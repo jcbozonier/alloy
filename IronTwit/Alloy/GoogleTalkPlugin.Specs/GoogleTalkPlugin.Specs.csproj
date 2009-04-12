@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6D6AD44D-28E7-4ED0-8A9F-68C36E9AFCC6}</ProjectGuid>
+    <ProjectGuid>{B24F402C-8C84-4205-8FCA-DC189F5EA450}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GoogleTalkPlugIn</RootNamespace>
-    <AssemblyName>GoogleTalkPlugIn</AssemblyName>
+    <RootNamespace>GoogleTalkPlugin.Specs</RootNamespace>
+    <AssemblyName>GoogleTalkPlugin.Specs</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,13 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="jabber-net, Version=2.1.0.710, Culture=neutral, PublicKeyToken=924c5b18328d6f09, processorArchitecture=MSIL">
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ThirdParty\JabberLibrary\jabber-net.dll</HintPath>
+      <HintPath>..\..\ThirdParty\UnitTesting\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="netlib.Dns, Version=1.1.3111.26991, Culture=neutral, PublicKeyToken=924c5b18328d6f09, processorArchitecture=MSIL">
+    <Reference Include="Rhino.Mocks, Version=3.5.0.1337, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ThirdParty\JabberLibrary\netlib.Dns.dll</HintPath>
+      <HintPath>..\..\ThirdParty\Mocking\Rhino.Mocks.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -51,22 +51,23 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="zlib.net, Version=1.0.3.0, Culture=neutral, PublicKeyToken=924c5b18328d6f09, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ThirdParty\JabberLibrary\zlib.net.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GoogleTalkDataAccess.cs" />
-    <Compile Include="GoogleTalkMessagingService.cs" />
-    <Compile Include="GTalkMessage.cs" />
-    <Compile Include="IGoogleTalkDataAccess.cs" />
+    <Compile Include="Sending_message_recipientless.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Alloy.Messaging\Alloy.Messaging.csproj">
+    <ProjectReference Include="..\Alloy.Messaging\Alloy.Messaging.csproj">
       <Project>{7B3CBD74-D69D-420F-90F9-19174C7DE3FA}</Project>
       <Name>Alloy.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Alloy.Specs\Alloy.Specs.csproj">
+      <Project>{FEBEE5E9-11DA-407E-8BF8-F52A9A4B72D6}</Project>
+      <Name>Alloy.Specs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Plug Ins\GoogleTalkPlugIn\GoogleTalkPlugIn.csproj">
+      <Project>{6D6AD44D-28E7-4ED0-8A9F-68C36E9AFCC6}</Project>
+      <Name>GoogleTalkPlugIn</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

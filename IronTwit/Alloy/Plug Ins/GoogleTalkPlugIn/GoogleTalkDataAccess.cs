@@ -7,10 +7,10 @@ using jabber.protocol.client;
 
 namespace GoogleTalkPlugIn
 {
-    public class GoogleTalkDataAccess
+    public class GoogleTalkDataAccess : IGoogleTalkDataAccess
     {
         private readonly JabberClient _Client;
-        public bool IsConnected;
+        public bool IsConnected{ get; set;}
 
         public GoogleTalkDataAccess()
         {
@@ -51,6 +51,11 @@ namespace GoogleTalkPlugIn
             _Client.Message(name, message);
         }
 
+        public void SetAvailableMessage(string message)
+        {
+            _Client.Presence(PresenceType.available, message, message, 1);
+        }
+
         public void Login(string name, string password)
         {
             _Client.User = name;
@@ -63,7 +68,7 @@ namespace GoogleTalkPlugIn
             _Client.Connect();
         }
 
-        internal void Logoff()
+        public void Logoff()
         {
             _Client.Close();
         }

@@ -13,7 +13,7 @@ namespace GoogleTalkPlugIn
 {
     public class GoogleTalkMessagingService : IMessagingService
     {
-        private readonly GoogleTalkDataAccess _DataAccess;
+        private readonly IGoogleTalkDataAccess _DataAccess;
 
         private Credentials _Credentials;
         private readonly CredentialEventArgs _CredEventArgs;
@@ -25,16 +25,23 @@ namespace GoogleTalkPlugIn
                                                              };
 
         public GoogleTalkMessagingService()
+            : this(new GoogleTalkDataAccess())
         {
-            _CredEventArgs = new CredentialEventArgs()
-                                 {
-                                     ServiceInfo = _ServiceInformation
-                                 };
+        }
 
-            _DataAccess = new GoogleTalkDataAccess();
+        public GoogleTalkMessagingService(IGoogleTalkDataAccess dataAccess)
+        {
+            _DataAccess = dataAccess;
             _DataAccess.OnMessage += _DataAccess_OnMessage;
             _DataAccess.OnAuthError += _DataAccess_OnAuthError;
+
+            _CredEventArgs = new CredentialEventArgs()
+            {
+                ServiceInfo = _ServiceInformation
+            };
         }
+
+        
 
         void _DataAccess_OnAuthError(object sender, EventArgs e)
         {
@@ -82,6 +89,14 @@ namespace GoogleTalkPlugIn
             if(_Credentials == null)
                 throw new Exception("Your credentials can not still be null. This should NEVER happen.");
 
+            if (recipient == null)
+                _DataAccess.SetAvailableMessage(message);
+            else
+                _SendInstantMessage(recipient, message);
+        }
+
+        private void _SendInstantMessage(IIdentity recipient, string message)
+        {
             var realUsername = !recipient.UserName.ToLowerInvariant().EndsWith("@gmail.com")
                                    ? recipient.UserName + "@gmail.com"
                                    : recipient.UserName;
