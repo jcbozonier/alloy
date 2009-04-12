@@ -23,7 +23,7 @@ namespace GoogleTalkPlugIn
 
             client.Server = "gmail.com";
             client.Port = 5222;
-            client.Resource = "Unit3";
+            client.Resource = "Alloy";
 
             client.OnConnect += (s, e) =>
                                     {

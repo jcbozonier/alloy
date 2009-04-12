@@ -9,7 +9,7 @@
     xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
     themes:ThemeManager.Theme="DavesGlossyControls"
     mc:Ignorable="d" Title="{Binding Path=Title}" Width="437" Height="504" Loaded="Window1_Loaded" 
-	FocusManager.FocusedElement="{Binding ElementName=Recipient}" WindowStyle="None" FontFamily="{StaticResource Unit3FontFamily}"
+	FocusManager.FocusedElement="{Binding ElementName=Recipient}" WindowStyle="None" FontFamily="{StaticResource AlloyFontFamily}"
 	BorderThickness="0" ResizeMode="CanResize" Background="Transparent" AllowsTransparency="True" Foreground="White">
     <UI:DraggableWindow.Resources>
         <System:Double x:Key="HeaderHeight">20</System:Double>
@@ -34,7 +34,7 @@
 				<RowDefinition Height="0.2*" />
 				<RowDefinition Height="{StaticResource FooterGridLength}" />
 			</Grid.RowDefinitions>
-			<TextBlock Grid.Row="0" Text="Inbox - Unit3" TextAlignment="Left" FontSize="18" Margin="{StaticResource ContentMargin}" />
+			<TextBlock Grid.Row="0" Text="Inbox - Alloy" TextAlignment="Left" FontSize="18" Margin="{StaticResource ContentMargin}" />
 			<StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="{StaticResource ContentMargin}">
                 <Button x:Name="MinimizeButton" Width="12" Height="12" Click="MinimizeButton_Click" Style="{StaticResource MarginlessGlossyBlackButtonStyle}">
                     <Button.Content>

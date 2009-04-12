@@ -61,7 +61,7 @@ namespace Unite.Specs.New_Starting_Application_Specs
 
     public class FakeReceivingMessagePlugin : FakePlugin
     {
-        public override event System.EventHandler<MessagesReceivedEventArgs> MessagesReceived;
+        public override event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
 
         public string Test;
 

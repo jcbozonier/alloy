@@ -72,7 +72,7 @@ namespace Unite.UI.ViewModels
             }
         }
 
-        public string Title { get { return "Unit3 Messaging"; } }
+        public string Title { get { return "Alloy Messaging"; } }
 
         UiMessage _SelectedMessage;
         public UiMessage SelectedMessage

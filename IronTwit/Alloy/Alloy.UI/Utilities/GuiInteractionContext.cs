@@ -56,7 +56,7 @@ namespace Unite.UI.Utilities
         public bool AuthenticationFailedRetryQuery()
         {
             var result = MessageBox.Show("Username and/or password are not correct. Retry?",
-                            "Unit3 by Justin Bozonier",
+                            "Alloy by Justin Bozonier",
                             MessageBoxButton.YesNo);
             return result == MessageBoxResult.Yes;
         }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Unite.UI.Utilities
 {
-    public static class Unit3Extensions
+    public static class AlloyExtensions
     {
         public static IEnumerable<K> Convert<T, K>(this IEnumerable<T> items, Func<T, K> converter)
         {
