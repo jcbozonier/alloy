@@ -15,10 +15,10 @@ namespace Unite.Specs.New_Starting_Application_Specs
 {
     public class ScenarioRepository
     {
-        public IInteractionContext FakeContext;
-        public IPluginFinder FakePluginFinder;
-        public ISettingsProvider FakeSettings;
-        public IMessagingService FakeMessagePlugin;
+        public readonly IInteractionContext FakeContext;
+        public readonly IPluginFinder FakePluginFinder;
+        public readonly ISettingsProvider FakeSettings;
+        public readonly IMessagingService FakeMessagePlugin;
 
         public ScenarioRepository()
         {
@@ -26,6 +26,11 @@ namespace Unite.Specs.New_Starting_Application_Specs
             FakePluginFinder = MockRepository.GenerateMock<IPluginFinder>();
             FakeSettings = MockRepository.GenerateMock<ISettingsProvider>();
             FakeMessagePlugin = MockRepository.GenerateMock<IMessagingService>();
+        }
+
+        public ScenarioRepository(IMessagingService plugin) : this()
+        {
+            FakeMessagePlugin = plugin;
         }
 
         public MainView GetMainView()
@@ -43,6 +48,15 @@ namespace Unite.Specs.New_Starting_Application_Specs
                        };
         }
 
+        public List<IMessage> GetMessages(DateTime timeStamp)
+        {
+            return new List<IMessage>
+                       {
+                           GetMessage(timeStamp),
+                           GetMessage(timeStamp)
+                       };
+        }
+
         public IMessage GetMessage()
         {
             return new Message()
@@ -51,6 +65,16 @@ namespace Unite.Specs.New_Starting_Application_Specs
                            Text = "Fake message",
                            TimeStamp = DateTime.MinValue
                        };
+        }
+
+        public IMessage GetMessage(DateTime timeStamp)
+        {
+            return new Message()
+            {
+                Address = new Address(),
+                Text = "Fake message",
+                TimeStamp = timeStamp
+            };
         }
 
         public Credentials CreateFakeCredentials()

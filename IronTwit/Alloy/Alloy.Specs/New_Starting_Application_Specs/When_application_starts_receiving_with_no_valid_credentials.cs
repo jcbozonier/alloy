@@ -61,10 +61,7 @@ namespace Unite.Specs.New_Starting_Application_Specs
         {
             FakeMessagingPlugin = new GetCredentialsPlugIn();
 
-            FakeRepo = new ScenarioRepository()
-                           {
-                               FakeMessagePlugin = FakeMessagingPlugin
-                           };
+            FakeRepo = new ScenarioRepository(FakeMessagingPlugin);
 
             Context();
             Because();
