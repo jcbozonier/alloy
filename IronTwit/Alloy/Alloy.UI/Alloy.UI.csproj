@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Unite.UI</RootNamespace>
-    <AssemblyName>Unite.UI</AssemblyName>
+    <AssemblyName>Alloy.UI</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -174,8 +174,8 @@
 copy /Y "$(SolutionDir)Plug Ins\GoogleTalkPlugIn\bin\$(Configuration)\jabber-net.dll" "$(TargetDir)"
 copy /Y "$(SolutionDir)Plug Ins\GoogleTalkPlugIn\bin\$(Configuration)\GoogleTalkPlugIn.dll" "$(TargetDir)"
 copy /Y "$(SolutionDir)Plug Ins\GoogleTalkPlugIn\bin\$(Configuration)\GoogleTalkPlugIn.pdb" "$(TargetDir)"
-copy /Y "$(SolutionDir)Plug Ins\TwitterPlugIn\bin\$(Configuration)\IronTwitterPlugIn.dll" "$(TargetDir)"
-copy /Y "$(SolutionDir)Plug Ins\TwitterPlugIn\bin\$(Configuration)\IronTwitterPlugIn.pdb" "$(TargetDir)"
+copy /Y "$(SolutionDir)Plug Ins\TwitterPlugIn\bin\$(Configuration)\TwitterPlugIn.dll" "$(TargetDir)"
+copy /Y "$(SolutionDir)Plug Ins\TwitterPlugIn\bin\$(Configuration)\TwitterPlugIn.pdb" "$(TargetDir)"
 copy /Y "$(SolutionDir)Plug Ins\TwitterPlugIn\bin\$(Configuration)\Newtonsoft.Json.dll" "$(TargetDir)"
 copy /Y "$(SolutionDir)Plug Ins\TwitterPlugIn\bin\$(Configuration)\Yedda.Twitter.dll" "$(TargetDir)"
 </PostBuildEvent>

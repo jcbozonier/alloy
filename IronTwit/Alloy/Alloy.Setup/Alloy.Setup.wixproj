@@ -5,7 +5,7 @@
     <ProductVersion>3.0</ProductVersion>
     <ProjectGuid>{8092133e-60b2-4e7f-9575-5d7cd52fbf11}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>Unite.Setup</OutputName>
+    <OutputName>Alloy.Setup</OutputName>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\Wix.targets</WixTargetsPath>
     <Name>Alloy.Setup</Name>
@@ -23,16 +23,16 @@
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\UI\Unite.UI.csproj">
-      <Name>Unite.UI</Name>
-      <Project>{df1a7919-466c-4321-bfef-c3aab6bf4841}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <WixExtension Include="WixUIExtension">
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
     </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Alloy.UI\Alloy.UI.csproj">
+      <Name>Alloy.UI</Name>
+      <Project>{df1a7919-466c-4321-bfef-c3aab6bf4841}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--
