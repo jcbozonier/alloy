@@ -7,6 +7,7 @@ using Unite.UI.ViewModels;
 
 namespace Unite.Specs.Application_running.Managing_Plugins
 {
+    [Ignore]
     [TestFixture]
     public class When_a_message_is_received_while_messages_already_exist : context
     {
@@ -48,7 +49,6 @@ namespace Unite.Specs.Application_running.Managing_Plugins
         {
             ContainerBootstrapper.BootstrapStructureMap();
 
-            Utilities = new TestTwitterUtilities();
             ObjectFactory.EjectAllInstancesOf<IMessagingService>();
             ObjectFactory.Inject<IMessagingService>(Utilities);
 

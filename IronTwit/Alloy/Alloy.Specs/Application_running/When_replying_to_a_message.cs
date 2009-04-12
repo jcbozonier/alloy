@@ -14,6 +14,7 @@ using Unite.UI.ViewModels;
 
 namespace Unite.Specs.Application_running
 {
+    [Ignore]
     [TestFixture]
     public class When_clicking_on_a_message : message_has_been_received
     {

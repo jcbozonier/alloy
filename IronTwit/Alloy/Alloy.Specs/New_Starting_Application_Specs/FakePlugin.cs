@@ -39,9 +39,10 @@ namespace Unite.Specs.New_Starting_Application_Specs
             return true;
         }
 
+        readonly ServiceInformation _ServiceInfo = new ServiceInformation() { ServiceID = Guid.NewGuid(), ServiceName = "Fake" };
         public virtual ServiceInformation GetInformation()
         {
-            return new ServiceInformation(){ServiceID = Guid.NewGuid(), ServiceName = "Fake"};
+            return _ServiceInfo;
         }
 
         public virtual void StartReceiving()

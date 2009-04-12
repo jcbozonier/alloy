@@ -82,6 +82,7 @@
     <Compile Include="Application_running\Context.cs" />
     <Compile Include="Application_running\When_replying_to_a_message.cs" />
     <Compile Include="Contacts\When_receiving_messages_with_known_contacts.cs" />
+    <Compile Include="New_sending_message_specs\Sending_message_across_two_services.cs" />
     <Compile Include="New_Starting_Application_Specs\FakePlugin.cs" />
     <Compile Include="New_Starting_Application_Specs\Receiving_messages.cs" />
     <Compile Include="New_Starting_Application_Specs\ScenarioRepository.cs" />

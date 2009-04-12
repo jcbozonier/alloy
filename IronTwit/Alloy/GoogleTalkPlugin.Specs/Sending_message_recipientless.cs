@@ -1,9 +1,11 @@
-﻿using GoogleTalkPlugIn;
+﻿using System;
+using GoogleTalkPlugIn;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.Mocks.Constraints;
 using SpecUnit;
 using Unite.Messaging;
+using Unite.Messaging.Entities;
 
 namespace GoogleTalkPlugin.Specs
 {
@@ -16,20 +18,30 @@ namespace GoogleTalkPlugin.Specs
             MessageSent.ShouldEqual(MessageToSend);
         }
 
+        [Test]
+        public void The_plugin_should_say_it_can_send_message()
+        {
+            Plugin.CanFind(null).ShouldBeTrue();
+        }
+
         private GoogleTalkMessagingService Plugin;
         private IGoogleTalkDataAccess GTalkDataAccess;
         private string MessageToSend;
         private string MessageSent;
+        private Identity Recipient;
+        private const string RecipientAddress = null;
+        private readonly ServiceInformation ServiceInfo = new ServiceInformation(){ServiceID = Guid.NewGuid()};
 
         public void Because()
         {
-            Plugin.SendMessage(null, MessageToSend);
+            Plugin.SendMessage(Recipient, MessageToSend);
         }
 
         [TestFixtureSetUp]
         public void Context()
         {
             MessageToSend = "Just a test tweet";
+            Recipient = new Identity(RecipientAddress, ServiceInfo);
 
             GTalkDataAccess = MockRepository.GenerateStub<IGoogleTalkDataAccess>();
             GTalkDataAccess

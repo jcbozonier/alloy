@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using IronTwitterPlugIn;
 using NUnit.Framework;
+using Unite.Messaging;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
@@ -59,6 +60,10 @@ namespace Unite.Specs.UnitTests
 
             public event EventHandler<CredentialEventArgs> CredentialsRequested;
             public event EventHandler<CredentialEventArgs> AuthorizationFailed;
+            public IEnumerable<IMessagingService> GetServices(string recipient)
+            {
+                return Enumerable.Empty<IMessagingService>();
+            }
 
             public IMessagingService GetService(ServiceInformation info)
             {

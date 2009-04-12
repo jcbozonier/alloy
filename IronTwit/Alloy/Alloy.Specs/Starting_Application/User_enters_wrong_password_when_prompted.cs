@@ -13,6 +13,7 @@ using Unite.Messaging;
 
 namespace Unite.Specs.Starting_Application
 {
+    [Ignore]
     [TestFixture]
     public class When_wrong_credentials_are_provided_to_the_app : context
     {
@@ -87,7 +88,7 @@ namespace Unite.Specs.Starting_Application
         }
     }
 
-    public class TestTwitterUtilities : IMessagingServiceManager
+    public class TestTwitterUtilities : IMessagingService
     {
         public Guid ServiceId { get { return Guid.NewGuid(); } }
         public string ServiceName { get { return "TestTwitter"; } }
@@ -179,7 +180,7 @@ namespace Unite.Specs.Starting_Application
             ObjectFactory.Initialize(x =>
             {
                 x.ForRequestedType<IInteractionContext>().TheDefaultIsConcreteType<TestingInteractionContext>();
-                x.ForRequestedType<IMessagingServiceManager>().TheDefaultIsConcreteType<TestTwitterUtilities>();
+                x.ForRequestedType<IMessagingService>().TheDefaultIsConcreteType<TestTwitterUtilities>();
                 x.ForRequestedType<IContactProvider>().TheDefaultIsConcreteType<ContactProvider>();
             });
 

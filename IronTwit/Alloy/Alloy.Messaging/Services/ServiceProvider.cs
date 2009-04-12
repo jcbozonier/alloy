@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using StructureMap;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
@@ -62,6 +63,18 @@ namespace Unite.Messaging.Services
 
         public event EventHandler<CredentialEventArgs> CredentialsRequested;
         public event EventHandler<CredentialEventArgs> AuthorizationFailed;
+
+        public IEnumerable<IMessagingService> GetServices(string recipient)
+        {
+            if (Services == null)
+                throw new NullReferenceException("This service provider has a null collection of services. You should NEVER have this issue.");
+
+            var services = from service in Services 
+                           where service.CanFind(recipient)
+                           select service;
+
+            return services.ToArray();
+        }
 
         public IMessagingService GetService(ServiceInformation info)
         {

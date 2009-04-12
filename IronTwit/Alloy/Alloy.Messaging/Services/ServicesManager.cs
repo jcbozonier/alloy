@@ -63,12 +63,6 @@ namespace Unite.Messaging.Services
             return messages;
         }
 
-        public void SendMessage(IIdentity recipient, string message)
-        {
-            var service = _Provider.GetService(recipient.ServiceInfo);
-            service.SendMessage(recipient, message);
-        }
-
         public void SetCredentials(Credentials credentials)
         {
             var services = _Services;
@@ -121,8 +115,9 @@ namespace Unite.Messaging.Services
 
         public void SendMessage(string recipient, string message)
         {
-            var serviceToUse = _Resolver.GetService(recipient);
-            SendMessage(new Identity(recipient, serviceToUse), message);
+            var servicesToUse = _Provider.GetServices(recipient);
+            foreach(var service in servicesToUse)
+                service.SendMessage(new Identity(recipient, service.GetInformation()), message);
         }
     }
 }

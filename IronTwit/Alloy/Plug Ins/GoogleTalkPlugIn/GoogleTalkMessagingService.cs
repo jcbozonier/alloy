@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using jabber.client;
-using jabber.protocol.client;
+using StructureMap;
 using Unite.Messaging;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
@@ -24,6 +21,7 @@ namespace GoogleTalkPlugIn
                                                                  ServiceName = "GoogleTalk"
                                                              };
 
+        [DefaultConstructor]
         public GoogleTalkMessagingService()
             : this(new GoogleTalkDataAccess())
         {
@@ -89,7 +87,7 @@ namespace GoogleTalkPlugIn
             if(_Credentials == null)
                 throw new Exception("Your credentials can not still be null. This should NEVER happen.");
 
-            if (recipient == null)
+            if (recipient == null || String.IsNullOrEmpty(recipient.UserName))
                 _DataAccess.SetAvailableMessage(message);
             else
                 _SendInstantMessage(recipient, message);
@@ -113,14 +111,12 @@ namespace GoogleTalkPlugIn
         {
             // If the address contains an ampersand it can't start with it
             // or it just shouldn't have one at all.
-            return address != null &&
-                   address.Trim() != String.Empty &&
-                   (
-                       (
-                            (!address.StartsWith("@") && address.Contains("@")
-                       ) ||
-                       !address.Contains("@"))
-                   );
+            if(String.IsNullOrEmpty(address))
+                return true;
+            if ((!address.StartsWith("@") && address.Contains("@")) || !address.Contains("@"))
+                return true;
+
+            return false;
         }
 
         public ServiceInformation GetInformation()

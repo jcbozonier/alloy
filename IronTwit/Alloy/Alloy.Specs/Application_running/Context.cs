@@ -7,13 +7,14 @@ using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
 using Unite.UI.Utilities;
-using IIdentity=Unite.Messaging.IIdentity;
+using Identity=Unite.Messaging.Identity;
 using IInteractionContext=Unite.Messaging.IInteractionContext;
 using IMessagingServiceManager=Unite.Messaging.IMessagingServiceManager;
+using IServiceProvider=Unite.Messaging.Services.IServiceProvider;
 
 namespace Unite.Specs.Application_running
 {
-    public class TestTwitterUtilities : IMessagingServiceManager
+    public class TestTwitterUtilities : IMessagingService
     {
         public Guid ServiceId { get { return Guid.NewGuid(); } }
         public string ServiceName { get { return "TestTwitter"; } }
@@ -133,7 +134,9 @@ namespace Unite.Specs.Application_running
             ObjectFactory.Initialize(x =>
             {
                 x.ForRequestedType<IInteractionContext>().TheDefaultIsConcreteType<TestingInteractionContext>();
-                x.ForRequestedType<IMessagingServiceManager>().TheDefaultIsConcreteType<TestTwitterUtilities>();
+                x.ForRequestedType<IMessagingServiceManager>().TheDefaultIsConcreteType<ServicesManager>();
+                x.ForRequestedType<IMessagingService>().TheDefaultIsConcreteType<TestTwitterUtilities>();
+                x.ForRequestedType<IServiceProvider>().TheDefaultIsConcreteType<ServiceProvider>();
                 x.ForRequestedType<IContactProvider>().TheDefaultIsConcreteType<ContactProvider>();
             });
 

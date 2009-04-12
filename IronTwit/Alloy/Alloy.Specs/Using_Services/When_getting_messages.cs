@@ -34,7 +34,7 @@ namespace Unite.Specs.Using_Services
 
     public abstract class context
     {
-        protected IMessagingService ServiceManager;
+        protected IMessagingServiceManager ServiceManager;
         protected ServiceProvider ServiceProvider;
         protected List<IMessage> Messages;
         protected Credentials MyCredentials;

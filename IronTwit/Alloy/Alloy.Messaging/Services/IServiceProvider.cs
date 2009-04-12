@@ -11,6 +11,6 @@ namespace Unite.Messaging.Services
         IEnumerable<IMessagingService> GetServices();
         event EventHandler<CredentialEventArgs> CredentialsRequested;
         event EventHandler<CredentialEventArgs> AuthorizationFailed;
-        IMessagingService GetService(ServiceInformation info);
+        IEnumerable<IMessagingService> GetServices(string recipient);
     }
 }

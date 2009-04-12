@@ -33,9 +33,19 @@ namespace Unite.Specs.New_Starting_Application_Specs
             FakeMessagePlugin = plugin;
         }
 
-        public MainView GetMainView()
+        public void InitializeIoC()
         {
             ContainerBootstrapper.BootstrapStructureMap(FakeContext, FakePluginFinder, FakeSettings, FakeMessagePlugin);
+        }
+
+        public MainView GetMainView()
+        {
+            InitializeIoC();
+            return ObjectFactory.GetInstance<MainView>();
+        }
+
+        public MainView GetMainViewDontIoC()
+        {
             return ObjectFactory.GetInstance<MainView>();
         }
 
