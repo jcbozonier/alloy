@@ -10,9 +10,9 @@ namespace Unite.Specs.New_Starting_Application_Specs
 {
     public class FakePlugin : IMessagingService
     {
-        public event EventHandler<CredentialEventArgs> AuthorizationFailed;
+        public virtual event EventHandler<CredentialEventArgs> AuthorizationFailed;
         public virtual event EventHandler<CredentialEventArgs> CredentialsRequested;
-        public event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
+        public virtual event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
 
         public virtual bool CanAccept(Credentials credentials)
         {
