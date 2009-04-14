@@ -199,16 +199,20 @@ namespace IronTwitterPlugIn
 
                 // Convert the sender property to proper twitter form.
                 tweets = (List<Tweet>)converter.Deserialize(str, typeof(List<Tweet>));
+
+                _MessagesHaveBeenReceivedBefore = _MessagesHaveBeenReceivedBefore || tweets.Count > 0;
             }
             catch (WebException err)
             {
-                if(err.Message.Contains("(400)"))
+                //Swallow errors because Twitter crashes more than a fighter pilot with parkinson's.
+                if(err.Message.Contains("(400)") ||
+                   err.Message.Contains("(502)"))
                     return new List<IMessage>();
 
                 // Those credentials suck apparently.
                 _UserCredentials = null;
                 // Let everyone know how much they suck.
-                if(AuthorizationFailed != null)
+                if(AuthorizationFailed != null && _MessagesHaveBeenReceivedBefore)
                     AuthorizationFailed(this, new CredentialEventArgs(){ServiceInfo = _ServiceInformation});
             }
 
@@ -225,6 +229,7 @@ namespace IronTwitterPlugIn
         }
 
         private Dictionary<int,bool> _ReceivedTweets;
+        private bool _MessagesHaveBeenReceivedBefore;
 
         private void _RequestCredentials()
         {
