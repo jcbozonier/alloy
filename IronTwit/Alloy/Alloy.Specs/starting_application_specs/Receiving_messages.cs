@@ -8,6 +8,7 @@ using SpecUnit;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
+using Unite.Specs.FakeSpecObjects;
 using Unite.UI.Utilities;
 using Unite.UI.ViewModels;
 

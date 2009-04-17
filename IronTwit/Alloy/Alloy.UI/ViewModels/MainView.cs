@@ -24,6 +24,7 @@ namespace Unite.UI.ViewModels
         private readonly IMessagingServiceManager _MessagingService;
         private readonly Thread _CurrentThread;
         private readonly Dispatcher _CurrentDispatcher;
+        private Dictionary<ServiceInformation, bool> _RetryOnAuthFailure;
 
         protected IContactProvider _ContactRepo;
 
@@ -128,20 +129,26 @@ namespace Unite.UI.ViewModels
                 () =>
                 {
                     _MessagingService.SendMessage(Recipient, MessageToSend);
-                    Recipient = "";
                     MessageToSend = "";
-                    if(ReceiveMessage.CanExecute(null))
-                        ReceiveMessage.Execute(null);
                 });
 
             ReceiveMessage = new ReceiveMessagesCommand(
                 () =>
                     {
                         var result = _MessagingService.GetMessages();
-
                         _UpdateUIWithMessages(result);
                     });
 
+        }
+
+        /// <summary>
+        /// This must be called when the application first starts so
+        /// that the model can go through the appropriate workflow
+        /// to set up the UI for the user.
+        /// </summary>
+        public void Init()
+        {
+            _MessagingService.StartReceiving();
         }
 
         private void _UpdateUIWithMessages(IEnumerable<IMessage> result)
@@ -161,66 +168,9 @@ namespace Unite.UI.ViewModels
             }
         }
 
-        private Dictionary<ServiceInformation, bool> _RetryOnAuthFailure;
-
-        void _MessagingService_AuthorizationFailed(object sender, CredentialEventArgs e)
-        {
-            _RetryOnAuthFailure = _RetryOnAuthFailure ?? new Dictionary<ServiceInformation, bool>();
-
-            if(!_RetryOnAuthFailure.ContainsKey(e.ServiceInfo))
-                _RetryOnAuthFailure[e.ServiceInfo] = Interactions.AuthenticationFailedRetryQuery();
-
-            if (!_RetryOnAuthFailure[e.ServiceInfo]) return;
-
-            messagingService_CredentialsRequested(this, e);
-        }
-
-        void _MessagingService_MessagesReceived(object sender, MessagesReceivedEventArgs e)
-        {
-            if (_CurrentThread != Thread.CurrentThread)
-            {
-                _CurrentDispatcher.Invoke(
-                    DispatcherPriority.Normal,
-                    (Action) (() => _GetMessagesFromEvent(e)));
-            }
-            else
-            {
-                _GetMessagesFromEvent(e);
-            }
-        }
-
         private void _GetMessagesFromEvent(MessagesReceivedEventArgs e)
         {
             _UpdateUIWithMessages(e.Messages);
-        }
-
-        void MainView_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if(SelectedMessage == null || SelectedMessage.Address == null)
-                return;
-
-            switch(e.PropertyName)
-            {
-                case "SelectedMessage":
-                    Recipient = SelectedMessage.Address.UserName;
-                    break;
-            }
-        }
-
-        void messagingService_CredentialsRequested(object sender, CredentialEventArgs e)
-        {
-            var credentials = Interactions.GetCredentials(e.ServiceInfo);
-            _MessagingService.SetCredentials(credentials);
-        }
-
-        /// <summary>
-        /// This must be called when the application first starts so
-        /// that the model can go through the appropriate workflow
-        /// to set up the UI for the user.
-        /// </summary>
-        public void Init()
-        {
-            _MessagingService.StartReceiving();
         }
 
         /// <summary>
@@ -235,6 +185,51 @@ namespace Unite.UI.ViewModels
             _MessagingService.CredentialsRequested -= messagingService_CredentialsRequested;
             _MessagingService.AuthorizationFailed -= _MessagingService_AuthorizationFailed;
             _MessagingService.MessagesReceived -= _MessagingService_MessagesReceived;
+        }
+
+        void MainView_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (SelectedMessage == null || SelectedMessage.Address == null)
+                return;
+
+            switch (e.PropertyName)
+            {
+                case "SelectedMessage":
+                    Recipient = SelectedMessage.Address.UserName;
+                    break;
+            }
+        }
+
+        void messagingService_CredentialsRequested(object sender, CredentialEventArgs e)
+        {
+            var credentials = Interactions.GetCredentials(e.ServiceInfo);
+            _MessagingService.SetCredentials(credentials);
+        }
+
+        void _MessagingService_AuthorizationFailed(object sender, CredentialEventArgs e)
+        {
+            _RetryOnAuthFailure = _RetryOnAuthFailure ?? new Dictionary<ServiceInformation, bool>();
+
+            if (!_RetryOnAuthFailure.ContainsKey(e.ServiceInfo))
+                _RetryOnAuthFailure[e.ServiceInfo] = Interactions.AuthenticationFailedRetryQuery();
+
+            if (!_RetryOnAuthFailure[e.ServiceInfo]) return;
+
+            messagingService_CredentialsRequested(this, e);
+        }
+
+        void _MessagingService_MessagesReceived(object sender, MessagesReceivedEventArgs e)
+        {
+            if (_CurrentThread != Thread.CurrentThread)
+            {
+                _CurrentDispatcher.Invoke(
+                    DispatcherPriority.Normal,
+                    (Action)(() => _GetMessagesFromEvent(e)));
+            }
+            else
+            {
+                _GetMessagesFromEvent(e);
+            }
         }
     }
 }

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using IronTwitterPlugIn;
 using NUnit.Framework;
-using Unite.Messaging;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
@@ -12,7 +10,6 @@ using IServiceProvider=Unite.Messaging.Services.IServiceProvider;
 
 namespace Unite.Specs.UnitTests
 {
-    //[Ignore]
     [TestFixture]
     public class ServiceResolverTests
     {

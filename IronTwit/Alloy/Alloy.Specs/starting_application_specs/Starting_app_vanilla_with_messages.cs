@@ -6,6 +6,7 @@ using SpecUnit;
 using StructureMap;
 using Unite.Messaging;
 using Unite.Messaging.Messages;
+using Unite.Specs.FakeSpecObjects;
 using Unite.UI.ViewModels;
 
 namespace Unite.Specs.New_Starting_Application_Specs

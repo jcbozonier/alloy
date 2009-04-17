@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Rhino.Mocks;
 using StructureMap;
 using Unite.Messaging;
@@ -11,18 +10,18 @@ using Unite.UI.Utilities;
 using Unite.UI.ViewModels;
 using IServiceProvider=Unite.Messaging.Services.IServiceProvider;
 
-namespace Unite.Specs.New_Starting_Application_Specs
+namespace Unite.Specs.FakeSpecObjects
 {
     public class ScenarioRepository
     {
-        public readonly IInteractionContext FakeContext;
+        public readonly IInteractionContext FakeUIContext;
         public readonly IPluginFinder FakePluginFinder;
         public readonly ISettingsProvider FakeSettings;
         public readonly IMessagingService FakeMessagePlugin;
 
         public ScenarioRepository()
         {
-            FakeContext = MockRepository.GenerateMock<IInteractionContext>();
+            FakeUIContext = MockRepository.GenerateMock<IInteractionContext>();
             FakePluginFinder = MockRepository.GenerateMock<IPluginFinder>();
             FakeSettings = MockRepository.GenerateMock<ISettingsProvider>();
             FakeMessagePlugin = MockRepository.GenerateMock<IMessagingService>();
@@ -35,7 +34,7 @@ namespace Unite.Specs.New_Starting_Application_Specs
 
         public void InitializeIoC()
         {
-            ContainerBootstrapper.BootstrapStructureMap(FakeContext, FakePluginFinder, FakeSettings, FakeMessagePlugin);
+            ContainerBootstrapper.BootstrapStructureMap(FakeUIContext, FakePluginFinder, FakeSettings, FakeMessagePlugin);
         }
 
         public MainView GetMainView()
@@ -80,11 +79,11 @@ namespace Unite.Specs.New_Starting_Application_Specs
         public IMessage GetMessage(DateTime timeStamp)
         {
             return new Message()
-            {
-                Address = new Address(),
-                Text = "Fake message",
-                TimeStamp = timeStamp
-            };
+                       {
+                           Address = new Address(),
+                           Text = "Fake message",
+                           TimeStamp = timeStamp
+                       };
         }
 
         public Credentials CreateFakeCredentials()
@@ -141,16 +140,16 @@ namespace Unite.Specs.New_Starting_Application_Specs
         {
             // Initialize the static ObjectFactory container
             ObjectFactory.Initialize(x =>
-            {
-                x.ForRequestedType<MainView>().TheDefaultIsConcreteType<MainView>();
-                x.ForRequestedType<IInteractionContext>().TheDefault.IsThis(gui);
-                x.ForRequestedType<IMessagingService>().TheDefault.IsThis(plugin);
-                x.ForRequestedType<ISettingsProvider>().TheDefault.IsThis(settings);
-                x.ForRequestedType<IMessagingServiceManager>().TheDefaultIsConcreteType<ServicesManager>();
-                x.ForRequestedType<IContactProvider>().TheDefaultIsConcreteType<ContactProvider>();
-                x.ForRequestedType<IServiceProvider>().TheDefaultIsConcreteType<ServiceProvider>();
-                x.ForRequestedType<IPluginFinder>().TheDefault.IsThis(pluginFinder);
-            });
+                                         {
+                                             x.ForRequestedType<MainView>().TheDefaultIsConcreteType<MainView>();
+                                             x.ForRequestedType<IInteractionContext>().TheDefault.IsThis(gui);
+                                             x.ForRequestedType<IMessagingService>().TheDefault.IsThis(plugin);
+                                             x.ForRequestedType<ISettingsProvider>().TheDefault.IsThis(settings);
+                                             x.ForRequestedType<IMessagingServiceManager>().TheDefaultIsConcreteType<ServicesManager>();
+                                             x.ForRequestedType<IContactProvider>().TheDefaultIsConcreteType<ContactProvider>();
+                                             x.ForRequestedType<IServiceProvider>().TheDefaultIsConcreteType<ServiceProvider>();
+                                             x.ForRequestedType<IPluginFinder>().TheDefault.IsThis(pluginFinder);
+                                         });
         }
     }
 }

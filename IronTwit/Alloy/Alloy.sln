@@ -23,6 +23,8 @@ Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Alloy.Setup", "Alloy.Setup\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleTalkPlugin.Specs", "GoogleTalkPlugin.Specs\GoogleTalkPlugin.Specs.csproj", "{B24F402C-8C84-4205-8FCA-DC189F5EA450}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterPlugIn.Specs", "TwitterPlugIn.Specs\TwitterPlugIn.Specs.csproj", "{81813F7F-2288-435E-98ED-2E5554C16813}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +115,16 @@ Global
 		{B24F402C-8C84-4205-8FCA-DC189F5EA450}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B24F402C-8C84-4205-8FCA-DC189F5EA450}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B24F402C-8C84-4205-8FCA-DC189F5EA450}.Release|x86.ActiveCfg = Release|Any CPU
+		{81813F7F-2288-435E-98ED-2E5554C16813}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81813F7F-2288-435E-98ED-2E5554C16813}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81813F7F-2288-435E-98ED-2E5554C16813}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{81813F7F-2288-435E-98ED-2E5554C16813}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{81813F7F-2288-435E-98ED-2E5554C16813}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{81813F7F-2288-435E-98ED-2E5554C16813}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81813F7F-2288-435E-98ED-2E5554C16813}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81813F7F-2288-435E-98ED-2E5554C16813}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{81813F7F-2288-435E-98ED-2E5554C16813}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{81813F7F-2288-435E-98ED-2E5554C16813}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -121,5 +133,6 @@ Global
 		{7E90D07E-E532-4F57-BD4D-41A3C64F6B3E} = {37DA2247-7893-4ADA-AC91-922B74465BD4}
 		{6D6AD44D-28E7-4ED0-8A9F-68C36E9AFCC6} = {37DA2247-7893-4ADA-AC91-922B74465BD4}
 		{B24F402C-8C84-4205-8FCA-DC189F5EA450} = {37DA2247-7893-4ADA-AC91-922B74465BD4}
+		{81813F7F-2288-435E-98ED-2E5554C16813} = {37DA2247-7893-4ADA-AC91-922B74465BD4}
 	EndGlobalSection
 EndGlobal

@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using Unite.Messaging;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
+using Unite.Specs.FakeSpecObjects;
 using Unite.UI.ViewModels;
 
 namespace Unite.Specs.New_Starting_Application_Specs
@@ -20,7 +21,7 @@ namespace Unite.Specs.New_Starting_Application_Specs
                 .Stub(x => x.GetAllPlugins())
                 .Return(new[] { typeof(IMessagingService) });
 
-                FakeRepo.FakeContext
+                FakeRepo.FakeUIContext
                     .Stub(x => x.GetCredentials(null))
                     .Return(FakeRepo.CreateFakeCredentials());
 
@@ -35,7 +36,7 @@ namespace Unite.Specs.New_Starting_Application_Specs
         [Test]
         public void It_should_ask_ui_for_credentials()
         {
-            FakeRepo.FakeContext
+            FakeRepo.FakeUIContext
                 .AssertWasCalled(x => x.GetCredentials(null));
         }
     }
