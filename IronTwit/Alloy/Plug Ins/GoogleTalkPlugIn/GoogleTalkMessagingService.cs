@@ -43,7 +43,10 @@ namespace GoogleTalkPlugIn
 
         void _DataAccess_OnAuthError(object sender, EventArgs e)
         {
-            if (AuthorizationFailed != null)
+            if(_Credentials != null)
+                _DataAccess.Login(_Credentials.UserName, _Credentials.Password);
+
+            if (AuthorizationFailed != null && _Credentials == null)
                 AuthorizationFailed(this, _CredEventArgs);
         }
 

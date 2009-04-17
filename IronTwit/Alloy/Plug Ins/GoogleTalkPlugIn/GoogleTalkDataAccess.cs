@@ -48,7 +48,12 @@ namespace GoogleTalkPlugIn
 
         public void Message(string name, string message)
         {
-            _Client.Message(name, message);
+            if(!_Client.IsAuthenticated && OnAuthError != null)
+            {
+                OnAuthError(this, EventArgs.Empty);
+            }
+            else
+                _Client.Message(name, message);
         }
 
         public void SetAvailableMessage(string message)
