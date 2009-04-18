@@ -129,9 +129,11 @@ namespace Unite.UI.ViewModels
             SendMessage = new SendMessageCommand(
                 () =>
                 {
+                    // This is not the appropriate place for this code IMO.
                     if(MessageToSend.Contains("\n") &&
                         (MessageToSend.Contains("\t") || MessageToSend.Contains("\n   "))) 
                         MessageToSend = codePaste.PasteCode(MessageToSend);
+
                     _MessagingService.SendMessage(Recipient, MessageToSend);
                     MessageToSend = "";
                 });

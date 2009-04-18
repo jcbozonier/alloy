@@ -17,11 +17,14 @@ namespace Unite.UI.Views
             MessageToSend.AcceptsTab = true;
             _PreviousKey = Key.None;
 
+            // This is all to manage Ctrl-Enter for newline and Enter to send message.
+            // :( I tried using KeyBindings but didn't get it. Please help!
             MessageToSend.PreviewKeyDown += (s, e) =>
                                          {
                                              if(e.Key == Key.None || e.Key == Key.LeftCtrl)
                                              {
                                                  _PreviousKey = e.Key;
+                                                 return;
                                              }
                                              if (_PreviousKey != Key.LeftCtrl &&
                                                e.Key == Key.Enter)
@@ -29,14 +32,22 @@ namespace Unite.UI.Views
                                                  _SendMessageCommand(null);
                                                  _PreviousKey = Key.None;
                                                  e.Handled = true;
+                                                 return;
                                              }
                                              if (_PreviousKey == Key.LeftCtrl &&
                                                  e.Key == Key.Enter)
                                              {
                                                  _NewLineCommand();
                                                  _PreviousKey = Key.None;
+                                                 return;
                                              }
+
+                                             _PreviousKey = Key.None;
                                          };
+            MessageToSend.PreviewKeyUp += (s, e) =>
+                                              {
+                                                  _PreviousKey = Key.None;
+                                              };
         }
 
         private void _NewLineCommand()
