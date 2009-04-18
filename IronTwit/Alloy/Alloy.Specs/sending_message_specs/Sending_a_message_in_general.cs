@@ -74,7 +74,7 @@ namespace Unite.Specs.New_sending_message_specs
             IntendedRecipient = "@darkxanthos";
             MessageToBeSent = "Test message";
 
-            FakeRepo = new ScenarioRepository();
+            FakeRepo = ScenarioRepository.CreateStubbedInstance();
 
             FakeRepo.FakePluginFinder
                 .Stub(x => x.GetAllPlugins())

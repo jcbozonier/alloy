@@ -82,6 +82,7 @@
     <Compile Include="sending_message_specs\Sending_a_message_in_general.cs" />
     <Compile Include="sending_message_specs\Sending_message_across_two_services.cs" />
     <Compile Include="FakeSpecObjects\FakePlugin.cs" />
+    <Compile Include="sending_message_specs\When_sending_a_message_containing_code.cs" />
     <Compile Include="starting_application_specs\Receiving_messages.cs" />
     <Compile Include="FakeSpecObjects\ScenarioRepository.cs" />
     <Compile Include="starting_application_specs\Sending_message.cs" />

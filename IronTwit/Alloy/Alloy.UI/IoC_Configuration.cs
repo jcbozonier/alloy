@@ -20,6 +20,7 @@ namespace Unite.UI
                 x.ForRequestedType<IContactProvider>().TheDefaultIsConcreteType<ContactProvider>();
                 x.ForRequestedType<IServiceProvider>().TheDefaultIsConcreteType<ServiceProvider>();
                 x.ForRequestedType<IPluginFinder>().TheDefaultIsConcreteType<PluginFinder>();
+                x.ForRequestedType<ICodePaste>().TheDefaultIsConcreteType<CodePaste>();
             });
         }
     }

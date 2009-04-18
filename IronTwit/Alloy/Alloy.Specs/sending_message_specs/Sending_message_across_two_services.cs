@@ -40,7 +40,7 @@ namespace Unite.Specs.New_sending_message_specs
         {
             MessageToSend = "Test message";
 
-            var fakesRepo = new ScenarioRepository();
+            var fakesRepo = ScenarioRepository.CreateUnstubbedInstance();
             fakesRepo.FakePluginFinder
                 .Stub(x => x.GetAllPlugins())
                 .Return(new[] {typeof (FakeTwitterPlugin), typeof (FakeGTalkPlugin)});

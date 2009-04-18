@@ -103,7 +103,8 @@ namespace Unite.UI.ViewModels
         public MainView(
             IInteractionContext interactionContext,
             IMessagingServiceManager messagingService, 
-            IContactProvider contactRepo)
+            IContactProvider contactRepo,
+            ICodePaste codePaste)
         {
             if(interactionContext == null) 
                 throw new ArgumentNullException("interactionContext");
@@ -128,6 +129,9 @@ namespace Unite.UI.ViewModels
             SendMessage = new SendMessageCommand(
                 () =>
                 {
+                    if(MessageToSend.Contains("\n") &&
+                        (MessageToSend.Contains("\t") || MessageToSend.Contains("\n   "))) 
+                        MessageToSend = codePaste.PasteCode(MessageToSend);
                     _MessagingService.SendMessage(Recipient, MessageToSend);
                     MessageToSend = "";
                 });

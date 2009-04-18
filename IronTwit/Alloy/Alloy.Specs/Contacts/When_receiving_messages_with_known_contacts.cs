@@ -86,6 +86,7 @@ namespace Unite.Specs.Contacts
                 x.ForRequestedType<IInteractionContext>().TheDefaultIsConcreteType<TestingInterface>();
                 x.ForRequestedType<IMessagingServiceManager>().TheDefault.IsThis(ServiceManager);
                 x.ForRequestedType<IContactProvider>().TheDefault.IsThis(TheContactProvider);
+                x.ForRequestedType<ICodePaste>().TheDefaultIsConcreteType<CodePaste>();
             });
 
             ViewModel = ObjectFactory.GetInstance<MainView>();

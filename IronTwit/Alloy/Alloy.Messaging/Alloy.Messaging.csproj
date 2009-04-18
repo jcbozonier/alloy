@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{7B3CBD74-D69D-420F-90F9-19174C7DE3FA}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -31,6 +31,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CookComputing.XmlRpcV2, Version=2.1.0.3, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdParty\Pastebin.NET\Library\CookComputing.XmlRpcV2.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenPasteAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdParty\Pastebin.NET\Library\OpenPasteAPI.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap, Version=2.5.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\ThirdParty\IoC\StructureMap.dll</HintPath>
@@ -58,6 +66,8 @@
     <Compile Include="Entities\IMessage.cs" />
     <Compile Include="Messages\IMessagingServiceManager.cs" />
     <Compile Include="Messages\IMessagingServiceRegistry.cs" />
+    <Compile Include="Services\CodePaste.cs" />
+    <Compile Include="Services\ICodePaste.cs" />
     <Compile Include="Services\IPluginFinder.cs" />
     <Compile Include="Services\IServiceProvider.cs" />
     <Compile Include="Messages\MessagingAccount.cs" />

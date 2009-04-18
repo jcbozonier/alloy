@@ -226,6 +226,7 @@ namespace Unite.Specs.Application_starting
                 x.ForRequestedType<IInteractionContext>().TheDefaultIsConcreteType<TestingInteractionContext>();
                 x.ForRequestedType<IMessagingServiceManager>().TheDefaultIsConcreteType<TestTwitterUtilities>();
                 x.ForRequestedType<IContactProvider>().TheDefaultIsConcreteType<ContactProvider>();
+                x.ForRequestedType<ICodePaste>().TheDefaultIsConcreteType<CodePaste>();
             });
 
         }

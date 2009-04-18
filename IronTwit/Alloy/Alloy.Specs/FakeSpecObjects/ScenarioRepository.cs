@@ -18,13 +18,32 @@ namespace Unite.Specs.FakeSpecObjects
         public readonly IPluginFinder FakePluginFinder;
         public readonly ISettingsProvider FakeSettings;
         public readonly IMessagingService FakeMessagePlugin;
+        public readonly ICodePaste FakeCodeFormatter;
 
         public ScenarioRepository()
         {
             FakeUIContext = MockRepository.GenerateMock<IInteractionContext>();
-            FakePluginFinder = MockRepository.GenerateMock<IPluginFinder>();
             FakeSettings = MockRepository.GenerateMock<ISettingsProvider>();
+            FakeCodeFormatter = MockRepository.GenerateMock<ICodePaste>();
             FakeMessagePlugin = MockRepository.GenerateMock<IMessagingService>();
+            FakePluginFinder = MockRepository.GenerateMock<IPluginFinder>();
+        }
+
+        private void _ApplyDefaultStubs()
+        {
+            FakePluginFinder
+                .Stub(x => x.GetAllPlugins())
+                .Return(new []{typeof (IMessagingService)});
+            FakeMessagePlugin
+                .Stub(x => x.CanFind(null))
+                .IgnoreArguments()
+                .Return(true);
+        }
+
+        public ScenarioRepository(bool applyDefaultStubs):this()
+        {
+            if(applyDefaultStubs)
+                _ApplyDefaultStubs();
         }
 
         public ScenarioRepository(IMessagingService plugin) : this()
@@ -34,12 +53,13 @@ namespace Unite.Specs.FakeSpecObjects
 
         public void InitializeIoC()
         {
-            ContainerBootstrapper.BootstrapStructureMap(FakeUIContext, FakePluginFinder, FakeSettings, FakeMessagePlugin);
+            ContainerBootstrapper.BootstrapStructureMap(FakeUIContext, FakePluginFinder, FakeSettings, FakeMessagePlugin, FakeCodeFormatter);
         }
 
         public MainView GetMainView()
         {
             InitializeIoC();
+            ObjectFactory.Inject(FakeMessagePlugin);
             return ObjectFactory.GetInstance<MainView>();
         }
 
@@ -97,6 +117,16 @@ namespace Unite.Specs.FakeSpecObjects
                                                     }
                        };
         }
+
+        public static ScenarioRepository CreateUnstubbedInstance()
+        {
+            return new ScenarioRepository(false);
+        }
+
+        public static ScenarioRepository CreateStubbedInstance()
+        {
+            return new ScenarioRepository(true);
+        }
     }
 
     public class Address : IIdentity
@@ -138,18 +168,24 @@ namespace Unite.Specs.FakeSpecObjects
             ISettingsProvider settings, 
             IMessagingService plugin)
         {
+            BootstrapStructureMap(gui, pluginFinder, settings, plugin, null);
+        }
+
+        public static void BootstrapStructureMap(IInteractionContext gui, IPluginFinder pluginFinder, ISettingsProvider settings, IMessagingService plugin, ICodePaste formatter)
+        {
             // Initialize the static ObjectFactory container
             ObjectFactory.Initialize(x =>
-                                         {
-                                             x.ForRequestedType<MainView>().TheDefaultIsConcreteType<MainView>();
-                                             x.ForRequestedType<IInteractionContext>().TheDefault.IsThis(gui);
-                                             x.ForRequestedType<IMessagingService>().TheDefault.IsThis(plugin);
-                                             x.ForRequestedType<ISettingsProvider>().TheDefault.IsThis(settings);
-                                             x.ForRequestedType<IMessagingServiceManager>().TheDefaultIsConcreteType<ServicesManager>();
-                                             x.ForRequestedType<IContactProvider>().TheDefaultIsConcreteType<ContactProvider>();
-                                             x.ForRequestedType<IServiceProvider>().TheDefaultIsConcreteType<ServiceProvider>();
-                                             x.ForRequestedType<IPluginFinder>().TheDefault.IsThis(pluginFinder);
-                                         });
+            {
+                x.ForRequestedType<MainView>().TheDefaultIsConcreteType<MainView>();
+                x.ForRequestedType<IInteractionContext>().TheDefault.IsThis(gui);
+                x.ForRequestedType<IMessagingService>().TheDefault.IsThis(plugin);
+                x.ForRequestedType<ISettingsProvider>().TheDefault.IsThis(settings);
+                x.ForRequestedType<IMessagingServiceManager>().TheDefaultIsConcreteType<ServicesManager>();
+                x.ForRequestedType<IContactProvider>().TheDefaultIsConcreteType<ContactProvider>();
+                x.ForRequestedType<IServiceProvider>().TheDefaultIsConcreteType<ServiceProvider>();
+                x.ForRequestedType<IPluginFinder>().TheDefault.IsThis(pluginFinder);
+                x.ForRequestedType<ICodePaste>().TheDefault.IsThis(formatter);
+            });
         }
     }
 }
