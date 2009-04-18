@@ -13,7 +13,41 @@ namespace Unite.UI.Views
         {
             InitializeComponent();
             DataContext = viewModel;
+            MessageToSend.AcceptsReturn = true;
+            MessageToSend.AcceptsTab = true;
+            _PreviousKey = Key.None;
+
+            MessageToSend.PreviewKeyDown += (s, e) =>
+                                         {
+                                             if(e.Key == Key.None || e.Key == Key.LeftCtrl)
+                                             {
+                                                 _PreviousKey = e.Key;
+                                             }
+                                             if (_PreviousKey != Key.LeftCtrl &&
+                                               e.Key == Key.Enter)
+                                             {
+                                                 _SendMessageCommand(null);
+                                                 _PreviousKey = Key.None;
+                                                 e.Handled = true;
+                                             }
+                                             if (_PreviousKey == Key.LeftCtrl &&
+                                                 e.Key == Key.Enter)
+                                             {
+                                                 _NewLineCommand();
+                                                 _PreviousKey = Key.None;
+                                             }
+                                         };
         }
+
+        private void _NewLineCommand()
+        {
+            var caretIndex = MessageToSend.CaretIndex;
+            MessageToSend.Text = MessageToSend.Text.Insert(MessageToSend.CaretIndex, "\n");
+            MessageToSend.CaretIndex = caretIndex + 1;
+            _PreviousKey = Key.None;
+        }
+
+        private Key _PreviousKey;
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
@@ -73,14 +107,11 @@ namespace Unite.UI.Views
             Close();
         }
 
-        private void MessageToSend_KeyUp(object sender, KeyEventArgs e)
+        private void _SendMessageCommand(object param)
         {
-            if (e.Key == Key.Enter)
-            {
-                SendMessage.Focus(); //need to cause MessageToSend to lose focus so binding will update viewmodel
-                SendMessage.Command.Execute(null);
-                OnMessageSent();
-            }
+            SendMessage.Focus(); //need to cause MessageToSend to lose focus so binding will update viewmodel
+            SendMessage.Command.Execute(null);
+            OnMessageSent();
         }
 
         private void SendMessage_Click(object sender, RoutedEventArgs e)

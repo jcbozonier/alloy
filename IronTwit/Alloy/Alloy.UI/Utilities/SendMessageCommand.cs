@@ -3,7 +3,7 @@ using System.Windows.Input;
 using Unite.UI.Utilities;
 using StructureMap;
 
-namespace Unite.UI.ViewModels
+namespace Unite.UI.Utilities
 {
     public class SendMessageCommand : ICommand
     {

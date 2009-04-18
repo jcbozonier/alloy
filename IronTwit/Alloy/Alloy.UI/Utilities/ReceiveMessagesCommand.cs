@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using System.Net;
 
-namespace Unite.UI.ViewModels
+namespace Unite.UI.Utilities
 {
     public class ReceiveMessagesCommand : ICommand
     {

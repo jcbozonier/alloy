@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Unite.UI.ViewModels
+namespace Unite.UI.Utilities
 {
     public class Do<T> : ICommand
     {
@@ -22,15 +22,15 @@ namespace Unite.UI.ViewModels
 
         public void Execute(object parameter)
         {
-            if(!(parameter is T)) 
+            if(!(parameter is T) && parameter != null) 
                 throw new ArgumentException("parameter doesn't match the type.");
             _Action((T) parameter);
         }
 
         public bool CanExecute(object parameter)
         {
-            if(_Pred == null) 
-                throw new NullReferenceException("You must provide a predicate to tell when an action can be carried out.");
+            if(_Pred == null)
+                return true;
             return _Pred((T) parameter);
         }
     }
