@@ -27,23 +27,24 @@ namespace Unite.UI.Utilities
             var password = "";
 
             var dispatcher = Dispatcher.FromThread(_mainThread);
-            dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
-                                                             {
-                                                                 var model = new UserCredentialsViewModel()
+            dispatcher.Invoke(DispatcherPriority.Normal,
+                              (Action) (() =>
+                                            {
+                                                var model = new UserCredentialsViewModel()
+                                                                {
+                                                                    Caption = serviceInformation.ServiceName + " Login"
+                                                                };
+                                                var dialog = new UserCredentialsWindow
                                                                  {
-                                                                     Caption = serviceInformation.ServiceName + " Login"
+                                                                     DataContext = model
                                                                  };
-                                                                 var dialog = new UserCredentialsWindow
-                                                                     {
-                                                                         DataContext = model
-                                                                     };
-                                                                 var mainWindow = Application.Current.MainWindow;
-                                                                 dialog.Owner = mainWindow;
-                                                                 dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                                                                 dialog.ShowDialog();
-                                                                 username = model.UserName;
-                                                                 password = model.Password;
-                                                             }));
+                                                var mainWindow = Application.Current.MainWindow;
+                                                dialog.Owner = mainWindow;
+                                                dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                                                dialog.ShowDialog();
+                                                username = model.UserName;
+                                                password = model.Password;
+                                            }));
 
             return new Credentials()
                        {

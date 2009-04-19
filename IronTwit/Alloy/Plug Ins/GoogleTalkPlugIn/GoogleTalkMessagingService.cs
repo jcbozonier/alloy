@@ -138,7 +138,9 @@ namespace GoogleTalkPlugIn
             {
                 if (CredentialsRequested != null)
                     CredentialsRequested(this, _CredEventArgs);
-                _DataAccess.Login(_Credentials.UserName, _Credentials.Password);
+
+                if(!String.IsNullOrEmpty(_Credentials.UserName) || _Credentials.Password != null)
+                    _DataAccess.Login(_Credentials.UserName, _Credentials.Password);
             }   
         }
 

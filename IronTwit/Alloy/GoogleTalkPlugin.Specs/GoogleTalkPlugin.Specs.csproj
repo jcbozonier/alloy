@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Sending_message_recipientless.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="When_start_receiving.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Alloy.Messaging\Alloy.Messaging.csproj">

@@ -47,7 +47,8 @@ namespace Unite.Specs.FakeSpecObjects
 
         public virtual void StartReceiving()
         {
-            
+            if(CredentialsRequested!= null)
+                CredentialsRequested(this, new CredentialEventArgs() { ServiceInfo = GetInformation() });
         }
 
         public virtual void StopReceiving()

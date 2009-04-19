@@ -15,6 +15,18 @@ namespace Unite.Specs.New_Starting_Application_Specs
     [TestFixture]
     public class When_messaging_service_needs_credentials : cached_credentials_no_settings
     {
+        protected override void Because()
+        {
+            ViewModel.Init();
+        }
+
+        [Test]
+        public void It_should_ask_ui_for_credentials()
+        {
+            FakeRepo.FakeUIContext
+                .AssertWasCalled(x => x.GetCredentials(null));
+        }
+
         protected override void Context()
         {
             FakeRepo.FakePluginFinder
@@ -26,18 +38,6 @@ namespace Unite.Specs.New_Starting_Application_Specs
                     .Return(FakeRepo.CreateFakeCredentials());
 
             ViewModel = FakeRepo.GetMainView();
-        }
-
-        protected override void Because()
-        {
-            ViewModel.Init();
-        }
-
-        [Test]
-        public void It_should_ask_ui_for_credentials()
-        {
-            FakeRepo.FakeUIContext
-                .AssertWasCalled(x => x.GetCredentials(null));
         }
     }
 
