@@ -41,8 +41,7 @@ namespace Unite.Specs.New_Starting_Application_Specs
             var repo = new ScenarioRepository(FakeMessagePlugin);
 
             repo.FakePluginFinder
-                .Stub(x => x.GetAllPlugins())
-                .Return(new[] {typeof (IMessagingService)});
+                .Assume_a_single_messaging_service_is_found();
 
             View = repo.GetMainView();
             View.Init();

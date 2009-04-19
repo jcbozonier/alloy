@@ -24,14 +24,6 @@ namespace GoogleTalkPlugin.Specs
             Plugin.CanFind(null).ShouldBeTrue();
         }
 
-        private GoogleTalkMessagingService Plugin;
-        private IGoogleTalkDataAccess GTalkDataAccess;
-        private string MessageToSend;
-        private string MessageSent;
-        private Identity Recipient;
-        private const string RecipientAddress = null;
-        private readonly ServiceInformation ServiceInfo = new ServiceInformation(){ServiceID = Guid.NewGuid()};
-
         public void Because()
         {
             Plugin.SendMessage(Recipient, MessageToSend);
@@ -54,5 +46,13 @@ namespace GoogleTalkPlugin.Specs
 
             Because();
         }
+
+        private GoogleTalkMessagingService Plugin;
+        private IGoogleTalkDataAccess GTalkDataAccess;
+        private string MessageToSend;
+        private string MessageSent;
+        private Identity Recipient;
+        private const string RecipientAddress = null;
+        private readonly ServiceInformation ServiceInfo = new ServiceInformation() { ServiceID = Guid.NewGuid() };
     }
 }

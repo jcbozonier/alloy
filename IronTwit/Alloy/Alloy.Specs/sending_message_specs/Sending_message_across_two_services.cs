@@ -6,17 +6,11 @@ using Unite.Messaging;
 using Unite.Specs.FakeSpecObjects;
 using Unite.UI.ViewModels;
 
-namespace Unite.Specs.New_sending_message_specs
+namespace Unite.Specs.sending_message_specs
 {
     [TestFixture]
-    public class When_sending_message_that_is_valid_for_multiple_services
+    public class When_sending_message_that_is_valid_for_multiple_services : multiple_service_context
     {
-        private MainView View;
-        private string MessageToSend;
-        private FakeTwitterPlugin FakeTwitter;
-        private FakeGTalkPlugin FakeGTalk;
-        private IInteractionContext FakeUI;
-
         [Test]
         public void It_should_send_message_using_each_service()
         {
@@ -31,58 +25,53 @@ namespace Unite.Specs.New_sending_message_specs
             FakeGTalk.MessageSent.ShouldEqual(MessageToSend);
         }
 
-        [TestFixtureSetUp]
-        public void Context()
+        protected override void Context()
         {
-            MessageToSend = "Test message";
+            FakesRepo.FakeUIContext
+                .Assume_valid_credentials_are_provided_for_the_correct_service();
+            FakesRepo.FakePluginFinder
+                .Assume_that_two_different_plugins_are_found();
 
-            var fakesRepo = ScenarioRepository.CreateUnstubbedInstance();
-            fakesRepo.FakePluginFinder
-                .Stub(x => x.GetAllPlugins())
-                .Return(new[] {typeof (FakeTwitterPlugin), typeof (FakeGTalkPlugin)});
-
-            FakeTwitter = new FakeTwitterPlugin();
-            FakeGTalk = new FakeGTalkPlugin();
-            FakeUI = fakesRepo.CreateGuiForEchoingServiceInfoInCredentials();
-
-            fakesRepo.InitializeIoC();
-            ObjectFactory.Inject(FakeTwitter);
-            ObjectFactory.Inject(FakeGTalk);
-            ObjectFactory.Inject(FakeUI);
-
-            View = fakesRepo.GetMainViewDontIoC();
-
+            View = FakesRepo.GetMainViewDontIoC();
             View.Init();
-
             View.MessageToSend = MessageToSend;
             View.Recipient = null;
-
-            Because();
         }
 
-        private void Because()
+        protected override void Because()
         {
             View.SendMessage.Execute(null);
         }
     }
 
-    public class FakeTwitterPlugin : FakePlugin
+    public abstract class multiple_service_context
     {
-        public string MessageSent;
+        protected MainView View;
+        protected string MessageToSend;
+        protected FakeTwitterPlugin FakeTwitter;
+        protected FakeGTalkPlugin FakeGTalk;
+        protected IInteractionContext FakeUI;
+        protected ScenarioRepository FakesRepo;
 
-        public override void SendMessage(IIdentity recipient, string message)
+        [TestFixtureSetUp]
+        public void Setup()
         {
-            MessageSent = message;
-        }
-    }
+            FakesRepo = ScenarioRepository.CreateUnstubbedInstance();
 
-    public class FakeGTalkPlugin : FakePlugin
-    {
-        public string MessageSent;
+            FakesRepo.InitializeIoC();
+            FakeTwitter = new FakeTwitterPlugin();
+            FakeGTalk = new FakeGTalkPlugin();
+            ObjectFactory.Inject(FakeTwitter);
+            ObjectFactory.Inject(FakeGTalk);
 
-        public override void SendMessage(IIdentity recipient, string message)
-        {
-            MessageSent = message;
+            MessageToSend = "Test message";
+
+            Context();
+            Because();
         }
+
+        protected abstract void Because();
+
+        protected abstract void Context();
     }
 }

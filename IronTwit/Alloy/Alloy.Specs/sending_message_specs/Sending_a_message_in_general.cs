@@ -6,7 +6,7 @@ using Unite.Messaging.Messages;
 using Unite.Specs.FakeSpecObjects;
 using Unite.UI.ViewModels;
 
-namespace Unite.Specs.New_sending_message_specs
+namespace Unite.Specs.sending_message_specs
 {
     [TestFixture]
     public class Sending_a_message_in_general : context
@@ -55,6 +55,13 @@ namespace Unite.Specs.New_sending_message_specs
 
         protected override void Context()
         {
+            FakeRepo.FakePluginFinder
+                .Assume_a_single_messaging_service_is_found();
+
+            FakeRepo.FakeMessagePlugin
+                .Assume_it_can_find_any_address()
+                .Assume_a_message_will_be_sent_and_deliver_the_arguments_to(SendingMessageCallBack);
+
             ViewModel.Init();
             ViewModel.MessageToSend = MessageToBeSent;
             ViewModel.Recipient = IntendedRecipient;
@@ -76,21 +83,6 @@ namespace Unite.Specs.New_sending_message_specs
 
             FakeRepo = ScenarioRepository.CreateStubbedInstance();
 
-            FakeRepo.FakePluginFinder
-                .Stub(x => x.GetAllPlugins())
-                .Return(new[] { typeof(IMessagingService) });
-
-            FakeRepo.FakeMessagePlugin
-                .Stub(x => x.CanFind(null))
-                .Return(true);
-            FakeRepo.FakeMessagePlugin
-                .Stub(x => x.SendMessage(null, null))
-                .Callback<IIdentity, string>(SendingMessageCallBack);
-            FakeRepo.FakeMessagePlugin
-                .Stub(x => x.CanFind(null))
-                .IgnoreArguments()
-                .Return(true);
-
             ViewModel = FakeRepo.GetMainView();
 
             Context();
@@ -101,11 +93,10 @@ namespace Unite.Specs.New_sending_message_specs
 
         protected abstract void Context();
 
-        protected bool SendingMessageCallBack(IIdentity recipient, string message)
+        protected void SendingMessageCallBack(IIdentity recipient, string message)
         {
             ActualRecipient = recipient;
             MessageSent = message;
-            return true;
         }
 
         protected ScenarioRepository FakeRepo;

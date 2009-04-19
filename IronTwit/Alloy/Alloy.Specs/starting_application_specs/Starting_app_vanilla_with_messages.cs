@@ -14,13 +14,10 @@ namespace Unite.Specs.New_Starting_Application_Specs
     [TestFixture]
     public class When_application_starts : no_cached_credentials_no_settings
     {
-        protected override void Context()
+        [Test]
+        public void It_should_start_receiving_messages()
         {
-            FakeRepo.FakePluginFinder
-                .Stub(x => x.GetAllPlugins())
-                .Return(new[] { typeof(IMessagingService) });
-
-            ViewModel = FakeRepo.GetMainView();
+            FakeRepo.FakeMessagePlugin.AssertWasCalled(x => x.StartReceiving());
         }
 
         protected override void Because()
@@ -28,10 +25,12 @@ namespace Unite.Specs.New_Starting_Application_Specs
             ViewModel.Init();
         }
 
-        [Test]
-        public void It_should_start_receiving_messages()
+        protected override void Context()
         {
-            FakeRepo.FakeMessagePlugin.AssertWasCalled(x => x.StartReceiving());
+            FakeRepo.FakePluginFinder
+                .Assume_a_single_messaging_service_is_found();
+
+            ViewModel = FakeRepo.GetMainView();
         }
     }
 

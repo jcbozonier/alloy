@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Unite.Messaging;
-using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
 using Unite.Specs.FakeSpecObjects;
 using Unite.UI.ViewModels;
@@ -15,11 +10,6 @@ namespace Unite.Specs.starting_application_specs
     [TestFixture]
     public class When_messaging_service_needs_credentials : cached_credentials_no_settings
     {
-        protected override void Because()
-        {
-            ViewModel.Init();
-        }
-
         [Test]
         public void It_should_ask_ui_for_credentials()
         {
@@ -27,15 +17,18 @@ namespace Unite.Specs.starting_application_specs
                 .AssertWasCalled(x => x.GetCredentials(null));
         }
 
+        protected override void Because()
+        {
+            ViewModel.Init();
+        }
+
         protected override void Context()
         {
             FakeRepo.FakePluginFinder
-                .Stub(x => x.GetAllPlugins())
-                .Return(new[] { typeof(IMessagingService) });
+                .Assume_a_single_messaging_service_is_found();
 
             FakeRepo.FakeUIContext
-                .Stub(x => x.GetCredentials(null))
-                .Return(FakeRepo.CreateFakeCredentials());
+                .Assume_some_credential_is_provided();
 
             ViewModel = FakeRepo.GetMainView();
         }

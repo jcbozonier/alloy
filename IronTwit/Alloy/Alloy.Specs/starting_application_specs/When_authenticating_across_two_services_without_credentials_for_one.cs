@@ -1,6 +1,5 @@
 ﻿using System;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SpecUnit;
 using StructureMap;
 using Unite.Messaging;
@@ -33,7 +32,12 @@ namespace Unite.Specs.starting_application_specs
 
         protected override void Context()
         {
-            
+            FakesRepo.FakeUIContext
+                .Assume_valid_credentials_are_provided_for_the_correct_service();
+            FakesRepo.FakePluginFinder
+                .Assume_these_plugins_were_found(typeof(FakeTwitterPlugin), typeof(FakeGTalkPlugin));
+
+            View = FakesRepo.GetMainViewDontIoC();
         }
     }
 
@@ -47,29 +51,20 @@ namespace Unite.Specs.starting_application_specs
 
         protected bool TwitterPluginAuthenticated;
         protected bool GTalkPluginAuthenticated;
+        protected ScenarioRepository FakesRepo;
 
         [TestFixtureSetUp]
         public void Setup()
         {
-            var fakesRepo = ScenarioRepository.CreateUnstubbedInstance();
-            
-            fakesRepo.FakePluginFinder
-                .Stub(x => x.GetAllPlugins())
-                .Return(new[] { typeof(FakeTwitterPlugin), typeof(FakeGTalkPlugin) });
+            FakesRepo = ScenarioRepository.CreateUnstubbedInstance();
+
+            FakesRepo.InitializeIoC();
 
             FakeTwitter = new FakeTwitterPlugin();
-            FakeGTalk = new FakeGTalkPlugin();
-            var gui = new FakeGui();
-
-            fakesRepo.InitializeIoC();
-
             ObjectFactory.Inject(FakeTwitter);
+
+            FakeGTalk = new FakeGTalkPlugin();
             ObjectFactory.Inject(FakeGTalk);
-
-            ObjectFactory.EjectAllInstancesOf<IInteractionContext>();
-            ObjectFactory.Inject <IInteractionContext>(gui);
-
-            View = fakesRepo.GetMainViewDontIoC();
 
             Context();
             BecauseOf();

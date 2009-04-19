@@ -11,22 +11,6 @@ namespace Unite.Specs.sending_message_specs
     [TestFixture]
     public class When_sending_a_message_containing_a_code_sample : code_sample_context
     {
-        protected override void In_this_context()
-        {
-            // This is the definition of a code sample.
-            // Any message that contains a newline and a tab character
-            // immediately after at least one new line.
-            MinimalCodeSample = "\n\t";
-            MessageToSend = MinimalCodeSample;
-
-            ViewModel.MessageToSend = MessageToSend;
-        }
-
-        protected override void Because_of_this()
-        {
-            ViewModel.SendMessage.Execute(null);
-        }
-
         [Test]
         public void The_sent_message_should_contain_a_url()
         {
@@ -37,6 +21,31 @@ namespace Unite.Specs.sending_message_specs
         public void The_sent_message_should_NOT_contain_the_code_sample()
         {
             MessageSent.Contains(MinimalCodeSample).ShouldBeFalse();
+        }
+
+        protected override void Because_of_this()
+        {
+            ViewModel.SendMessage.Execute(null);
+        }
+
+        protected override void In_this_context()
+        {
+            FakeRepo.FakeMessagePlugin
+                .Assume_a_message_will_be_sent_and_deliver_the_arguments_to
+                (
+                    (recipient, message) => MessageSent = message
+                );
+
+            FakeRepo.FakeCodeFormatter
+                .Assume_code_was_pasted_and_return(CodeSampleUrl);
+
+            // This is the definition of a code sample.
+            // Any message that contains a newline and a tab character
+            // immediately after at least one new line.
+            MinimalCodeSample = "\n\t";
+            MessageToSend = MinimalCodeSample;
+
+            ViewModel.MessageToSend = MessageToSend;
         }
     }
 
@@ -55,24 +64,11 @@ namespace Unite.Specs.sending_message_specs
             CodeSampleUrl = "[gestures with hand] 'I **AM** a URL'";
 
             FakeRepo = ScenarioRepository.CreateStubbedInstance();
-            FakeRepo.FakeMessagePlugin
-                .Stub(x => x.SendMessage(null, null))
-                .Callback<IIdentity, string>(Foo);
-            FakeRepo.FakeCodeFormatter
-                .Stub(x => x.PasteCode(null))
-                .Constraints(Is.Anything())
-                .Return(CodeSampleUrl);
 
             ViewModel = FakeRepo.GetMainView();
 
             In_this_context();
             Because_of_this();
-        }
-
-        public bool Foo(IIdentity recipient, string message)
-        {
-            MessageSent = message;
-            return true;
         }
 
         protected abstract void Because_of_this();

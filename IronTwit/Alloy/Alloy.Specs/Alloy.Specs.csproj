@@ -79,13 +79,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contacts\When_receiving_messages_with_known_contacts.cs" />
+    <Compile Include="FakeSpecObjects\ScenarioExtensions.cs" />
     <Compile Include="sending_message_specs\Sending_a_message_in_general.cs" />
     <Compile Include="sending_message_specs\Sending_message_across_two_services.cs" />
     <Compile Include="FakeSpecObjects\FakePlugin.cs" />
     <Compile Include="sending_message_specs\When_sending_a_message_containing_code.cs" />
     <Compile Include="starting_application_specs\Receiving_messages.cs" />
     <Compile Include="FakeSpecObjects\ScenarioRepository.cs" />
-    <Compile Include="starting_application_specs\Sending_message.cs" />
     <Compile Include="starting_application_specs\Starting_app_vanilla_with_messages.cs" />
     <Compile Include="starting_application_specs\When_application_starts_receiving_with_no_valid_credentials.cs" />
     <Compile Include="starting_application_specs\When_authenticating_across_two_services_without_credentials_for_one.cs" />

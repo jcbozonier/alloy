@@ -1,10 +1,8 @@
-﻿using System;
-using IronTwitterPlugIn;
+﻿using IronTwitterPlugIn;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SpecUnit;
 using Unite.Messaging;
-using Unite.Messaging.Entities;
 using Unite.Specs.FakeSpecObjects;
 
 namespace TwitterPlugIn.Specs
@@ -36,8 +34,6 @@ namespace TwitterPlugIn.Specs
 
             BecauseOf();
         }
-
-        
 
         private TwitterUtilities Twitter;
         private ITwitterDataAccess TwitterDal;

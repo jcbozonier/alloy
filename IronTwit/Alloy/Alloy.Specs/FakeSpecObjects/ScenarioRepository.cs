@@ -118,11 +118,6 @@ namespace Unite.Specs.FakeSpecObjects
                        };
         }
 
-        public IInteractionContext CreateGuiForEchoingServiceInfoInCredentials()
-        {
-            return new FakeGui();
-        }
-
         public static ScenarioRepository CreateUnstubbedInstance()
         {
             return new ScenarioRepository(false);
@@ -162,19 +157,6 @@ namespace Unite.Specs.FakeSpecObjects
         public DateTime TimeStamp
         {
             get; set;
-        }
-    }
-
-    public class FakeGui : IInteractionContext
-    {
-        public Credentials GetCredentials(IServiceInformation serviceInformation)
-        {
-            return new Credentials { ServiceInformation = serviceInformation };
-        }
-
-        public bool AuthenticationFailedRetryQuery()
-        {
-            throw new NotSupportedException("This method shouldn't be reached in this context.");
         }
     }
 
