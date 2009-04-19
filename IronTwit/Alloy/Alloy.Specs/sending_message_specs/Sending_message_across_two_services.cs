@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using SpecUnit;
 using StructureMap;
 using Unite.Messaging;
-using Unite.Messaging.Messages;
 using Unite.Specs.FakeSpecObjects;
 using Unite.UI.ViewModels;
 
@@ -20,6 +15,7 @@ namespace Unite.Specs.New_sending_message_specs
         private string MessageToSend;
         private FakeTwitterPlugin FakeTwitter;
         private FakeGTalkPlugin FakeGTalk;
+        private IInteractionContext FakeUI;
 
         [Test]
         public void It_should_send_message_using_each_service()
@@ -47,10 +43,12 @@ namespace Unite.Specs.New_sending_message_specs
 
             FakeTwitter = new FakeTwitterPlugin();
             FakeGTalk = new FakeGTalkPlugin();
+            FakeUI = fakesRepo.CreateGuiForEchoingServiceInfoInCredentials();
 
             fakesRepo.InitializeIoC();
             ObjectFactory.Inject(FakeTwitter);
             ObjectFactory.Inject(FakeGTalk);
+            ObjectFactory.Inject(FakeUI);
 
             View = fakesRepo.GetMainViewDontIoC();
 

@@ -10,7 +10,7 @@ using Unite.Messaging.Messages;
 using Unite.Specs.FakeSpecObjects;
 using Unite.UI.ViewModels;
 
-namespace Unite.Specs.New_Starting_Application_Specs
+namespace Unite.Specs.starting_application_specs
 {
     [TestFixture]
     public class When_messaging_service_needs_credentials : cached_credentials_no_settings
@@ -33,9 +33,9 @@ namespace Unite.Specs.New_Starting_Application_Specs
                 .Stub(x => x.GetAllPlugins())
                 .Return(new[] { typeof(IMessagingService) });
 
-                FakeRepo.FakeUIContext
-                    .Stub(x => x.GetCredentials(null))
-                    .Return(FakeRepo.CreateFakeCredentials());
+            FakeRepo.FakeUIContext
+                .Stub(x => x.GetCredentials(null))
+                .Return(FakeRepo.CreateFakeCredentials());
 
             ViewModel = FakeRepo.GetMainView();
         }

@@ -16,7 +16,7 @@ namespace Unite.Specs.FakeSpecObjects
 
         public virtual bool CanAccept(Credentials credentials)
         {
-            return true;
+            return credentials.ServiceInformation == GetInformation();
         }
 
         public virtual List<IMessage> GetMessages()

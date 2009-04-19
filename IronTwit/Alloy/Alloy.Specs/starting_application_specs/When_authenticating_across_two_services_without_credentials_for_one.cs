@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SpecUnit;
@@ -19,8 +16,14 @@ namespace Unite.Specs.starting_application_specs
         [Test]
         public void Both_services_should_ask_to_authenticate()
         {
-            TwitterPluginAuthenticated.ShouldBeTrue();
-            GTalkPluginAuthenticated.ShouldBeTrue();
+            FakeTwitter.FirstCredentials.ShouldNotBeNull();
+            FakeGTalk.FirstCredentials.ShouldNotBeNull();
+        }
+
+        [Test]
+        public void Both_services_should_be_passed_only_the_appropriate_credentials()
+        {
+            FakeTwitter.FirstCredentials.ShouldNotBeTheSameAs(FakeGTalk.FirstCredentials);
         }
 
         protected override void BecauseOf()
@@ -45,7 +48,7 @@ namespace Unite.Specs.starting_application_specs
         protected bool TwitterPluginAuthenticated;
         protected bool GTalkPluginAuthenticated;
 
-        [Test]
+        [TestFixtureSetUp]
         public void Setup()
         {
             var fakesRepo = ScenarioRepository.CreateUnstubbedInstance();
@@ -54,31 +57,22 @@ namespace Unite.Specs.starting_application_specs
                 .Stub(x => x.GetAllPlugins())
                 .Return(new[] { typeof(FakeTwitterPlugin), typeof(FakeGTalkPlugin) });
 
-            fakesRepo.FakeUIContext.Stub(x => x.GetCredentials(null))
-                .Callback<IServiceInformation>(Foo)
-                .Return(new Credentials());
-
             FakeTwitter = new FakeTwitterPlugin();
             FakeGTalk = new FakeGTalkPlugin();
+            var gui = new FakeGui();
 
             fakesRepo.InitializeIoC();
+
             ObjectFactory.Inject(FakeTwitter);
             ObjectFactory.Inject(FakeGTalk);
+
+            ObjectFactory.EjectAllInstancesOf<IInteractionContext>();
+            ObjectFactory.Inject <IInteractionContext>(gui);
 
             View = fakesRepo.GetMainViewDontIoC();
 
             Context();
             BecauseOf();
-        }
-
-        private bool Foo(IServiceInformation serviceInfo)
-        {
-            if(serviceInfo.ServiceName == "FakeTwitterPlugin")
-                TwitterPluginAuthenticated = true;
-            if (serviceInfo.ServiceName == "FakeGTalkPlugin")
-                GTalkPluginAuthenticated = true;
-
-            return true;
         }
 
         protected abstract void BecauseOf();
@@ -89,9 +83,18 @@ namespace Unite.Specs.starting_application_specs
     public class FakeTwitterPlugin : FakePlugin
     {
         public string MessageSent;
-        public override Unite.Messaging.Entities.ServiceInformation GetInformation()
+        public Credentials FirstCredentials;
+        private readonly ServiceInformation _ServiceInfo = new ServiceInformation() { ServiceID = Guid.NewGuid(), ServiceName = "FakeTwitterPlugin"};
+
+        public override ServiceInformation GetInformation()
         {
-            return new ServiceInformation() {ServiceName = "FakeTwitterPlugin"};
+            return _ServiceInfo;
+        }
+
+        public override void SetCredentials(Credentials credentials)
+        {
+            if (FirstCredentials == null)
+                FirstCredentials = credentials;
         }
 
         public override void SendMessage(IIdentity recipient, string message)
@@ -103,10 +106,18 @@ namespace Unite.Specs.starting_application_specs
     public class FakeGTalkPlugin : FakePlugin
     {
         public string MessageSent;
+        public Credentials FirstCredentials;
+        private readonly ServiceInformation _ServiceInfo = new ServiceInformation() { ServiceID = Guid.NewGuid(), ServiceName = "FakeGTalkPlugin" };
 
-        public override Unite.Messaging.Entities.ServiceInformation GetInformation()
+        public override ServiceInformation GetInformation()
         {
-            return new ServiceInformation() { ServiceName = "FakeGTalkPlugin" };
+            return _ServiceInfo;
+        }
+
+        public override void SetCredentials(Credentials credentials)
+        {
+            if (FirstCredentials == null)
+                FirstCredentials = credentials;
         }
 
         public override void SendMessage(IIdentity recipient, string message)
