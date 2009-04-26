@@ -35,9 +35,8 @@ namespace GoogleTalkPlugin.Specs
         [TestFixtureSetUp]
         public void Setup()
         {
-            FakeDataAccess = Rhino.Mocks.MockRepository.GenerateMock<IGoogleTalkDataAccess>();
-            FakeDataAccess
-                .Stub(x => x.Login(null, null));
+            FakeDataAccess = MockRepository.GenerateMock<IGoogleTalkDataAccess>();
+            FakeDataAccess.Stub(x => x.Login(null, null));
             Plugin = new GoogleTalkMessagingService(FakeDataAccess);
 
             Context();

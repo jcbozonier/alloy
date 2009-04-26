@@ -1,8 +1,5 @@
-﻿using System;
-using Unite.Messaging;
-using Unite.Messaging.Entities;
+﻿using Unite.Messaging;
 using Unite.Specs.Application_starting;
-using Unite.UI.Utilities;
 using IronTwitterPlugIn;
 using NUnit.Framework;
 using SpecUnit;
@@ -28,7 +25,7 @@ namespace Unite.Specs.Application_running.sending_messages
         [Test]
         public void It_clips_each_message_to_be_at_or_below_the_max_message_length()
         {
-            DataAccess.SentMessages.ForEach(message => message.Length.ShouldBeLessThan(MaxMessageLength+1));
+            DataAccess.SentMessages.ForEach(message => message.Length.ShouldBeLessThan(MaxMessageLength + 1));
         }
 
         [Test]
