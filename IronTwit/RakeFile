@@ -75,6 +75,10 @@ task :move_artifacts do
   msiDir = "Alloy/Alloy.Setup/bin/#{COMPILE_TARGET}" 
   
   archive_files(msiDir, "*.{msi}", props[:archive])
+  
+  msi_file = "Alloy.Setup.msi"
+  versioned_filename = add_version_to_msi_filename(msi_file, VERSION_NUMBER)
+  File.rename("build/Alloy.Setup.msi", "build/#{versioned_filename}")
 end
 
 desc "Runs unit tests"

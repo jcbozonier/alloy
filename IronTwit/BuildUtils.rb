@@ -116,3 +116,7 @@ Imports System.Runtime.InteropServices
 		end
 	end
 end
+
+def add_version_to_msi_filename(filename, version_number)
+	File.basename(filename, ".msi") + "-" + version_number + ".msi"
+end
