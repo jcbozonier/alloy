@@ -78,6 +78,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Contacts\When_receiving_messages_with_known_contacts.cs" />
     <Compile Include="FakeSpecObjects\ScenarioExtensions.cs" />
     <Compile Include="sending_message_specs\Sending_a_message_in_general.cs" />

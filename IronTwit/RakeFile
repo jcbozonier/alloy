@@ -16,7 +16,7 @@ COPYRIGHT = '';
 COMMON_ASSEMBLY_INFO = 'CommonAssemblyInfo';
 CLR_VERSION = "v3.5"
 
-VERSION_PREFIX = "2.0.0."
+VERSION_PREFIX = "0.1.0."
 BUILD_NUMBER = ENV["BUILD_NUMBER"].nil? ? "0" : ENV["BUILD_NUMBER"]
 
 VERSION_NUMBER = VERSION_PREFIX + BUILD_NUMBER;
@@ -40,7 +40,7 @@ task :version do
   
   builder = AsmInfoBuilder.new(VERSION_NUMBER, {'Product' => PRODUCT, 'Copyright' => COPYRIGHT})
   buildNumber = builder.buildnumber
-  builder.write COMMON_ASSEMBLY_INFO  
+  builder.writeCS(File.join('Alloy', COMMON_ASSEMBLY_INFO))
 end
 
 # TODO Make clean actually clean build directories.
@@ -57,7 +57,7 @@ task :clean do
 end
 
 desc "Compiles the app"
-task :compile do
+task :compile => :version do
 	puts "Compiling the application..."
 	MSBuildRunner.compile :compilemode => COMPILE_TARGET, :solutionfile => 'Alloy/Alloy.sln', :clrversion => CLR_VERSION
 end
