@@ -36,6 +36,20 @@ namespace Unite.UI.ViewModels
             }
         }
 
+        public static DependencyProperty SavePasswordProperty = DependencyProperty
+            .Register("SavePassword", typeof (bool), typeof (UserCredentialsViewModel));
+        public bool SavePassword
+        {
+            get
+            {
+                return (bool) GetValue(SavePasswordProperty);
+            }
+            set
+            {
+                SetValue(SavePasswordProperty, value);
+            }
+        }
+
         public string Caption { get; set; }
     }
 }

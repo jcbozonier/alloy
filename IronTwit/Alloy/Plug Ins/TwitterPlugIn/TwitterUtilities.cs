@@ -146,7 +146,7 @@ namespace IronTwitterPlugIn
 
         public bool CanAccept(Credentials credentials)
         {
-            return credentials.ServiceInformation == GetInformation();
+            return credentials.ServiceInformation.ServiceID.Equals(GetInformation().ServiceID);
         }
 
         private bool _StopReceiving;

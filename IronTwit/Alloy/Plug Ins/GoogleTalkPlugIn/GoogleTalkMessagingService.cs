@@ -17,7 +17,7 @@ namespace GoogleTalkPlugIn
 
         private static readonly ServiceInformation _ServiceInformation = new ServiceInformation()
                                                              {
-                                                                 ServiceID = Guid.NewGuid(),
+                                                                 ServiceID = new Guid("{D17E41F2-8D70-49fa-95C7-1DE34CB55DE3}"),
                                                                  ServiceName = "GoogleTalk"
                                                              };
 
@@ -75,7 +75,7 @@ namespace GoogleTalkPlugIn
 
         public bool CanAccept(Credentials credentials)
         {
-            return credentials.ServiceInformation == _ServiceInformation;
+            return credentials.ServiceInformation.ServiceID.Equals(_ServiceInformation.ServiceID);
         }
 
         public List<IMessage> GetMessages()

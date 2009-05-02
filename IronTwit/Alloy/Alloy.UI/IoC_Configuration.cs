@@ -1,4 +1,6 @@
 ﻿using System.Threading;
+using StructureMap.Attributes;
+using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
 using Unite.UI.Utilities;
 using StructureMap;
@@ -17,10 +19,11 @@ namespace Unite.UI
                 x.ForRequestedType<IInteractionContext>().TheDefault.IsThis(
                     new GuiInteractionContext(Thread.CurrentThread));
                 x.ForRequestedType<IMessagingServiceManager>().TheDefaultIsConcreteType<ServicesManager>();
-                x.ForRequestedType<IContactProvider>().TheDefaultIsConcreteType<ContactProvider>();
+                x.ForRequestedType<IContactProvider>().TheDefaultIsConcreteType<ContactProvider>().CacheBy(InstanceScope.Singleton);
                 x.ForRequestedType<IServiceProvider>().TheDefaultIsConcreteType<ServiceProvider>();
                 x.ForRequestedType<IPluginFinder>().TheDefaultIsConcreteType<PluginFinder>();
                 x.ForRequestedType<ICodePaste>().TheDefaultIsConcreteType<CodePaste>();
+                x.ForRequestedType<ICredentialCache>().TheDefaultIsConcreteType<CredentialCache>().CacheBy(InstanceScope.Singleton);
             });
         }
     }
