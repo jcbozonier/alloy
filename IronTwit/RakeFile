@@ -59,7 +59,7 @@ end
 desc "Compiles the app"
 task :compile do
 	puts "Compiling the application..."
-	MSBuildRunner.compile :compilemode => COMPILE_TARGET, :solutionfile => 'IronTwit/Unite.sln', :clrversion => CLR_VERSION
+	MSBuildRunner.compile :compilemode => COMPILE_TARGET, :solutionfile => 'IronTwit/Alloy.sln', :clrversion => CLR_VERSION
 end
 
 desc "Move Compilation Output to Build Directory"

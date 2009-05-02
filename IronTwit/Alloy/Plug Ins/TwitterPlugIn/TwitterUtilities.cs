@@ -158,15 +158,19 @@ namespace IronTwitterPlugIn
 
             var receivingThread = new Thread(() =>
                                                  {
+                                                     // 100 api calls over an hour.
+                                                     var getIntervalMilliseconds = 60*60*1000/99;
+                                                     DateTime lastGetTime = DateTime.MinValue;
                                                      while (!_StopReceiving)
                                                      {
-                                                         
-                                                         var messages = GetMessages();
-                                                         if (MessagesReceived != null)
-                                                             MessagesReceived(this, new MessagesReceivedEventArgs(messages));
-                                                         
-                                                         // 100 api calls over an hour.
-                                                         Thread.Sleep(60*60*1000/99);
+                                                         if (DateTime.Now.Subtract(lastGetTime).TotalMilliseconds >= getIntervalMilliseconds)
+                                                         {
+                                                             var messages = GetMessages();
+                                                             if (MessagesReceived != null)
+                                                                 MessagesReceived(this, new MessagesReceivedEventArgs(messages));
+                                                             lastGetTime = DateTime.Now;
+                                                         }
+                                                         Thread.Sleep(100);
                                                      }
                                                  });
             receivingThread.Start();
