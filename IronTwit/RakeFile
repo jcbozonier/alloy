@@ -11,8 +11,8 @@ require "BuildUtils.rb"
 
 COMPILE_TARGET = "release"
 RESULTS_DIR = "results"
-PRODUCT = "Falcon MobileServer"
-COPYRIGHT = 'Copyright 2008 JMT Systems Consulting, LLC';
+PRODUCT = "Alloy"
+COPYRIGHT = '';
 COMMON_ASSEMBLY_INFO = 'CommonAssemblyInfo';
 CLR_VERSION = "v3.5"
 
@@ -52,14 +52,14 @@ task :clean do
 	}	
 	Dir.mkdir props[:archive] unless exists?(props[:archive])
 	
-	file = "Server/Falcon.Server.Setup/setup.exe"
+	file = "Path/To/setup.exe"
 	FileUtils.rm(file) if File.file?(file)
 end
 
 desc "Compiles the app"
 task :compile do
 	puts "Compiling the application..."
-	MSBuildRunner.compile :compilemode => COMPILE_TARGET, :solutionfile => 'IronTwit/Alloy.sln', :clrversion => CLR_VERSION
+	MSBuildRunner.compile :compilemode => COMPILE_TARGET, :solutionfile => 'Alloy/Alloy.sln', :clrversion => CLR_VERSION
 end
 
 desc "Move Compilation Output to Build Directory"
@@ -72,7 +72,7 @@ task :move_artifacts do
 	}
   end
   
-  msiDir = "IronTwit/Unite.Setup/bin/#{COMPILE_TARGET}" 
+  msiDir = "Alloy/Alloy.Setup/bin/#{COMPILE_TARGET}" 
   
   archive_files(msiDir, "*.{msi}", props[:archive])
 end
@@ -80,6 +80,6 @@ end
 desc "Runs unit tests"
 task :unit_test do
   puts "Running unit tests..."
-  runner = NUnitRunner.new :compilemode => COMPILE_TARGET, :results => './build', :source => './IronTwit', :platform => nil
-  runner.executeTestInProject("Specs", "Unite.Specs")
+  runner = NUnitRunner.new :compilemode => COMPILE_TARGET, :results => './build', :source => './Alloy', :platform => nil
+  runner.executeTests("Alloy.Specs")
 end
