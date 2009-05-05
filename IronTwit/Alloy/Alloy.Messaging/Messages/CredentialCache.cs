@@ -15,9 +15,9 @@ namespace Unite.Messaging.Messages
 
         private Dictionary<Guid, CachedCredential> _cache;
 
-        public CredentialCache()
+        public CredentialCache(Services.IServiceProvider serviceProvider)
         {
-            _serviceProvider = ObjectFactory.GetInstance<Services.IServiceProvider>();
+            _serviceProvider = serviceProvider;
             var userAppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             _cacheFile = Path.Combine(userAppData, "CredentialCache.xml");
             if (!Directory.Exists(userAppData))

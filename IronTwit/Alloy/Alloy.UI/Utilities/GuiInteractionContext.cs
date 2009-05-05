@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
-using StructureMap;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
 using Unite.UI.ViewModels;
@@ -17,15 +13,17 @@ namespace Unite.UI.Utilities
     public class GuiInteractionContext : IInteractionContext
     {
         private Thread _mainThread;
+        private ICredentialCache _CredentialCache;
 
-        public GuiInteractionContext(Thread mainThread)
+        public GuiInteractionContext(ICredentialCache credentialCache)
         {
-            _mainThread = mainThread;
+            _mainThread = Thread.CurrentThread;
+            _CredentialCache = credentialCache;
         }
 
         public Credentials GetCredentials(IServiceInformation serviceInformation)
         {
-            var credentialCache = ObjectFactory.GetInstance<ICredentialCache>();
+            var credentialCache = _CredentialCache;
             Credentials cachedCredential = null;
             if (credentialCache.Contains(serviceInformation.ServiceID))
             {

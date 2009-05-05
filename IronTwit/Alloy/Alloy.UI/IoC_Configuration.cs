@@ -16,14 +16,13 @@ namespace Unite.UI
             ObjectFactory.Initialize(x =>
             {
                 x.ForRequestedType<Views.MainView>().TheDefaultIsConcreteType<Views.MainView>();
-                x.ForRequestedType<IInteractionContext>().TheDefault.IsThis(
-                    new GuiInteractionContext(Thread.CurrentThread));
                 x.ForRequestedType<IMessagingServiceManager>().TheDefaultIsConcreteType<ServicesManager>();
-                x.ForRequestedType<IContactProvider>().TheDefaultIsConcreteType<ContactProvider>().CacheBy(InstanceScope.Singleton);
+                x.ForRequestedType<IContactProvider>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<ContactProvider>();
                 x.ForRequestedType<IServiceProvider>().TheDefaultIsConcreteType<ServiceProvider>();
                 x.ForRequestedType<IPluginFinder>().TheDefaultIsConcreteType<PluginFinder>();
                 x.ForRequestedType<ICodePaste>().TheDefaultIsConcreteType<CodePaste>();
-                x.ForRequestedType<ICredentialCache>().TheDefaultIsConcreteType<CredentialCache>().CacheBy(InstanceScope.Singleton);
+                x.ForRequestedType<ICredentialCache>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<CredentialCache>();
+                x.ForRequestedType<IInteractionContext>().TheDefaultIsConcreteType<GuiInteractionContext>();
             });
         }
     }
