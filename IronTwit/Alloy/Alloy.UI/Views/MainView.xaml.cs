@@ -123,6 +123,7 @@ namespace Unite.UI.Views
             SendMessage.Focus(); //need to cause MessageToSend to lose focus so binding will update viewmodel
             SendMessage.Command.Execute(null);
             OnMessageSent();
+            MessageToSend.Focus();
         }
 
         private void SendMessage_Click(object sender, RoutedEventArgs e)
