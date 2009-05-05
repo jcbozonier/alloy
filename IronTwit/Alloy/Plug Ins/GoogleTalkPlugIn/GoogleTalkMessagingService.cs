@@ -93,7 +93,10 @@ namespace GoogleTalkPlugIn
             if (recipient == null || String.IsNullOrEmpty(recipient.UserName))
                 _DataAccess.SetAvailableMessage(message);
             else
+            {
                 _SendInstantMessage(recipient, message);
+                _ReceiveMessage(_Credentials.UserName, message);
+            }
         }
 
         private void _SendInstantMessage(IIdentity recipient, string message)
