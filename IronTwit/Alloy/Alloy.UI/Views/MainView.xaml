@@ -77,7 +77,7 @@
 				<TextBox x:Name="Recipient" Grid.Column="0" VerticalAlignment="Center" Text="{Binding Path=Recipient}" />
 				<Button x:Name="SendMessage" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right"  Width="75" Height="25" Command="{Binding Path=SendMessage}" Content="Send" Click="SendMessage_Click" />
 				<Button x:Name="ReceiveMessage" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Width="75" Height="25"  Command="{Binding Path=ReceiveMessage}" Content="Refresh" />
-			</Grid>
+            </Grid>
 			<TextBox x:Name="MessageToSend" Grid.Row="3" TextWrapping="WrapWithOverflow" 
                      Margin="{StaticResource ContentMargin}" Text="{Binding Path=MessageToSend}"
                      VerticalScrollBarVisibility="Auto" />

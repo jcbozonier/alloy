@@ -48,6 +48,7 @@ namespace Unite.UI.Views
                                               {
                                                   _PreviousKey = Key.None;
                                               };
+
         }
 
         private void _NewLineCommand()

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Windows.Data;
 using System.Windows.Threading;
@@ -86,6 +87,20 @@ namespace Unite.UI.ViewModels
             {
                 _SelectedMessage = value;
                 PropertyChanged.Notify(()=>SelectedMessage);
+            }
+        }
+
+        private IEnumerable<string> _suggestedRecipients;
+        public IEnumerable<string> SuggestedRecipients
+        {
+            get
+            {
+                return _suggestedRecipients;
+            }
+            set
+            {
+                _suggestedRecipients = value;
+                PropertyChanged.Notify(() => SuggestedRecipients);
             }
         }
 
@@ -195,15 +210,23 @@ namespace Unite.UI.ViewModels
 
         void MainView_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (SelectedMessage == null || SelectedMessage.Address == null)
-                return;
 
             switch (e.PropertyName)
             {
                 case "SelectedMessage":
                     Recipient = SelectedMessage.Address.UserName;
                     break;
+                case "Recipient":
+                    SuggestedRecipients = _SuggestRecipients(Recipient);
+                    break;
             }
+        }
+
+        private IEnumerable<string> _SuggestRecipients(string recipient)
+        {
+            return from message in Messages
+                    where message.Address.UserName.StartsWith(recipient)
+                    select message.Address.UserName;
         }
 
         void messagingService_CredentialsRequested(object sender, CredentialEventArgs e)

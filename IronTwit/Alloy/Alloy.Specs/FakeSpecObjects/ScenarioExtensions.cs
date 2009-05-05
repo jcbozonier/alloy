@@ -10,6 +10,7 @@ namespace Unite.Specs.FakeSpecObjects
 {
     public static class ScenarioExtensions
     {
+        
         public static IMessagingService Assume_it_can_find_any_address(this IMessagingService plugin)
         {
             plugin.Stub(x => x.CanFind(null))

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Unite.Specs.UnitTests
 {
-    class TrieTests
+    public class TrieTests
     {
     }
 }
