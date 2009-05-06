@@ -100,7 +100,9 @@ namespace Unite.UI.Controls
                 var hyperlink = new Hyperlink();
                 var displayRun = new Run(messageText.Substring(inlineUri.StartIndex, inlineUri.Length));
                 hyperlink.Inlines.Add(displayRun);
-                hyperlink.NavigateUri = new Uri(displayRun.Text);
+                // #TODO: Add test... Was failing due to this tweet: "RT @bhalchander,@adnanmahmud: looking for folks to help us test our beta site www.jolkona.org pls RT"
+                // hyperlink.NavigateUri = new Uri(displayRun.Text);
+                hyperlink.NavigateUri = inlineUri; 
                 ListenToHyperlink(hyperlink, true);
                 MessageText.Inlines.Add(hyperlink);
                 charIndex += inlineUri.Length;

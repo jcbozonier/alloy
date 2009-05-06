@@ -31,7 +31,14 @@ namespace Unite.UI.Utilities
                 if (match == Match.Empty)
                     break;
 
-                uris.Add(new InlineUri(text.Substring(match.Index, match.Length), match.Index, match.Length));
+                var uri = text.Substring(match.Index, match.Length);
+
+                // #TODO: Add test... Without the below line the following tweet crashes the app:
+                // "RT @bhalchander,@adnanmahmud: looking for folks to help us test our beta site www.jolkona.org pls RT"
+                if(!uri.Contains("http://"))
+                    uri = "http://" + uri;
+
+                uris.Add(new InlineUri(uri, match.Index, match.Length));
                 index = match.Index + match.Length;
             };
 
