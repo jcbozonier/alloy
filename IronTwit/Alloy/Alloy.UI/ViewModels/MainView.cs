@@ -90,8 +90,8 @@ namespace Unite.UI.ViewModels
             }
         }
 
-        private IEnumerable<string> _suggestedRecipients;
-        public IEnumerable<string> SuggestedRecipients
+        private IEnumerable<IIdentity> _suggestedRecipients;
+        public IEnumerable<IIdentity> SuggestedRecipients
         {
             get
             {
@@ -222,11 +222,11 @@ namespace Unite.UI.ViewModels
             }
         }
 
-        private IEnumerable<string> _SuggestRecipients(string recipient)
+        private IEnumerable<IIdentity> _SuggestRecipients(string recipient)
         {
             return from message in Messages
                     where message.Address.UserName.StartsWith(recipient)
-                    select message.Address.UserName;
+                    select message.Address;
         }
 
         void messagingService_CredentialsRequested(object sender, CredentialEventArgs e)

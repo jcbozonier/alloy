@@ -36,7 +36,7 @@ namespace Unite.Specs.Contacts
         [Test]
         public void It_should_provide_a_name_suggestion()
         {
-            ViewModel.SuggestedRecipients.Single().ShouldEqual("@darkxanthos");
+            ViewModel.SuggestedRecipients.Single().UserName.ShouldEqual("@darkxanthos");
         }
 
         protected override void Because()
