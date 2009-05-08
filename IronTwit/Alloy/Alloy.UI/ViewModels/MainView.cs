@@ -92,6 +92,8 @@ namespace Unite.UI.ViewModels
         }
 
         private IEnumerable<IIdentity> _suggestedRecipients;
+        private IMessageFormatter _MessageFormatter;
+
         public IEnumerable<IIdentity> SuggestedRecipients
         {
             get
@@ -132,7 +134,7 @@ namespace Unite.UI.ViewModels
 
             _ContactRepo = contactRepo;
             _MessagingService = messagingService;
-
+            _MessageFormatter = messageFormatter;
             PropertyChanged += MainView_PropertyChanged;
             _MessagingService.CredentialsRequested += messagingService_CredentialsRequested;
             _MessagingService.AuthorizationFailed += _MessagingService_AuthorizationFailed;
@@ -145,18 +147,19 @@ namespace Unite.UI.ViewModels
             SendMessage = new SendMessageCommand(
                 () =>
                 {
-                    MessageToSend = messageFormatter.ApplyFormatting(MessageToSend);
-                    _MessagingService.SendMessage(Recipient, MessageToSend);
+                    var messageToSend = MessageToSend;
+                    _SendMessage(messageToSend, Recipient);
                     MessageToSend = "";
                 });
 
-            ReceiveMessage = new ReceiveMessagesCommand(
-                () =>
-                    {
-                        var result = _MessagingService.GetMessages();
-                        _UpdateUIWithMessages(result);
-                    });
+            ReceiveMessage = new ReceiveMessagesCommand(()=>_UpdateMessageRepoWithMessages(_MessagingService.GetMessages()));
 
+        }
+
+        private void _SendMessage(string messageToSend, string recipient)
+        {
+            messageToSend = _MessageFormatter.ApplyFormatting(messageToSend);
+            _MessagingService.SendMessage(recipient, messageToSend);
         }
 
         /// <summary>
@@ -167,13 +170,6 @@ namespace Unite.UI.ViewModels
         public void Init()
         {
             _MessagingService.StartReceiving();
-        }
-
-        
-
-        private void _GetMessagesFromEvent(MessagesReceivedEventArgs e)
-        {
-            _UpdateUIWithMessages(e.Messages);
         }
 
         /// <summary>
@@ -229,34 +225,45 @@ namespace Unite.UI.ViewModels
             messagingService_CredentialsRequested(this, e);
         }
 
-        private void _UpdateUIWithMessages(IEnumerable<IMessage> result)
+        void _MessagingService_MessagesReceived(object sender, MessagesReceivedEventArgs e)
         {
-            var messageList = new List<UiMessage>(Messages);
-            Messages.Clear();
+            var currentMessages = Messages;
+            var newMessages = e.Messages;
+
+            _UpdateMessageRepo(newMessages, currentMessages);
+        }
+
+        private void _UpdateMessageRepoWithMessages(IEnumerable<IMessage> newMessages)
+        {
+            var messageRepo = Messages;
+            var result = newMessages;
+            var messageList = new List<UiMessage>(messageRepo);
+            messageRepo.Clear();
 
             foreach (var message in result)
             {
                 var uiMessage = new UiMessage(message, _ContactRepo.Get(message.Address));
-                Messages.Add(uiMessage);
+                messageRepo.Add(uiMessage);
             }
 
             foreach (var message in messageList)
             {
-                Messages.Add(message);
+                messageRepo.Add(message);
             }
         }
+        
 
-        void _MessagingService_MessagesReceived(object sender, MessagesReceivedEventArgs e)
+        private void _UpdateMessageRepo(IEnumerable<IMessage> newMessages, ICollection<UiMessage> messageRepo)
         {
             if (_CurrentThread != Thread.CurrentThread)
             {
                 _CurrentDispatcher.Invoke(
                     DispatcherPriority.Normal,
-                    (Action)(() => _GetMessagesFromEvent(e)));
+                    (Action) (()=>_UpdateMessageRepoWithMessages(newMessages)));
             }
             else
             {
-                _GetMessagesFromEvent(e);
+                _UpdateMessageRepoWithMessages(newMessages);
             }
         }
     }
