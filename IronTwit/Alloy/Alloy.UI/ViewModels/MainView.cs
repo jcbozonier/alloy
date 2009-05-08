@@ -156,16 +156,7 @@ namespace Unite.UI.ViewModels
 
         }
 
-        private void _GetMessages()
-        {
-            _UpdateMessageRepoWithMessages(_MessagingService.GetMessages());
-        }
-
-        private void _SendMessage(string messageToSend, string recipient)
-        {
-            messageToSend = _MessageFormatter.ApplyFormatting(messageToSend);
-            _MessagingService.SendMessage(recipient, messageToSend);
-        }
+        
 
         /// <summary>
         /// This must be called when the application first starts so
@@ -270,6 +261,17 @@ namespace Unite.UI.ViewModels
             {
                 _UpdateMessageRepoWithMessages(newMessages);
             }
+        }
+
+        private void _GetMessages()
+        {
+            _UpdateMessageRepoWithMessages(_MessagingService.GetMessages());
+        }
+
+        private void _SendMessage(string messageToSend, string recipient)
+        {
+            messageToSend = _MessageFormatter.ApplyFormatting(messageToSend);
+            _MessagingService.SendMessage(recipient, messageToSend);
         }
     }
 }
