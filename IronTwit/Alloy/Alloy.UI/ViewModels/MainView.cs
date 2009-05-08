@@ -226,7 +226,7 @@ namespace Unite.UI.ViewModels
             var currentMessages = Messages;
             var newMessages = e.Messages;
 
-            _UpdateMessageRepo(newMessages, currentMessages);
+            _UpdateMessageRepo(newMessages);
         }
 
         private void _UpdateMessageRepoWithMessages(IEnumerable<IMessage> newMessages)
@@ -249,7 +249,7 @@ namespace Unite.UI.ViewModels
         }
         
 
-        private void _UpdateMessageRepo(IEnumerable<IMessage> newMessages, ICollection<UiMessage> messageRepo)
+        private void _UpdateMessageRepo(IEnumerable<IMessage> newMessages)
         {
             if (_CurrentThread != Thread.CurrentThread)
             {
