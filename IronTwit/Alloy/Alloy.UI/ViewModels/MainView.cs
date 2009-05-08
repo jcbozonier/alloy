@@ -152,8 +152,13 @@ namespace Unite.UI.ViewModels
                     MessageToSend = "";
                 });
 
-            ReceiveMessage = new ReceiveMessagesCommand(()=>_UpdateMessageRepoWithMessages(_MessagingService.GetMessages()));
+            ReceiveMessage = new ReceiveMessagesCommand(_GetMessages);
 
+        }
+
+        private void _GetMessages()
+        {
+            _UpdateMessageRepoWithMessages(_MessagingService.GetMessages());
         }
 
         private void _SendMessage(string messageToSend, string recipient)
