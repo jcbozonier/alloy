@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using StructureMap.Attributes;
+using Unite.Messaging.Extras;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
 using Unite.UI.Utilities;
@@ -23,6 +24,7 @@ namespace Unite.UI
                 x.ForRequestedType<ICodePaste>().TheDefaultIsConcreteType<CodePaste>();
                 x.ForRequestedType<ICredentialCache>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<CredentialCache>();
                 x.ForRequestedType<IInteractionContext>().TheDefaultIsConcreteType<GuiInteractionContext>();
+                x.ForRequestedType<IMessageFormatter>().TheDefaultIsConcreteType<MessageFormatter>();
             });
         }
     }

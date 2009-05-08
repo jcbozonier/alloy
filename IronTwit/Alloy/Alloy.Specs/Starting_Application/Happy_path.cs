@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Unite.Messaging.Entities;
+using Unite.Messaging.Extras;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
 using Unite.UI.Utilities;
@@ -227,6 +228,7 @@ namespace Unite.Specs.Application_starting
                 x.ForRequestedType<IMessagingServiceManager>().TheDefaultIsConcreteType<TestTwitterUtilities>();
                 x.ForRequestedType<IContactProvider>().TheDefaultIsConcreteType<ContactProvider>();
                 x.ForRequestedType<ICodePaste>().TheDefaultIsConcreteType<CodePaste>();
+                x.ForRequestedType<IMessageFormatter>().TheDefaultIsConcreteType<MessageFormatter>();
             });
 
         }

@@ -60,6 +60,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Extras\MessageFormatter.cs" />
     <Compile Include="Messages\CredentialCache.cs" />
     <Compile Include="Messages\CredentialEventArgs.cs" />
     <Compile Include="Entities\Contact.cs" />

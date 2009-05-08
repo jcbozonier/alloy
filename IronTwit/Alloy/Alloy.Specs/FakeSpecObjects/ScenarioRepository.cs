@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using StructureMap;
 using Unite.Messaging;
 using Unite.Messaging.Entities;
+using Unite.Messaging.Extras;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
 using Unite.UI.Utilities;
@@ -185,6 +186,7 @@ namespace Unite.Specs.FakeSpecObjects
                 x.ForRequestedType<IServiceProvider>().TheDefaultIsConcreteType<ServiceProvider>();
                 x.ForRequestedType<IPluginFinder>().TheDefault.IsThis(pluginFinder);
                 x.ForRequestedType<ICodePaste>().TheDefault.IsThis(formatter);
+                x.ForRequestedType<IMessageFormatter>().TheDefaultIsConcreteType<MessageFormatter>();
             });
         }
     }

@@ -8,6 +8,7 @@ using SpecUnit;
 using StructureMap;
 using Unite.Messaging;
 using Unite.Messaging.Entities;
+using Unite.Messaging.Extras;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
 using Unite.UI.Utilities;
@@ -87,6 +88,7 @@ namespace Unite.Specs.Contacts
                 x.ForRequestedType<IMessagingServiceManager>().TheDefault.IsThis(ServiceManager);
                 x.ForRequestedType<IContactProvider>().TheDefault.IsThis(TheContactProvider);
                 x.ForRequestedType<ICodePaste>().TheDefaultIsConcreteType<CodePaste>();
+                x.ForRequestedType<IMessageFormatter>().TheDefaultIsConcreteType<MessageFormatter>();
             });
 
             ViewModel = ObjectFactory.GetInstance<MainView>();

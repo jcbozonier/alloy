@@ -5,6 +5,7 @@ using System.Windows.Data;
 using System.Windows.Threading;
 using Bound.Net;
 using Unite.Messaging.Entities;
+using Unite.Messaging.Extras;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
 using Unite.UI.Utilities;
@@ -119,7 +120,7 @@ namespace Unite.UI.ViewModels
             IInteractionContext interactionContext,
             IMessagingServiceManager messagingService, 
             IContactProvider contactRepo,
-            ICodePaste codePaste)
+            IMessageFormatter messageFormatter)
         {
             if(interactionContext == null) 
                 throw new ArgumentNullException("interactionContext");
@@ -144,11 +145,7 @@ namespace Unite.UI.ViewModels
             SendMessage = new SendMessageCommand(
                 () =>
                 {
-                    // This is not the appropriate place for this code IMO.
-                    if(MessageToSend.Contains("\n") &&
-                        (MessageToSend.Contains("\t") || MessageToSend.Contains("\n   "))) 
-                        MessageToSend = codePaste.PasteCode(MessageToSend);
-
+                    MessageToSend = messageFormatter.ApplyFormatting(MessageToSend);
                     _MessagingService.SendMessage(Recipient, MessageToSend);
                     MessageToSend = "";
                 });
@@ -172,22 +169,7 @@ namespace Unite.UI.ViewModels
             _MessagingService.StartReceiving();
         }
 
-        private void _UpdateUIWithMessages(IEnumerable<IMessage> result)
-        {
-            var messageList = new List<UiMessage>(Messages);
-            Messages.Clear();
-
-            foreach (var message in result)
-            {
-                var uiMessage = new UiMessage(message, _ContactRepo.Get(message.Address));
-                Messages.Add(uiMessage);
-            }
-
-            foreach (var message in messageList)
-            {
-                Messages.Add(message);
-            }
-        }
+        
 
         private void _GetMessagesFromEvent(MessagesReceivedEventArgs e)
         {
@@ -245,6 +227,23 @@ namespace Unite.UI.ViewModels
             if (!_RetryOnAuthFailure[e.ServiceInfo]) return;
 
             messagingService_CredentialsRequested(this, e);
+        }
+
+        private void _UpdateUIWithMessages(IEnumerable<IMessage> result)
+        {
+            var messageList = new List<UiMessage>(Messages);
+            Messages.Clear();
+
+            foreach (var message in result)
+            {
+                var uiMessage = new UiMessage(message, _ContactRepo.Get(message.Address));
+                Messages.Add(uiMessage);
+            }
+
+            foreach (var message in messageList)
+            {
+                Messages.Add(message);
+            }
         }
 
         void _MessagingService_MessagesReceived(object sender, MessagesReceivedEventArgs e)
