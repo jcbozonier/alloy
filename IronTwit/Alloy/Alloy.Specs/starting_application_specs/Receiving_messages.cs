@@ -18,7 +18,7 @@ namespace Unite.Specs.New_Starting_Application_Specs
     public class When_a_message_is_received_while_messages_already_exist
     {
         private MainView View;
-        private List<UiMessage> PreexistingMessages;
+        private List<IMessage> PreexistingMessages;
         private FakeReceivingMessagePlugin FakeMessagePlugin;
 
         [Test]
@@ -46,7 +46,7 @@ namespace Unite.Specs.New_Starting_Application_Specs
             View = repo.GetMainView();
             View.Init();
             
-            PreexistingMessages = new List<UiMessage>(View.Messages);
+            PreexistingMessages = new List<IMessage>(View.Messages);
 
             // Sleep for a minute so that the time spans don't match.
             Thread.Sleep(10);

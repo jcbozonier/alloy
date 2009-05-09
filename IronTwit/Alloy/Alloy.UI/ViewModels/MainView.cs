@@ -28,7 +28,6 @@ namespace Unite.UI.ViewModels
         private readonly Dispatcher _CurrentDispatcher;
         private Dictionary<ServiceInformation, bool> _RetryOnAuthFailure;
 
-        protected IContactProvider _ContactRepo;
 
         /// <summary>
         /// Any user input the view model needs can be requested through
@@ -39,7 +38,7 @@ namespace Unite.UI.ViewModels
         /// <summary>
         /// A list of all of the tweets that should be displayed.
         /// </summary>
-        public ObservableCollection<UiMessage> Messages { get; set; }
+        public ObservableCollection<IMessage> Messages { get; set; }
 
         private string _messageToSend;
         /// <summary>
@@ -77,8 +76,8 @@ namespace Unite.UI.ViewModels
 
         public string Title { get { return "Alloy Messaging"; } }
 
-        UiMessage _SelectedMessage;
-        public UiMessage SelectedMessage
+        IMessage _SelectedMessage;
+        public IMessage SelectedMessage
         {
             get
             {
@@ -122,7 +121,6 @@ namespace Unite.UI.ViewModels
         public MainView(
             IInteractionContext interactionContext,
             IMessagingServiceManager messagingService, 
-            IContactProvider contactRepo,
             IMessageFormatter messageFormatter,
             ContactManager contactManager)
         {
@@ -135,7 +133,6 @@ namespace Unite.UI.ViewModels
             _CurrentDispatcher = Dispatcher.CurrentDispatcher;
 
             _ContactManager = contactManager;
-            _ContactRepo = contactRepo;
             _MessagingService = messagingService;
             _MessageFormatter = messageFormatter;
             PropertyChanged += MainView_PropertyChanged;
@@ -143,7 +140,7 @@ namespace Unite.UI.ViewModels
             _MessagingService.AuthorizationFailed += _MessagingService_AuthorizationFailed;
             _MessagingService.MessagesReceived += _MessagingService_MessagesReceived;
 
-            Messages = new ObservableCollection<UiMessage>();
+            Messages = new ObservableCollection<IMessage>();
 
             Interactions = interactionContext;
 
@@ -233,13 +230,12 @@ namespace Unite.UI.ViewModels
         {
             var messageRepo = Messages;
             var result = newMessages;
-            var messageList = new List<UiMessage>(messageRepo);
+            var messageList = new List<IMessage>(messageRepo);
             messageRepo.Clear();
 
             foreach (var message in result)
             {
-                var uiMessage = new UiMessage(message, _ContactRepo.Get(message.Address));
-                messageRepo.Add(uiMessage);
+                messageRepo.Add(message);
             }
 
             foreach (var message in messageList)

@@ -19,7 +19,6 @@ namespace Unite.UI
                 x.ForRequestedType<Views.MainView>().TheDefaultIsConcreteType<Views.MainView>();
                 x.ForRequestedType<IMessagingServiceManager>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<ServicesManager>();
                 x.ForRequestedType<IContactService>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<ServicesManager>();
-                x.ForRequestedType<IContactProvider>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<ContactProvider>();
                 x.ForRequestedType<ContactManager>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<ContactManager>();
                 x.ForRequestedType<IServiceProvider>().TheDefaultIsConcreteType<ServiceProvider>();
                 x.ForRequestedType<IPluginFinder>().TheDefaultIsConcreteType<PluginFinder>();

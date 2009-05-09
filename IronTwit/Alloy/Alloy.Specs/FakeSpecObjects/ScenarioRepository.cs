@@ -184,7 +184,6 @@ namespace Unite.Specs.FakeSpecObjects
                 x.ForRequestedType<ISettingsProvider>().TheDefault.IsThis(settings);
                 x.ForRequestedType<IMessagingServiceManager>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<ServicesManager>();
                 x.ForRequestedType<IContactService>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<ServicesManager>();
-                x.ForRequestedType<IContactProvider>().TheDefaultIsConcreteType<ContactProvider>();
                 x.ForRequestedType<ContactManager>().TheDefaultIsConcreteType<ContactManager>();
                 x.ForRequestedType<IServiceProvider>().TheDefaultIsConcreteType<ServiceProvider>();
                 x.ForRequestedType<IPluginFinder>().TheDefault.IsThis(pluginFinder);
