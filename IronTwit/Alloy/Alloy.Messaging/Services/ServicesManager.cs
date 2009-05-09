@@ -6,7 +6,7 @@ using Unite.Messaging.Messages;
 
 namespace Unite.Messaging.Services
 {
-    public class ServicesManager : IMessagingServiceManager
+    public class ServicesManager : IMessagingServiceManager, IContactService
     {
         private readonly ServiceInformation _ServiceInfo = new ServiceInformation()
         {
@@ -36,6 +36,8 @@ namespace Unite.Messaging.Services
         /// </summary>
         public event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
 
+        public event EventHandler<ContactEventArgs> OnContactsReceived;
+
         public ServicesManager(IServiceProvider provider)
         {
             _Provider = provider;
@@ -44,6 +46,7 @@ namespace Unite.Messaging.Services
             _Resolver = new ServiceResolver(_Provider);
 
             _Services = _Provider.GetServices();
+
         }
 
         void Provider_AuthorizationFailed(object sender, CredentialEventArgs e)
@@ -146,9 +149,16 @@ namespace Unite.Messaging.Services
 
             foreach (var service in services)
             {
+                service.ContactsReceived += service_ContactsReceived;
                 service.MessagesReceived += service_MessagesReceived;
                 service.StartReceiving();
             }
+        }
+
+        private void service_ContactsReceived(object sender, ContactEventArgs e)
+        {
+            if (OnContactsReceived != null)
+                OnContactsReceived(this, e);
         }
 
         /// <summary>

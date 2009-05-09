@@ -18,5 +18,6 @@ namespace Unite.Messaging.Messages
         void StartReceiving();
         void StopReceiving();
         event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
+        event EventHandler<ContactEventArgs> ContactsReceived;
     }
 }

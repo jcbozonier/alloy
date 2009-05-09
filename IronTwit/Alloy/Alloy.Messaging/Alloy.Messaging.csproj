@@ -72,6 +72,8 @@
     <Compile Include="Messages\IMessagingServiceManager.cs" />
     <Compile Include="Messages\IMessagingServiceRegistry.cs" />
     <Compile Include="Services\CodePaste.cs" />
+    <Compile Include="Services\ContactManager.cs" />
+    <Compile Include="Services\ContactRepository.cs" />
     <Compile Include="Services\ICodePaste.cs" />
     <Compile Include="Services\IPluginFinder.cs" />
     <Compile Include="Services\IServiceProvider.cs" />

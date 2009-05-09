@@ -93,6 +93,7 @@ namespace Unite.UI.ViewModels
 
         private IEnumerable<IIdentity> _suggestedRecipients;
         private IMessageFormatter _MessageFormatter;
+        private ContactManager _ContactManager;
 
         public IEnumerable<IIdentity> SuggestedRecipients
         {
@@ -122,7 +123,8 @@ namespace Unite.UI.ViewModels
             IInteractionContext interactionContext,
             IMessagingServiceManager messagingService, 
             IContactProvider contactRepo,
-            IMessageFormatter messageFormatter)
+            IMessageFormatter messageFormatter,
+            ContactManager contactManager)
         {
             if(interactionContext == null) 
                 throw new ArgumentNullException("interactionContext");
@@ -132,6 +134,7 @@ namespace Unite.UI.ViewModels
             _CurrentThread = Thread.CurrentThread;
             _CurrentDispatcher = Dispatcher.CurrentDispatcher;
 
+            _ContactManager = contactManager;
             _ContactRepo = contactRepo;
             _MessagingService = messagingService;
             _MessageFormatter = messageFormatter;
@@ -198,9 +201,7 @@ namespace Unite.UI.ViewModels
 
         private IEnumerable<IIdentity> _SuggestRecipients(string recipient)
         {
-            return from message in Messages
-                    where message.Address.UserName.StartsWith(recipient)
-                    select message.Address;
+            return _ContactManager.SearchFor(recipient);
         }
 
         void messagingService_CredentialsRequested(object sender, CredentialEventArgs e)
@@ -223,7 +224,6 @@ namespace Unite.UI.ViewModels
 
         void _MessagingService_MessagesReceived(object sender, MessagesReceivedEventArgs e)
         {
-            var currentMessages = Messages;
             var newMessages = e.Messages;
 
             _UpdateMessageRepo(newMessages);
@@ -247,7 +247,6 @@ namespace Unite.UI.ViewModels
                 messageRepo.Add(message);
             }
         }
-        
 
         private void _UpdateMessageRepo(IEnumerable<IMessage> newMessages)
         {

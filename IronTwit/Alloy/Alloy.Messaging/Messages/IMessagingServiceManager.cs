@@ -20,6 +20,26 @@ namespace Unite.Messaging
         ServiceInformation GetInformation();
         void StartReceiving();
         void StopReceiving();
-        event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
+        event EventHandler<MessagesReceivedEventArgs> MessagesReceived; 
+        event EventHandler<ContactEventArgs> OnContactsReceived;
+    }
+
+    public interface IContactService
+    {
+        event EventHandler<ContactEventArgs> OnContactsReceived;
+    }
+
+    public class ContactEventArgs : EventArgs
+    {
+        public IEnumerable<IIdentity> ReceivedContacts;
+
+        public ContactEventArgs()
+        {
+        }
+
+        public ContactEventArgs(IEnumerable<IIdentity> contacts)
+        {
+            ReceivedContacts = contacts;
+        }
     }
 }

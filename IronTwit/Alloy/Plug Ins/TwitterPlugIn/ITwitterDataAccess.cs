@@ -12,5 +12,6 @@ namespace IronTwitterPlugIn
         /// <returns></returns>
         string SendMessage(Credentials credentials, string message);
         string GetMessages(Credentials credentials);
+        string GetContacts(Credentials credentials);
     }
 }

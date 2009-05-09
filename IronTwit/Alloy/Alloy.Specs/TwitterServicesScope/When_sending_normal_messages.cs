@@ -152,5 +152,10 @@ namespace Unite.Specs.TwitterServicesScope
         {
             return "result message";
         }
+
+        public string GetContacts(Credentials credentials)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

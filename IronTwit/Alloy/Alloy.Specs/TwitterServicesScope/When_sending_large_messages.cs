@@ -95,5 +95,10 @@ namespace Unite.Specs.Application_running.sending_messages
         {
             return "result message";
         }
+
+        public string GetContacts(Credentials credentials)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

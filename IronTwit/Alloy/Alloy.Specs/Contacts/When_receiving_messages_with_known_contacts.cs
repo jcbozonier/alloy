@@ -6,6 +6,7 @@ using IronTwitterPlugIn.DataObjects;
 using NUnit.Framework;
 using SpecUnit;
 using StructureMap;
+using StructureMap.Attributes;
 using Unite.Messaging;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Extras;
@@ -85,7 +86,8 @@ namespace Unite.Specs.Contacts
             {
                 x.ForRequestedType<MainView>().TheDefaultIsConcreteType<MainView>();
                 x.ForRequestedType<IInteractionContext>().TheDefaultIsConcreteType<TestingInterface>();
-                x.ForRequestedType<IMessagingServiceManager>().TheDefault.IsThis(ServiceManager);
+                x.ForRequestedType<IMessagingServiceManager>().CacheBy(InstanceScope.Singleton).TheDefault.IsThis(ServiceManager);
+                x.ForRequestedType<IContactService>().CacheBy(InstanceScope.Singleton).TheDefault.IsThis(ServiceManager);
                 x.ForRequestedType<IContactProvider>().TheDefault.IsThis(TheContactProvider);
                 x.ForRequestedType<ICodePaste>().TheDefaultIsConcreteType<CodePaste>();
                 x.ForRequestedType<IMessageFormatter>().TheDefaultIsConcreteType<MessageFormatter>();
@@ -130,7 +132,7 @@ namespace Unite.Specs.Contacts
         }
     }
 
-    public class FakeMessagingService : IMessagingServiceManager
+    public class FakeMessagingService : IMessagingServiceManager, IContactService
     {
         public ServiceInformation ServiceInfo;
         private ServiceInformation _Information;
@@ -196,5 +198,7 @@ namespace Unite.Specs.Contacts
         {
             throw new System.NotImplementedException();
         }
+
+        public event EventHandler<ContactEventArgs> OnContactsReceived;
     }
 }

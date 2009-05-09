@@ -32,6 +32,7 @@ namespace GoogleTalkPlugIn
             _DataAccess = dataAccess;
             _DataAccess.OnMessage += _DataAccess_OnMessage;
             _DataAccess.OnAuthError += _DataAccess_OnAuthError;
+            _DataAccess.OnContactsReceived += _DataAccess_OnContactsReceived;
 
             _CredEventArgs = new CredentialEventArgs()
             {
@@ -39,7 +40,18 @@ namespace GoogleTalkPlugIn
             };
         }
 
-        
+        private void _DataAccess_OnContactsReceived(object sender, ContactEventArgs e)
+        {
+            var localizedContacts = new List<IIdentity>();
+            foreach(var contact in e.ReceivedContacts)
+            {
+                localizedContacts.Add(new Identity(contact.UserName, GetInformation()));
+            }
+
+            if (ContactsReceived != null)
+                ContactsReceived(this, new ContactEventArgs(localizedContacts));
+        }
+
 
         void _DataAccess_OnAuthError(object sender, EventArgs e)
         {
@@ -155,5 +167,6 @@ namespace GoogleTalkPlugIn
         public event EventHandler<CredentialEventArgs> AuthorizationFailed;
         public event EventHandler<CredentialEventArgs> CredentialsRequested;
         public event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
+        public event EventHandler<ContactEventArgs> ContactsReceived;
     }
 }

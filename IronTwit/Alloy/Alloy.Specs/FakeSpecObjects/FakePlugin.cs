@@ -13,6 +13,7 @@ namespace Unite.Specs.FakeSpecObjects
         public virtual event EventHandler<CredentialEventArgs> AuthorizationFailed;
         public virtual event EventHandler<CredentialEventArgs> CredentialsRequested;
         public virtual event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
+        public virtual event EventHandler<ContactEventArgs> ContactsReceived;
 
         public virtual bool CanAccept(Credentials credentials)
         {

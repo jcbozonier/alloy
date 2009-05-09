@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using System.Security.Authentication;
 using System.Threading;
 using IronTwitterPlugIn.DataObjects;
@@ -152,12 +153,15 @@ namespace IronTwitterPlugIn
         private bool _StopReceiving;
 
         public event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
+        public event EventHandler<ContactEventArgs> ContactsReceived;
+
         public void StartReceiving()
         {
             _StopReceiving = false;
 
             var receivingThread = new Thread(() =>
                                                  {
+                                                     GetContacts();
                                                      // 100 api calls over an hour.
                                                      var getIntervalMilliseconds = 60*60*1000/99;
                                                      DateTime lastGetTime = DateTime.MinValue;
@@ -174,6 +178,28 @@ namespace IronTwitterPlugIn
                                                      }
                                                  });
             receivingThread.Start();
+        }
+
+        private void GetContacts()
+        {
+           _RequestCredentials();
+
+            var resultString = _DataAccess.GetContacts(_UserCredentials);
+            var str = new StringReader(resultString);
+
+            var converter = new JsonSerializer()
+                                {
+                                    MissingMemberHandling = MissingMemberHandling.Ignore
+                                };
+            var twits = (List<TwitterUser>)converter.Deserialize(str, typeof(List<TwitterUser>));
+
+            foreach(var twit in twits)
+            {
+                twit.ServiceInfo = GetInformation();
+            }
+
+            if(ContactsReceived != null)
+                ContactsReceived(this, new ContactEventArgs(twits.Cast<IIdentity>()));
         }
 
         public void StopReceiving()

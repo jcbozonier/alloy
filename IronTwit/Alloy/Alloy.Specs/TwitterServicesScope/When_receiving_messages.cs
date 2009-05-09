@@ -105,5 +105,10 @@ namespace Unite.Specs.TwitterServicesScope
             ProvidedCredentials = credentials;
             return "[{text:'test message'}]";
         }
+
+        public string GetContacts(Credentials credentials)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

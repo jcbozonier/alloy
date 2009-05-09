@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using jabber.client;
 using jabber.protocol.client;
+using Unite.Messaging;
 
 namespace GoogleTalkPlugIn
 {
@@ -11,6 +12,7 @@ namespace GoogleTalkPlugIn
     {
         private readonly JabberClient _Client;
         public bool IsConnected{ get; set;}
+        public event EventHandler<ContactEventArgs> OnContactsReceived;
 
         public GoogleTalkDataAccess()
         {
@@ -24,10 +26,12 @@ namespace GoogleTalkPlugIn
             client.Server = "gmail.com";
             client.Port = 5222;
             client.Resource = "Alloy";
+            client.OnAuthenticate += client_OnAuthenticate; 
 
             client.OnConnect += (s, e) =>
                                     {
                                         IsConnected = e.Connected;
+                                        
                                     };
 
             client.OnError += (s, e) =>
@@ -40,7 +44,26 @@ namespace GoogleTalkPlugIn
                                         OnMessage(s, new GTalkMessageEventArgs(e.From.User, e.Body));
                                     };
 
+
+            client.OnPresence += (sndr, e) =>
+                                     {
+                                         if (OnContactsReceived != null)
+                                             OnContactsReceived(this, new ContactEventArgs()
+                                                                          {
+                                                                              ReceivedContacts =
+                                                                                  new IIdentity[]
+                                                                                      {new Identity(e.From.User, null)}
+                                                                          });
+ 
+                                     }; 
             _Client = client;
+
+
+        }
+
+        void client_OnAuthenticate(object sender)
+        {
+            _Client.GetRoster();
         }
 
         public event EventHandler OnAuthError;
@@ -54,6 +77,7 @@ namespace GoogleTalkPlugIn
             }
             else
                 _Client.Message(name, message);
+
         }
 
         public void SetAvailableMessage(string message)

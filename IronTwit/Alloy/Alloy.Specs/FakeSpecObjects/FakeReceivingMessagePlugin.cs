@@ -8,6 +8,7 @@ namespace Unite.Specs.FakeSpecObjects
 {
     public class FakeReceivingMessagePlugin : FakePlugin
     {
+        public override event EventHandler<ContactEventArgs> ContactsReceived;
         public override event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
         public string Test;
 
@@ -22,6 +23,17 @@ namespace Unite.Specs.FakeSpecObjects
             var eventArgs = new MessagesReceivedEventArgs(messages);
 
             MessagesReceived(this, eventArgs);
+        }
+
+        public void Pretend_you_received_contacts_for(params string[] addresses)
+        {
+            var contacts = new List<IIdentity>();
+            foreach (var address in addresses)
+            {
+                contacts.Add(new Identity(address, GetInformation()));
+            }
+
+            ContactsReceived(this, new ContactEventArgs(contacts));
         }
 
         public override void StartReceiving()

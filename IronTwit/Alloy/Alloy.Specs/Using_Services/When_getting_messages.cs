@@ -117,6 +117,7 @@ namespace Unite.Specs.Using_Services
         }
 
         public event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
+        public event EventHandler<ContactEventArgs> ContactsReceived;
     }
 
     public class Recipient : IIdentity

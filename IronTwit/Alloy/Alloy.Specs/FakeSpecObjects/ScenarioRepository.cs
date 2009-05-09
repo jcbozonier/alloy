@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Rhino.Mocks;
 using StructureMap;
+using StructureMap.Attributes;
 using Unite.Messaging;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Extras;
@@ -181,8 +182,10 @@ namespace Unite.Specs.FakeSpecObjects
                 x.ForRequestedType<IInteractionContext>().TheDefault.IsThis(gui);
                 x.ForRequestedType<IMessagingService>().TheDefault.IsThis(plugin);
                 x.ForRequestedType<ISettingsProvider>().TheDefault.IsThis(settings);
-                x.ForRequestedType<IMessagingServiceManager>().TheDefaultIsConcreteType<ServicesManager>();
+                x.ForRequestedType<IMessagingServiceManager>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<ServicesManager>();
+                x.ForRequestedType<IContactService>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<ServicesManager>();
                 x.ForRequestedType<IContactProvider>().TheDefaultIsConcreteType<ContactProvider>();
+                x.ForRequestedType<ContactManager>().TheDefaultIsConcreteType<ContactManager>();
                 x.ForRequestedType<IServiceProvider>().TheDefaultIsConcreteType<ServiceProvider>();
                 x.ForRequestedType<IPluginFinder>().TheDefault.IsThis(pluginFinder);
                 x.ForRequestedType<ICodePaste>().TheDefault.IsThis(formatter);

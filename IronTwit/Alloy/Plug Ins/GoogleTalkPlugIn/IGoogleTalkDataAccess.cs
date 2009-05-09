@@ -1,4 +1,5 @@
 using System;
+using Unite.Messaging;
 
 namespace GoogleTalkPlugIn
 {
@@ -11,5 +12,6 @@ namespace GoogleTalkPlugIn
         void Logoff();
         void SetAvailableMessage(string message);
         bool IsConnected { get; set; }
+        event EventHandler<ContactEventArgs> OnContactsReceived;
     }
 }
