@@ -136,7 +136,6 @@
     <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Utilities\InlineUrls.cs" />
     <Compile Include="Utilities\GuiInteractionContext.cs" />
-    <Compile Include="Utilities\UIThreadManager.cs" />
     <Compile Include="Utilities\DelegateCommand.cs" />
     <Compile Include="ViewModels\MainView.cs" />
     <Compile Include="Utilities\ReceiveMessagesCommand.cs" />

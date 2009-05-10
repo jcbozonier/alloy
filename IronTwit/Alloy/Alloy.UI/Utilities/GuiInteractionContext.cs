@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Threading;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
+using Unite.Messaging.Services;
 using Unite.UI.ViewModels;
 using Unite.UI.Views;
 using Unite.Messaging;
@@ -12,13 +13,13 @@ namespace Unite.UI.Utilities
 {
     public class GuiInteractionContext : IInteractionContext
     {
-        private Thread _mainThread;
-        private ICredentialCache _CredentialCache;
+        private readonly ICredentialCache _CredentialCache;
+        private readonly IJobRunner _JobRunner;
 
-        public GuiInteractionContext(ICredentialCache credentialCache)
+        public GuiInteractionContext(ICredentialCache credentialCache, IJobRunner jobRunner)
         {
-            _mainThread = Thread.CurrentThread;
             _CredentialCache = credentialCache;
+            _JobRunner = jobRunner;
         }
 
         public Credentials GetCredentials(IServiceInformation serviceInformation)
@@ -36,9 +37,7 @@ namespace Unite.UI.Utilities
             var password = "";
             var savePassword = false;
 
-            var dispatcher = Dispatcher.FromThread(_mainThread);
-            dispatcher.Invoke(DispatcherPriority.Normal,
-                              (Action) (() =>
+            _JobRunner.RunOnMainThread(() =>
                                             {
                                                 var model = new UserCredentialsViewModel()
                                                                 {
@@ -56,7 +55,7 @@ namespace Unite.UI.Utilities
                                                 username = model.UserName;
                                                 password = model.Password;
                                                 savePassword = model.SavePassword;
-                                            }));
+                                            });
 
             var credentials = new Credentials()
                        {

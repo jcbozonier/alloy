@@ -12,7 +12,7 @@ namespace Unite.Messaging.Services
 
     public class AsyncJobRunner : IJobRunner
     {
-        private Dispatcher _MainDispatcher;
+        private readonly Dispatcher _MainDispatcher;
 
         public AsyncJobRunner(Dispatcher mainDispatcher)
         {
@@ -22,7 +22,7 @@ namespace Unite.Messaging.Services
         public void RunOnMainThread(Action job)
         {
             if (_MainDispatcher.Thread != Thread.CurrentThread)
-                _MainDispatcher.Invoke(job, DispatcherPriority.Normal, null);
+                _MainDispatcher.Invoke(DispatcherPriority.Normal, job);
             else
                 job();
         }
