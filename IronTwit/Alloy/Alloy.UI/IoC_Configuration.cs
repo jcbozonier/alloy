@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using System.Windows.Threading;
 using StructureMap.Attributes;
 using Unite.Messaging.Extras;
 using Unite.Messaging.Messages;
@@ -16,6 +17,8 @@ namespace Unite.UI
             // Initialize the static ObjectFactory container
             ObjectFactory.Initialize(x =>
             {
+                var asyncJobRunner = new AsyncJobRunner(Dispatcher.CurrentDispatcher);
+
                 x.ForRequestedType<Views.MainView>().TheDefaultIsConcreteType<Views.MainView>();
                 x.ForRequestedType<IMessagingServiceManager>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<ServicesManager>();
                 x.ForRequestedType<IContactService>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<ServicesManager>();
@@ -26,6 +29,7 @@ namespace Unite.UI
                 x.ForRequestedType<ICredentialCache>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<CredentialCache>();
                 x.ForRequestedType<IInteractionContext>().TheDefaultIsConcreteType<GuiInteractionContext>();
                 x.ForRequestedType<IMessageFormatter>().TheDefaultIsConcreteType<MessageFormatter>();
+                x.ForRequestedType<IJobRunner>().TheDefault.IsThis(asyncJobRunner);
             });
         }
     }

@@ -1,9 +1,9 @@
 ﻿using Unite.Messaging;
-using Unite.Specs.Application_starting;
 using IronTwitterPlugIn;
 using NUnit.Framework;
 using SpecUnit;
 using System.Collections.Generic;
+using Unite.Specs.FakeSpecObjects;
 
 namespace Unite.Specs.Application_running.sending_messages
 {
@@ -43,7 +43,7 @@ namespace Unite.Specs.Application_running.sending_messages
         protected override void Because()
         {
             Utilities.SendMessage(
-                new FakeUser(){UserName = Recipient},
+                new FakeUser {UserName = Recipient},
                 Message);
         }
 

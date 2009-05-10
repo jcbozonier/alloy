@@ -75,7 +75,7 @@ namespace Unite.Messaging.Services
         /// Gets an aggregated list of messages received from all plugins.
         /// </summary>
         /// <returns></returns>
-        public List<IMessage> GetMessages()
+        public void GetMessages()
         {
             var messages = new List<IMessage>();
             var services = _Services;
@@ -85,7 +85,8 @@ namespace Unite.Messaging.Services
                 messages.AddRange(service.GetMessages());
             }
 
-            return messages;
+            if(MessagesReceived != null)
+                MessagesReceived(this, new MessagesReceivedEventArgs(messages));
         }
 
         /// <summary>

@@ -12,7 +12,7 @@ namespace Unite.Messaging
     {
         void SendMessage(string recipient, string message);
         bool CanAccept(Credentials credentials);
-        List<IMessage> GetMessages();
+        void GetMessages();
         void SetCredentials(Credentials credentials);
         event EventHandler<CredentialEventArgs> CredentialsRequested;
         event EventHandler<CredentialEventArgs> AuthorizationFailed;

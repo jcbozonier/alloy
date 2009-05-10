@@ -22,13 +22,12 @@ namespace Unite.Specs.Using_Services
 
         protected override void Because()
         {
-
-            Messages = new List<IMessage>(ServiceManager.GetMessages());
+            ServiceManager.GetMessages();
         }
 
         protected override void Context()
         {
-            
+            ServiceManager.MessagesReceived += (sndr, e) => Messages = e.Messages;
         }
     }
 
@@ -36,7 +35,7 @@ namespace Unite.Specs.Using_Services
     {
         protected IMessagingServiceManager ServiceManager;
         protected ServiceProvider ServiceProvider;
-        protected List<IMessage> Messages;
+        protected IEnumerable<IMessage> Messages;
         protected Credentials MyCredentials;
 
         [TestFixtureSetUp]

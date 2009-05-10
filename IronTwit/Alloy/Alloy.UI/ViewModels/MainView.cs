@@ -1,11 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Windows.Data;
-using System.Windows.Threading;
 using Bound.Net;
 using Unite.Messaging.Entities;
-using Unite.Messaging.Extras;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
 using Unite.UI.Utilities;
@@ -23,11 +18,46 @@ namespace Unite.UI.ViewModels
 
     public class MainView : IInitializeView, INotifyPropertyChanged
     {
-        private readonly IMessagingServiceManager _MessagingService;
-        private readonly Thread _CurrentThread;
-        private readonly Dispatcher _CurrentDispatcher;
-        private Dictionary<ServiceInformation, bool> _RetryOnAuthFailure;
+        
+        public MainView(
+            IInteractionContext interactionContext, 
+            IMessagingServiceManager messagingService, 
+            ContactManager contactManager, 
+            MessageManager messageManager)
+        {
+            if (interactionContext == null)
+                throw new ArgumentNullException("interactionContext");
+            if (messagingService == null)
+                throw new ArgumentNullException("messagingService");
 
+            Interactions = interactionContext;
+            _ContactManager = contactManager;
+            _MessageManager = messageManager;
+            _MessageManager.NewMessagesReceived += (sndr,e)=>_GetMessages();
+
+            _MessagingService = messagingService;
+            PropertyChanged += MainView_PropertyChanged;
+            _MessagingService.CredentialsRequested += messagingService_CredentialsRequested;
+            _MessagingService.AuthorizationFailed += _MessagingService_AuthorizationFailed;
+
+            Messages = new ObservableCollection<IMessage>();
+
+            SendMessage = new SendMessageCommand(
+                () =>
+                {
+                    _MessageManager.MessageToSend(Recipient, MessageToSend);
+                    MessageToSend = "";
+                });
+
+            ReceiveMessage = new ReceiveMessagesCommand(_MessageManager.RequestMessageUpdate);
+
+        }
+
+        private readonly IMessagingServiceManager _MessagingService;
+        private readonly ContactManager _ContactManager;
+        private readonly MessageManager _MessageManager;
+
+        private Dictionary<ServiceInformation, bool> _RetryOnAuthFailure;
 
         /// <summary>
         /// Any user input the view model needs can be requested through
@@ -90,10 +120,8 @@ namespace Unite.UI.ViewModels
             }
         }
 
-        private IEnumerable<IIdentity> _suggestedRecipients;
-        private IMessageFormatter _MessageFormatter;
-        private ContactManager _ContactManager;
 
+        private IEnumerable<IIdentity> _suggestedRecipients;
         public IEnumerable<IIdentity> SuggestedRecipients
         {
             get
@@ -112,51 +140,23 @@ namespace Unite.UI.ViewModels
         /// a message.
         /// </summary>
         public SendMessageCommand SendMessage { get; set; }
+
         /// <summary>
         /// Command object invoked by the InteractionContext (GUI) to
         /// receive a message.
         /// </summary>
         public ReceiveMessagesCommand ReceiveMessage { get; set; }
 
-        public MainView(
-            IInteractionContext interactionContext,
-            IMessagingServiceManager messagingService, 
-            IMessageFormatter messageFormatter,
-            ContactManager contactManager)
+        private void _GetMessages()
         {
-            if(interactionContext == null) 
-                throw new ArgumentNullException("interactionContext");
-            if(messagingService == null)
-                throw new ArgumentNullException("messagingService");
+            Messages.Clear();
+            var messages = _MessageManager.GetAllMessages();
 
-            _CurrentThread = Thread.CurrentThread;
-            _CurrentDispatcher = Dispatcher.CurrentDispatcher;
-
-            _ContactManager = contactManager;
-            _MessagingService = messagingService;
-            _MessageFormatter = messageFormatter;
-            PropertyChanged += MainView_PropertyChanged;
-            _MessagingService.CredentialsRequested += messagingService_CredentialsRequested;
-            _MessagingService.AuthorizationFailed += _MessagingService_AuthorizationFailed;
-            _MessagingService.MessagesReceived += _MessagingService_MessagesReceived;
-
-            Messages = new ObservableCollection<IMessage>();
-
-            Interactions = interactionContext;
-
-            SendMessage = new SendMessageCommand(
-                () =>
-                {
-                    var messageToSend = MessageToSend;
-                    _SendMessage(messageToSend, Recipient);
-                    MessageToSend = "";
-                });
-
-            ReceiveMessage = new ReceiveMessagesCommand(_GetMessages);
-
+            foreach (var message in messages)
+            {
+                Messages.Add(message);
+            }
         }
-
-        
 
         /// <summary>
         /// This must be called when the application first starts so
@@ -173,15 +173,6 @@ namespace Unite.UI.ViewModels
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void Dispose()
-        {
-            _MessagingService.StopReceiving();
-            PropertyChanged -= MainView_PropertyChanged;
-            _MessagingService.CredentialsRequested -= messagingService_CredentialsRequested;
-            _MessagingService.AuthorizationFailed -= _MessagingService_AuthorizationFailed;
-            _MessagingService.MessagesReceived -= _MessagingService_MessagesReceived;
-        }
-
         void MainView_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
 
@@ -191,14 +182,9 @@ namespace Unite.UI.ViewModels
                     Recipient = SelectedMessage.Address.UserName;
                     break;
                 case "Recipient":
-                    SuggestedRecipients = _SuggestRecipients(Recipient);
+                    SuggestedRecipients = _ContactManager.SearchFor(Recipient);
                     break;
             }
-        }
-
-        private IEnumerable<IIdentity> _SuggestRecipients(string recipient)
-        {
-            return _ContactManager.SearchFor(recipient);
         }
 
         void messagingService_CredentialsRequested(object sender, CredentialEventArgs e)
@@ -219,54 +205,12 @@ namespace Unite.UI.ViewModels
             messagingService_CredentialsRequested(this, e);
         }
 
-        void _MessagingService_MessagesReceived(object sender, MessagesReceivedEventArgs e)
+        public void Dispose()
         {
-            var newMessages = e.Messages;
-
-            _UpdateMessageRepo(newMessages);
-        }
-
-        private void _UpdateMessageRepoWithMessages(IEnumerable<IMessage> newMessages)
-        {
-            var messageRepo = Messages;
-            var result = newMessages;
-            var messageList = new List<IMessage>(messageRepo);
-            messageRepo.Clear();
-
-            foreach (var message in result)
-            {
-                messageRepo.Add(message);
-            }
-
-            foreach (var message in messageList)
-            {
-                messageRepo.Add(message);
-            }
-        }
-
-        private void _UpdateMessageRepo(IEnumerable<IMessage> newMessages)
-        {
-            if (_CurrentThread != Thread.CurrentThread)
-            {
-                _CurrentDispatcher.Invoke(
-                    DispatcherPriority.Normal,
-                    (Action) (()=>_UpdateMessageRepoWithMessages(newMessages)));
-            }
-            else
-            {
-                _UpdateMessageRepoWithMessages(newMessages);
-            }
-        }
-
-        private void _GetMessages()
-        {
-            _UpdateMessageRepoWithMessages(_MessagingService.GetMessages());
-        }
-
-        private void _SendMessage(string messageToSend, string recipient)
-        {
-            messageToSend = _MessageFormatter.ApplyFormatting(messageToSend);
-            _MessagingService.SendMessage(recipient, messageToSend);
+            _MessagingService.StopReceiving();
+            PropertyChanged -= MainView_PropertyChanged;
+            _MessagingService.CredentialsRequested -= messagingService_CredentialsRequested;
+            _MessagingService.AuthorizationFailed -= _MessagingService_AuthorizationFailed;
         }
     }
 }
