@@ -30,7 +30,7 @@ namespace Unite.UI.ViewModels
             if (messagingService == null)
                 throw new ArgumentNullException("messagingService");
 
-            Interactions = interactionContext;
+            _Interactions = interactionContext;
             _ContactManager = contactManager;
             _MessageManager = messageManager;
             _MessageManager.NewMessagesReceived += (sndr,e)=>_GetMessages();
@@ -53,18 +53,17 @@ namespace Unite.UI.ViewModels
 
         }
 
+        /// <summary>
+        /// Any user input the view model needs can be requested through
+        /// this object. Instantiation is handled in IoC container.
+        /// </summary>
+        private readonly IInteractionContext _Interactions;
         private readonly IMessagingServiceManager _MessagingService;
         private readonly ContactManager _ContactManager;
         private readonly MessageManager _MessageManager;
 
         private Dictionary<ServiceInformation, bool> _RetryOnAuthFailure;
-
-        /// <summary>
-        /// Any user input the view model needs can be requested through
-        /// this object. Instantiation is handled in IoC container.
-        /// </summary>
-        public IInteractionContext Interactions;
-
+        
         /// <summary>
         /// A list of all of the tweets that should be displayed.
         /// </summary>
@@ -189,7 +188,7 @@ namespace Unite.UI.ViewModels
 
         void messagingService_CredentialsRequested(object sender, CredentialEventArgs e)
         {
-            var credentials = Interactions.GetCredentials(e.ServiceInfo);
+            var credentials = _Interactions.GetCredentials(e.ServiceInfo);
             _MessagingService.SetCredentials(credentials);
         }
 
@@ -198,7 +197,7 @@ namespace Unite.UI.ViewModels
             _RetryOnAuthFailure = _RetryOnAuthFailure ?? new Dictionary<ServiceInformation, bool>();
 
             if (!_RetryOnAuthFailure.ContainsKey(e.ServiceInfo))
-                _RetryOnAuthFailure[e.ServiceInfo] = Interactions.AuthenticationFailedRetryQuery();
+                _RetryOnAuthFailure[e.ServiceInfo] = _Interactions.AuthenticationFailedRetryQuery();
 
             if (!_RetryOnAuthFailure[e.ServiceInfo]) return;
 
