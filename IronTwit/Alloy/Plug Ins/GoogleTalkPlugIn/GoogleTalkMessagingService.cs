@@ -64,10 +64,10 @@ namespace GoogleTalkPlugIn
 
         void _DataAccess_OnMessage(object sender, GTalkMessageEventArgs e)
         {
-            _ReceiveMessage(e.User ?? _Credentials.UserName, e.Message);
+            _ReceiveMessage(e.User ?? _Credentials.UserName, e.Message, e.MessageReceivedTimeStamp);
         }
 
-        private void _ReceiveMessage(string username, string message)
+        private void _ReceiveMessage(string username, string message, DateTime messageReceivedTimeStamp)
         {
             var user = new GTalkUser()
                            {
@@ -77,7 +77,8 @@ namespace GoogleTalkPlugIn
             var messageReceived = new GTalkMessage()
                                       {
                                           Address = user,
-                                          Text = message
+                                          Text = message,
+                                          TimeStamp = messageReceivedTimeStamp
                                       };
             if (MessagesReceived != null)
                 MessagesReceived(
@@ -107,7 +108,7 @@ namespace GoogleTalkPlugIn
             else
             {
                 _SendInstantMessage(recipient, message);
-                _ReceiveMessage(_Credentials.UserName, message);
+                _ReceiveMessage(_Credentials.UserName, message, DateTime.Now);
             }
         }
 

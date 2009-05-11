@@ -41,7 +41,7 @@ namespace GoogleTalkPlugIn
             client.OnAuthError += (s, e) => OnAuthError(s, null);
             client.OnMessage += (s, e) =>
                                     {
-                                        OnMessage(s, new GTalkMessageEventArgs(e.From.User, e.Body));
+                                        OnMessage(s, new GTalkMessageEventArgs(e.From.User, e.Body, DateTime.Now));
                                     };
 
 
@@ -105,13 +105,15 @@ namespace GoogleTalkPlugIn
 
     public class GTalkMessageEventArgs : EventArgs
     {
-        public GTalkMessageEventArgs(string user, string message)
+        public GTalkMessageEventArgs(string user, string message, DateTime messageReceivedTimeStamp)
         {
             Message = message;
             User = user;
+            MessageReceivedTimeStamp = messageReceivedTimeStamp;
         }
 
         public string Message;
         public string User;
+        public DateTime MessageReceivedTimeStamp;
     }
 }
