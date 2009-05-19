@@ -69,7 +69,6 @@ namespace Unite.UI.Views
 
         void Window1_Loaded(object sender, RoutedEventArgs e)
         {
-            ((ViewModels.IInitializeView)DataContext).Init();
         }
 
         private void Resizer_MouseDown(object sender, MouseButtonEventArgs e)

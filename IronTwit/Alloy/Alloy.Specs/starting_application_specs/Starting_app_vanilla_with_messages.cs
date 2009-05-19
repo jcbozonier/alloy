@@ -22,7 +22,6 @@ namespace Unite.Specs.New_Starting_Application_Specs
 
         protected override void Because()
         {
-            ViewModel.Init();
         }
 
         protected override void Context()

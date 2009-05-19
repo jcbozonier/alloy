@@ -62,7 +62,6 @@ namespace Unite.Specs.sending_message_specs
                 .Assume_it_can_find_any_address()
                 .Assume_a_message_will_be_sent_and_deliver_the_arguments_to(SendingMessageCallBack);
 
-            ViewModel.Init();
             ViewModel.MessageToSend = MessageToBeSent;
             ViewModel.Recipient = IntendedRecipient;
         }

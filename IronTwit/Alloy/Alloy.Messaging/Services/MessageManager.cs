@@ -13,6 +13,7 @@ namespace Unite.Messaging.Services
         private readonly MessageRepository _MessageRepository;
         private readonly IMessageFormatter _MessageFormatter;
         private readonly IJobRunner _JobRunner;
+        private bool _MessagingServiceIsStarted;
 
         public MessageManager(
             IMessagingServiceManager messagingService, 
@@ -64,6 +65,12 @@ namespace Unite.Messaging.Services
 
         public IEnumerable<IMessage> GetAllMessages()
         {
+            if(!_MessagingServiceIsStarted)
+            {
+                _MessagingServiceIsStarted = true;
+                _JobRunner.Run(_MessagingService.StartReceiving);
+            }
+
             return _MessageRepository.GetAll();
         }
 

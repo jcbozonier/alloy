@@ -27,7 +27,6 @@ namespace Unite.Specs.starting_application_specs
 
         protected override void BecauseOf()
         {
-            View.Init();
         }
 
         protected override void Context()

@@ -44,18 +44,19 @@ namespace Unite.Specs.New_Starting_Application_Specs
                 .Assume_a_single_messaging_service_is_found();
 
             View = repo.GetMainView();
-            View.Init();
             
             PreexistingMessages = new List<IMessage>(View.Messages);
 
             // Sleep for a minute so that the time spans don't match.
-            Thread.Sleep(10);
+            
             Because();
         }
 
         private void Because()
         {
-            FakeMessagePlugin.PretendThatYouJustReceivedAMessage();
+            FakeMessagePlugin.PretendThatYouJustReceivedAMessage(); 
+            //Give us time to receive it...
+            Thread.Sleep(100);
         }
     }
 
@@ -76,7 +77,7 @@ namespace Unite.Specs.New_Starting_Application_Specs
         public override void StartReceiving()
         {
             var eventArgs = new MessagesReceivedEventArgs(
-                new ScenarioRepository().GetMessages(DateTime.Now));
+                new []{new ScenarioRepository().GetMessage(DateTime.Now)});
 
             MessagesReceived(this, eventArgs);
         }

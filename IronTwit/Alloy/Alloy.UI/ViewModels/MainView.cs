@@ -3,6 +3,7 @@ using Bound.Net;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
+using unite.ui.utilities;
 using Unite.UI.Utilities;
 using System;
 using System.Collections.ObjectModel;
@@ -11,34 +12,27 @@ using Unite.Messaging;
 
 namespace Unite.UI.ViewModels
 {
-    public interface IInitializeView : IDisposable
-    {
-        void Init();
-    }
-
-    public class MainView : IInitializeView, INotifyPropertyChanged
+    public class MainView : INotifyPropertyChanged
     {
         
         public MainView(
             IInteractionContext interactionContext, 
-            IMessagingServiceManager messagingService, 
+            CredentialManager credentialManager,
             ContactManager contactManager, 
             MessageManager messageManager)
         {
             if (interactionContext == null)
                 throw new ArgumentNullException("interactionContext");
-            if (messagingService == null)
-                throw new ArgumentNullException("messagingService");
 
+            _CredentialManager = credentialManager;
             _Interactions = interactionContext;
             _ContactManager = contactManager;
             _MessageManager = messageManager;
             _MessageManager.NewMessagesReceived += (sndr,e)=>_GetMessages();
 
-            _MessagingService = messagingService;
             PropertyChanged += MainView_PropertyChanged;
-            _MessagingService.CredentialsRequested += messagingService_CredentialsRequested;
-            _MessagingService.AuthorizationFailed += _MessagingService_AuthorizationFailed;
+            _CredentialManager.CredentialsRequested += messagingService_CredentialsRequested;
+            _CredentialManager.AuthorizationFailed += _MessagingService_AuthorizationFailed;
 
             Messages = new ObservableCollection<IMessage>();
 
@@ -51,6 +45,8 @@ namespace Unite.UI.ViewModels
 
             ReceiveMessage = new ReceiveMessagesCommand(_MessageManager.RequestMessageUpdate);
 
+            _GetMessages();
+
         }
 
         /// <summary>
@@ -58,7 +54,6 @@ namespace Unite.UI.ViewModels
         /// this object. Instantiation is handled in IoC container.
         /// </summary>
         private readonly IInteractionContext _Interactions;
-        private readonly IMessagingServiceManager _MessagingService;
         private readonly ContactManager _ContactManager;
         private readonly MessageManager _MessageManager;
 
@@ -121,6 +116,8 @@ namespace Unite.UI.ViewModels
 
 
         private IEnumerable<IIdentity> _suggestedRecipients;
+        private CredentialManager _CredentialManager;
+
         public IEnumerable<IIdentity> SuggestedRecipients
         {
             get
@@ -148,23 +145,15 @@ namespace Unite.UI.ViewModels
 
         private void _GetMessages()
         {
-            Messages.Clear();
             var messages = _MessageManager.GetAllMessages();
 
+            // There is some sort of a race condition here.
+            // if you clear messages first this may cause duplicates.
+            Messages.Clear();
             foreach (var message in messages)
             {
                 Messages.Add(message);
             }
-        }
-
-        /// <summary>
-        /// This must be called when the application first starts so
-        /// that the model can go through the appropriate workflow
-        /// to set up the UI for the user.
-        /// </summary>
-        public void Init()
-        {
-            _MessagingService.StartReceiving();
         }
 
         /// <summary>
@@ -189,7 +178,7 @@ namespace Unite.UI.ViewModels
         void messagingService_CredentialsRequested(object sender, CredentialEventArgs e)
         {
             var credentials = _Interactions.GetCredentials(e.ServiceInfo);
-            _MessagingService.SetCredentials(credentials);
+            _CredentialManager.SetCredentials(credentials);
         }
 
         void _MessagingService_AuthorizationFailed(object sender, CredentialEventArgs e)
@@ -206,10 +195,8 @@ namespace Unite.UI.ViewModels
 
         public void Dispose()
         {
-            _MessagingService.StopReceiving();
+            //_MessagingService.StopReceiving();
             PropertyChanged -= MainView_PropertyChanged;
-            _MessagingService.CredentialsRequested -= messagingService_CredentialsRequested;
-            _MessagingService.AuthorizationFailed -= _MessagingService_AuthorizationFailed;
         }
     }
 }

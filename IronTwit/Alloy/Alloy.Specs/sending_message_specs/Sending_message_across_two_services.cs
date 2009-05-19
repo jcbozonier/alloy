@@ -33,7 +33,6 @@ namespace Unite.Specs.sending_message_specs
                 .Assume_that_two_different_plugins_are_found();
 
             View = FakesRepo.GetMainViewDontIoC();
-            View.Init();
             View.MessageToSend = MessageToSend;
             View.Recipient = null;
         }

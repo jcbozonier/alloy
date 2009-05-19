@@ -133,6 +133,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Utilities\ContactProvider.cs" />
+    <Compile Include="Utilities\CredentialManager.cs" />
     <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Utilities\InlineUrls.cs" />
     <Compile Include="Utilities\GuiInteractionContext.cs" />

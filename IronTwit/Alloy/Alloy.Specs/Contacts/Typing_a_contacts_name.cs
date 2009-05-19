@@ -26,7 +26,6 @@ namespace Unite.Specs.Contacts
                    .Assume_a_single_messaging_service_is_found();
             
             ViewModel = FakeRepo.GetMainView();
-            ViewModel.Init();
         }
     }
 
@@ -50,7 +49,6 @@ namespace Unite.Specs.Contacts
                 .Assume_a_single_messaging_service_is_found();
 
             ViewModel = FakeRepo.GetMainView();
-            ViewModel.Init();
             Plugin.Pretend_you_received_contacts_for("@darkxanthos", "@imerickson");
         }
     }
