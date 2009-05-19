@@ -24,13 +24,13 @@ namespace Unite.Specs.New_Starting_Application_Specs
         [Test]
         public void It_should_increase_the_number_of_viewable_messages_by_one()
         {
-            View.Messages.Count.ShouldBeGreaterThan(PreexistingMessages.Count);
+            View.Messages.Count().ShouldBeGreaterThan(PreexistingMessages.Count);
         }
 
         [Test]
         public void It_should_place_the_most_recent_message_at_the_top_of_the_list()
         {
-            View.Messages.First().TimeStamp.ShouldBeGreaterThan(View.Messages[1].TimeStamp);
+            View.Messages.First().TimeStamp.ShouldBeGreaterThan(View.Messages.ToArray()[1].TimeStamp);
         }
 
         [TestFixtureSetUp]

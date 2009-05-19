@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Bound.Net;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
@@ -74,7 +75,18 @@ namespace Unite.UI.ViewModels
         /// <summary>
         /// A list of all of the tweets that should be displayed.
         /// </summary>
-        public ObservableCollection<IMessage> Messages { get; set; }
+        public IEnumerable<IMessage> Messages
+        {
+            get
+            {
+                return _Messages;
+            }
+            set
+            {
+                _Messages = value;
+                PropertyChanged.Notify(() => Messages);
+            }
+        }
 
         private string _messageToSend;
         /// <summary>
@@ -129,6 +141,7 @@ namespace Unite.UI.ViewModels
 
         private IEnumerable<IIdentity> _suggestedRecipients;
         private CredentialManager _CredentialManager;
+        private IEnumerable<IMessage> _Messages;
 
         public IEnumerable<IIdentity> SuggestedRecipients
         {
@@ -157,15 +170,7 @@ namespace Unite.UI.ViewModels
 
         private void _GetMessages()
         {
-            var messages = _MessageManager.GetAllMessages();
-
-            // There is some sort of a race condition here.
-            // if you clear messages first this may cause duplicates.
-            Messages.Clear();
-            foreach (var message in messages)
-            {
-                Messages.Add(message);
-            }
+            Messages = _MessageManager.GetAllMessages().ToArray();
         }
 
         /// <summary>
