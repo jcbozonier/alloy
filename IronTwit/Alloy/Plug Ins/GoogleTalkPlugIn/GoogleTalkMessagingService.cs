@@ -64,7 +64,7 @@ namespace GoogleTalkPlugIn
 
         void _DataAccess_OnMessage(object sender, GTalkMessageEventArgs e)
         {
-            _ReceiveMessage(e.User ?? _Credentials.UserName, e.Message, e.MessageReceivedTimeStamp);
+            _ReceiveMessage(e.User ?? _Credentials.UserName, e.Message, e.MessageReceivedTimeStamp.ToUniversalTime());
         }
 
         private void _ReceiveMessage(string username, string message, DateTime messageReceivedTimeStamp)
@@ -108,7 +108,7 @@ namespace GoogleTalkPlugIn
             else
             {
                 _SendInstantMessage(recipient, message);
-                _ReceiveMessage(_Credentials.UserName, message, DateTime.Now);
+                _ReceiveMessage(_Credentials.UserName, message, DateTime.Now.ToUniversalTime());
             }
         }
 
