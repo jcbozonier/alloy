@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Windows.Threading;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Extras;
 
