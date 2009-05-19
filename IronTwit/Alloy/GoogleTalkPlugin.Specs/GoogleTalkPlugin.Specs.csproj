@@ -56,7 +56,6 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="FakeSpecObjects\FakeDataAccess.cs" />
     <Compile Include="Receiving_messages.cs" />
     <Compile Include="Sending_a_message.cs" />
     <Compile Include="Sending_message_recipientless.cs" />

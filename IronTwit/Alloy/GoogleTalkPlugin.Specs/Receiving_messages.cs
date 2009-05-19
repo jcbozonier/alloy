@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 using GoogleTalkPlugIn;
-using GoogleTalkPlugin.Specs.FakeSpecObjects;
 using NUnit.Framework;
+using Rhino.Mocks;
+using Rhino.Mocks.Interfaces;
 using SpecUnit;
+using Unite.Messaging;
 using Unite.Messaging.Entities;
 
 namespace GoogleTalkPlugin.Specs
@@ -36,7 +38,7 @@ namespace GoogleTalkPlugin.Specs
 
         protected override void Because()
         {
-            FakeDataAccess.Pretend_that_a_message_was_received("darkxanthos", "testing", TimeMessageWasReceived);
+            Data_access_OnMessage_event.Raise(FakeDataAccess, new GTalkMessageEventArgs("darkxanthos", "testing",TimeMessageWasReceived));
         }
 
         protected override void Context()
@@ -44,21 +46,26 @@ namespace GoogleTalkPlugin.Specs
             User = "darkxanthos";
             Message = "testing";
             TimeMessageWasReceived = DateTime.Now;
+            GoogleMessagingService.CredentialsRequested += (sndr,e)=>GoogleMessagingService.SetCredentials(new Credentials());
             GoogleMessagingService.MessagesReceived += (sndr, e) => MessageReceived = e.Messages.First();
             GoogleMessagingService.StartReceiving();
         }
     }
 
+   
+
     public abstract class receiving_messages_context
     {
-        protected FakeDataAccess FakeDataAccess;
+        protected IGoogleTalkDataAccess FakeDataAccess;
         protected GoogleTalkMessagingService GoogleMessagingService;
+        protected IEventRaiser Data_access_OnMessage_event;
 
         [TestFixtureSetUp]
         public void Setup()
         {
 
-            FakeDataAccess = new FakeDataAccess(); 
+            FakeDataAccess = MockRepository.GenerateMock<IGoogleTalkDataAccess>();
+            Data_access_OnMessage_event = FakeDataAccess.GetEventRaiser(x=>x.OnMessage += null);
             GoogleMessagingService = new GoogleTalkMessagingService(FakeDataAccess);
 
             Context();
@@ -68,6 +75,4 @@ namespace GoogleTalkPlugin.Specs
         protected abstract void Because();
         protected abstract void Context();
     }
-
-    
 }
