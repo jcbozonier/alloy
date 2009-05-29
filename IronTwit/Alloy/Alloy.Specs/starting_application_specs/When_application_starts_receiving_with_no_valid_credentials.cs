@@ -13,8 +13,7 @@ namespace Unite.Specs.starting_application_specs
         [Test]
         public void It_should_ask_ui_for_credentials()
         {
-            FakeRepo.FakeUIContext
-                .AssertWasCalled(x => x.GetCredentials(null));
+            FakeRepo.FakeUIContext.VerifyAllExpectations();
         }
 
         protected override void Because()
@@ -25,7 +24,8 @@ namespace Unite.Specs.starting_application_specs
         {
             FakeRepo.FakePluginFinder
                 .Assume_a_single_messaging_service_is_found();
-
+            FakeRepo.FakeUIContext
+                .Assume_valid_credentials_are_provided_for_the_correct_service();
             FakeRepo.FakeUIContext
                 .Assume_some_credential_is_provided();
 

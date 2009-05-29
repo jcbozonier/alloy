@@ -190,7 +190,6 @@ namespace Unite.Specs.FakeSpecObjects
                 x.ForRequestedType<ICodePaste>().TheDefault.IsThis(formatter);
                 x.ForRequestedType<IMessageFormatter>().TheDefaultIsConcreteType<MessageFormatter>();
                 x.ForRequestedType<IJobRunner>().TheDefaultIsConcreteType<SynchronousJobRunner>();
-
             });
         }
     }

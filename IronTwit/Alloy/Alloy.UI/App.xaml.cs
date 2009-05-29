@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Windows;
+using unite.ui.utilities;
 using Unite.UI.ViewModels;
 using StructureMap;
 
@@ -23,7 +24,7 @@ namespace Unite.UI
         void App_Startup(object sender, StartupEventArgs e)
         {
             ContainerBootstrapper.BootstrapStructureMap();
-
+            var credentialManager = ObjectFactory.GetInstance<CredentialManager>();
             var view = ObjectFactory.GetInstance<Views.MainView>();
             view.Show();
         }

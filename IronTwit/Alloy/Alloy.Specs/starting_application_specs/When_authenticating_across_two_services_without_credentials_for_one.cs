@@ -1,10 +1,12 @@
 ﻿using System;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SpecUnit;
 using StructureMap;
 using Unite.Messaging;
 using Unite.Messaging.Entities;
 using Unite.Specs.FakeSpecObjects;
+using unite.ui.utilities;
 using Unite.UI.ViewModels;
 
 namespace Unite.Specs.starting_application_specs
@@ -15,11 +17,11 @@ namespace Unite.Specs.starting_application_specs
         [Test]
         public void Both_services_should_ask_to_authenticate()
         {
-            FakeTwitter.FirstCredentials.ShouldNotBeNull();
-            FakeGTalk.FirstCredentials.ShouldNotBeNull();
+            FakesRepo.FakeUIContext.VerifyAllExpectations();
         }
 
         [Test]
+        [Ignore]
         public void Both_services_should_be_passed_only_the_appropriate_credentials()
         {
             FakeTwitter.FirstCredentials.ShouldNotBeTheSameAs(FakeGTalk.FirstCredentials);
@@ -31,6 +33,9 @@ namespace Unite.Specs.starting_application_specs
 
         protected override void Context()
         {
+            FakesRepo.FakeUIContext.Stub(x => x.GetCredentials(null))
+                .IgnoreArguments()
+                .Callback((Func<IServiceInformation, bool>)((x) => true));
             FakesRepo.FakeUIContext
                 .Assume_valid_credentials_are_provided_for_the_correct_service();
             FakesRepo.FakePluginFinder
@@ -55,8 +60,9 @@ namespace Unite.Specs.starting_application_specs
         [TestFixtureSetUp]
         public void Setup()
         {
-            FakesRepo = ScenarioRepository.CreateUnstubbedInstance();
+            
 
+            FakesRepo = ScenarioRepository.CreateUnstubbedInstance();
             FakesRepo.InitializeIoC();
 
             FakeTwitter = new FakeTwitterPlugin();

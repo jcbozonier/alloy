@@ -17,27 +17,24 @@ namespace Unite.UI.ViewModels
         
         public MainView(
             IInteractionContext interactionContext, 
-            CredentialManager credentialManager,
             ContactManager contactManager, 
             MessageManager messageManager)
         {
+            // TODO: CredentialManager doesn't belong here... it can be instantiated outside the ViewModel.
+            // This means that testing credentials will no longer be a part of testing the main view. 
+            // Also don't forget to clean up all of the event references for fear of memory leaks.
             if (interactionContext == null)
                 throw new ArgumentNullException("interactionContext");
-            if(credentialManager == null)
-                throw new ArgumentNullException("credentialManager");
             if(contactManager == null)
                 throw new ArgumentNullException("contactManager");
             if(messageManager == null)
                 throw new ArgumentNullException("messageManager");
 
-            _CredentialManager = credentialManager;
             _Interactions = interactionContext;
             _ContactManager = contactManager;
             _MessageManager = messageManager;
 
             _MessageManager.NewMessagesReceived += _MessageManager_NewMessagesReceived; 
-            _CredentialManager.CredentialsRequested += messagingService_CredentialsRequested;
-            _CredentialManager.AuthorizationFailed += _MessagingService_AuthorizationFailed;
 
             PropertyChanged += MainView_PropertyChanged;
             
@@ -128,7 +125,6 @@ namespace Unite.UI.ViewModels
 
 
         private IEnumerable<IIdentity> _suggestedRecipients;
-        private CredentialManager _CredentialManager;
 
         public IEnumerable<IIdentity> SuggestedRecipients
         {
@@ -187,32 +183,12 @@ namespace Unite.UI.ViewModels
             }
         }
 
-        void messagingService_CredentialsRequested(object sender, CredentialEventArgs e)
-        {
-            var credentials = _Interactions.GetCredentials(e.ServiceInfo);
-            _CredentialManager.SetCredentials(credentials);
-        }
-
-        void _MessagingService_AuthorizationFailed(object sender, CredentialEventArgs e)
-        {
-            // This needs to be refactored out of the view model for sure and placed
-            // into the credential manager.
-            _RetryOnAuthFailure = _RetryOnAuthFailure ?? new Dictionary<ServiceInformation, bool>();
-
-            if (!_RetryOnAuthFailure.ContainsKey(e.ServiceInfo))
-                _RetryOnAuthFailure[e.ServiceInfo] = _Interactions.AuthenticationFailedRetryQuery();
-
-            if (!_RetryOnAuthFailure[e.ServiceInfo]) return;
-
-            messagingService_CredentialsRequested(this, e);
-        }
+        
 
         public void Dispose()
         {
             PropertyChanged -= MainView_PropertyChanged;
             _MessageManager.NewMessagesReceived -= _MessageManager_NewMessagesReceived;
-            _CredentialManager.CredentialsRequested -= messagingService_CredentialsRequested;
-            _CredentialManager.AuthorizationFailed -= _MessagingService_AuthorizationFailed;
         }
     }
 }
