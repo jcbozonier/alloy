@@ -17,7 +17,7 @@ namespace Unite.Specs.New_Starting_Application_Specs
     [TestFixture]
     public class When_a_message_is_received_while_messages_already_exist
     {
-        private MainView View;
+        private MessagingViewModel View;
         private List<IMessage> PreexistingMessages;
         private FakeReceivingMessagePlugin FakeMessagePlugin;
 

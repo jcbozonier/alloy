@@ -13,13 +13,13 @@ using Unite.Messaging;
 
 namespace Unite.UI.ViewModels
 {
-    public class MainView : INotifyPropertyChanged
+    public class MessagingViewModel : INotifyPropertyChanged
     {
         
-        public MainView(
+        public MessagingViewModel(
             IInteractionContext interactionContext, 
-            ContactManager contactManager, 
-            MessageManager messageManager)
+            ContactQuery contactManager, 
+            UnifiedMessagingController messageManager)
         {
             // TODO: CredentialManager doesn't belong here... it can be instantiated outside the ViewModel.
             // This means that testing credentials will no longer be a part of testing the main view. 
@@ -64,8 +64,8 @@ namespace Unite.UI.ViewModels
         /// this object. Instantiation is handled in IoC container.
         /// </summary>
         private readonly IInteractionContext _Interactions;
-        private readonly ContactManager _ContactManager;
-        private readonly MessageManager _MessageManager;
+        private readonly ContactQuery _ContactManager;
+        private readonly UnifiedMessagingController _MessageManager;
 
         private Dictionary<ServiceInformation, bool> _RetryOnAuthFailure;
         

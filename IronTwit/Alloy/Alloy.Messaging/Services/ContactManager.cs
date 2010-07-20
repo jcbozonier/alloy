@@ -2,12 +2,12 @@
 
 namespace Unite.Messaging.Services
 {
-    public class ContactManager
+    public class ContactQuery
     {
         private readonly ContactRepository _ContactRepository;
-        private readonly IMessagingServiceManager _ServicesManager;
+        private readonly IUnifiedMessagingService _ServicesManager;
 
-        public ContactManager(IMessagingServiceManager servicesManager, ContactRepository contactRepository)
+        public ContactQuery(IUnifiedMessagingService servicesManager, ContactRepository contactRepository)
         {
             _ServicesManager = servicesManager;
             _ContactRepository = contactRepository;

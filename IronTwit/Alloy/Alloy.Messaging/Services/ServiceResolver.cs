@@ -4,9 +4,9 @@ using Unite.Messaging.Messages;
 
 namespace Unite.Messaging.Services
 {
-    public class ServiceResolver : IServiceResolver
+    public class DetectPlugInToUseBasedOnRecipientAddress : IPlugInDetection
     {
-        public ServiceResolver(IServiceProvider provider)
+        public DetectPlugInToUseBasedOnRecipientAddress(IServiceProvider provider)
         {
             _Services = provider.GetServices();
         }

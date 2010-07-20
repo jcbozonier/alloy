@@ -8,6 +8,16 @@ using System.Windows;
 using unite.ui.utilities;
 using Unite.UI.ViewModels;
 using StructureMap;
+using System.Threading;
+using System.Windows.Threading;
+using StructureMap.Attributes;
+using Unite.Messaging.Extras;
+using Unite.Messaging.Messages;
+using Unite.Messaging.Services;
+using Unite.UI.Utilities;
+using StructureMap;
+using Unite.Messaging;
+using Unite.UI.Views;
 
 namespace Unite.UI
 {
@@ -23,10 +33,30 @@ namespace Unite.UI
 
         void App_Startup(object sender, StartupEventArgs e)
         {
-            ContainerBootstrapper.BootstrapStructureMap();
-            var credentialManager = ObjectFactory.GetInstance<CredentialManager>();
-            var view = ObjectFactory.GetInstance<Views.MainView>();
-            view.Show();
+            var messagingPluginFinder = new MessagingPluginFinder();
+            var messagingPlugInRepository = new MessagingPlugInRepository(messagingPluginFinder);
+            var appropriatePlugInDetection = new DetectPlugInToUseBasedOnRecipientAddress(messagingPlugInRepository);
+            var unifiedMessenger = new UnifiedMessenger(messagingPlugInRepository, appropriatePlugInDetection);
+            
+            var contactRepository = new ContactRepository();
+            var contactQuery = new ContactQuery(unifiedMessenger, contactRepository);
+
+            var messagingFiber = new AsyncFiber(this.Dispatcher);
+            var credentialRepository = new MessagingAccountCredentialRepository(messagingPlugInRepository);
+            var securityDialogService = new SecurityDialogService(credentialRepository, messagingFiber);
+
+            var credentialManager = new CredentialAuthorizationController(unifiedMessenger, securityDialogService);
+
+            var codePasteToUrlService = new CodePasteToUrlService();
+            var automaticMessageFormatting = new AutoFormatCodePastesAsUrls(codePasteToUrlService);
+
+            var messageRepository = new MessageRepository();
+            var unifiedMessagingController = new UnifiedMessagingController(unifiedMessenger, messageRepository, automaticMessageFormatting, messagingFiber);
+
+            var messagingViewModel = new MessagingViewModel(securityDialogService, contactQuery, unifiedMessagingController);
+            var messagingWindow = new MessagingWindow(messagingViewModel);
+           
+            messagingWindow.Show();
         }
     }
 }

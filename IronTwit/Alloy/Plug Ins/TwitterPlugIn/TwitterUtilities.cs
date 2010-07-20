@@ -65,7 +65,7 @@ namespace IronTwitterPlugIn
             if (dataAccess == null) //default path
                 _DataAccess = new TwitterDataAccess();
 
-            _ReceivedTweets = new Dictionary<int, bool>();
+            _ReceivedTweets = new Dictionary<long, bool>();
         }
 
         public void SendMessage(IIdentity theRecipient, string message)
@@ -254,7 +254,7 @@ namespace IronTwitterPlugIn
             return new List<IMessage>(tweets.ToArray());
         }
 
-        private Dictionary<int,bool> _ReceivedTweets;
+        private Dictionary<long,bool> _ReceivedTweets;
         private bool _MessagesHaveBeenReceivedBefore;
 
         private void _RequestCredentials()

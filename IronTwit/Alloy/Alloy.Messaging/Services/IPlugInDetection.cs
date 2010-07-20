@@ -2,7 +2,7 @@
 
 namespace Unite.Messaging.Services
 {
-    public interface IServiceResolver
+    public interface IPlugInDetection
     {
         ServiceInformation GetService(string address);
     }

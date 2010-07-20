@@ -56,7 +56,7 @@ namespace Unite.Specs.Contacts
     public abstract class partial_contact_context
     {
         protected ScenarioRepository FakeRepo;
-        protected MainView ViewModel;
+        protected MessagingViewModel ViewModel;
         protected FakeReceivingMessagePlugin Plugin;
 
         [TestFixtureSetUp]

@@ -8,7 +8,7 @@ using Unite.Messaging.Services;
 
 namespace Unite.Messaging
 {
-    public interface IMessagingServiceManager
+    public interface IUnifiedMessagingService
     {
         void SendMessage(string recipient, string message);
         bool CanAccept(Credentials credentials);

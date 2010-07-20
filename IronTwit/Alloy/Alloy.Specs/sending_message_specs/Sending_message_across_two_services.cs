@@ -45,7 +45,7 @@ namespace Unite.Specs.sending_message_specs
 
     public abstract class multiple_service_context
     {
-        protected MainView View;
+        protected MessagingViewModel View;
         protected string MessageToSend;
         protected FakeTwitterPlugin FakeTwitter;
         protected FakeGTalkPlugin FakeGTalk;

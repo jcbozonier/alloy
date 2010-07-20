@@ -45,7 +45,7 @@ namespace Unite.Specs.starting_application_specs
 
     public abstract class cached_credentials_no_settings
     {
-        protected MainView ViewModel;
+        protected MessagingViewModel ViewModel;
         protected ScenarioRepository FakeRepo;
         protected IMessagingService FakeMessagingPlugin;
 

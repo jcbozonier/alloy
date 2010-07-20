@@ -7,11 +7,11 @@ using Unite.Messaging.Messages;
 
 namespace Unite.Messaging.Services
 {
-    public class ServiceProvider : IServiceProvider
+    public class MessagingPlugInRepository : IServiceProvider
     {
         private readonly List<IMessagingService> Services;
 
-        public ServiceProvider(IPluginFinder finder)
+        public MessagingPlugInRepository(IPluginFinder finder)
         {
             Services = new List<IMessagingService>();
 

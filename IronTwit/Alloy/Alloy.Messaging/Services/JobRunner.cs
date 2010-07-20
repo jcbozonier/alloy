@@ -4,17 +4,17 @@ using System.Windows.Threading;
 
 namespace Unite.Messaging.Services
 {
-    public interface IJobRunner 
+    public interface IFiber 
     {
         void Run(Action job);
         void RunOnMainThread(Action job);
     }
 
-    public class AsyncJobRunner : IJobRunner
+    public class AsyncFiber : IFiber
     {
         private readonly Dispatcher _MainDispatcher;
 
-        public AsyncJobRunner(Dispatcher mainDispatcher)
+        public AsyncFiber(Dispatcher mainDispatcher)
         {
             _MainDispatcher = mainDispatcher;
         }
@@ -33,7 +33,7 @@ namespace Unite.Messaging.Services
         }
     }
 
-    public class SynchronousJobRunner : IJobRunner
+    public class SynchronousFiber : IFiber
     {
         public void Run(Action job)
         {

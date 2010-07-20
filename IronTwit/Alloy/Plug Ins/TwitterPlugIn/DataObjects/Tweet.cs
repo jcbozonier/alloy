@@ -30,7 +30,7 @@ namespace IronTwitterPlugIn.DataObjects
                 Address = value;
             }
         }
-        public int id { get; set; }
+        public long id { get; set; }
 
         public string created_at
         {

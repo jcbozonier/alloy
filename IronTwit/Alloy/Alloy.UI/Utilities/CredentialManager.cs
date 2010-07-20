@@ -6,13 +6,13 @@ using Unite.Messaging.Messages;
 
 namespace unite.ui.utilities
 {
-    public class CredentialManager
+    public class CredentialAuthorizationController
     {
-        private readonly IMessagingServiceManager _MessagingService;
+        private readonly IUnifiedMessagingService _MessagingService;
         private Dictionary<ServiceInformation, bool> _RetryOnAuthFailure;
         private readonly IInteractionContext _Interactions;
 
-        public CredentialManager(IMessagingServiceManager messagingService, IInteractionContext uiContext)
+        public CredentialAuthorizationController(IUnifiedMessagingService messagingService, IInteractionContext uiContext)
         {
             _Interactions = uiContext;
             _MessagingService = messagingService;

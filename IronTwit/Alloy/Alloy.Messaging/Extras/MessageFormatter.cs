@@ -11,11 +11,11 @@ namespace Unite.Messaging.Extras
         string ApplyFormatting(string message);
     }
 
-    public class MessageFormatter : IMessageFormatter
+    public class AutoFormatCodePastesAsUrls : IMessageFormatter
     {
         private ICodePaste _CodePasteService;
 
-        public MessageFormatter(ICodePaste codePasteService)
+        public AutoFormatCodePastesAsUrls(ICodePaste codePasteService)
         {
             _CodePasteService = codePasteService;
         }

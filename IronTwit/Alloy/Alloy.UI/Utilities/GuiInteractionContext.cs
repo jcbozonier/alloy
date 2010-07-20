@@ -11,12 +11,12 @@ using Unite.Messaging;
 
 namespace Unite.UI.Utilities
 {
-    public class GuiInteractionContext : IInteractionContext
+    public class SecurityDialogService : IInteractionContext
     {
         private readonly ICredentialCache _CredentialCache;
-        private readonly IJobRunner _JobRunner;
+        private readonly IFiber _JobRunner;
 
-        public GuiInteractionContext(ICredentialCache credentialCache, IJobRunner jobRunner)
+        public SecurityDialogService(ICredentialCache credentialCache, IFiber jobRunner)
         {
             _CredentialCache = credentialCache;
             _JobRunner = jobRunner;

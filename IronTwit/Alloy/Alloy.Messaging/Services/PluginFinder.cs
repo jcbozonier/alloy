@@ -6,7 +6,7 @@ using Unite.Messaging.Messages;
 
 namespace Unite.Messaging.Services
 {
-    public class PluginFinder : IPluginFinder
+    public class MessagingPluginFinder : IPluginFinder
     {
         public IEnumerable<Type> GetAllPlugins()
         {

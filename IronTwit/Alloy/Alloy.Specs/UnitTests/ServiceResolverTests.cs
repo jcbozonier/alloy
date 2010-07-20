@@ -17,7 +17,7 @@ namespace Unite.Specs.UnitTests
         private const string EmailAddress = "darkxanthos@gmail.com";
         private const string GChatAddress = "darkxanthos";
 
-        private ServiceResolver _resolver;
+        private DetectPlugInToUseBasedOnRecipientAddress _resolver;
 
         [Test]
         public void DetectTwitterAddress()
@@ -73,7 +73,7 @@ namespace Unite.Specs.UnitTests
         {
             IServiceProvider serviceProvider = new TestServiceProvider();
             serviceProvider.Add(new TwitterUtilities());
-            _resolver = new ServiceResolver(serviceProvider);
+            _resolver = new DetectPlugInToUseBasedOnRecipientAddress(serviceProvider);
         }
     }
 }

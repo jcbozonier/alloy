@@ -1,6 +1,6 @@
 ﻿namespace Unite.Messaging.Services
 {
-    public class CodePaste : ICodePaste
+    public class CodePasteToUrlService : ICodePaste
     {
         public string PasteCode(string codeToPaste)
         {

@@ -33,8 +33,8 @@ namespace Unite.Specs.Using_Services
 
     public abstract class context
     {
-        protected IMessagingServiceManager ServiceManager;
-        protected ServiceProvider ServiceProvider;
+        protected IUnifiedMessagingService ServiceManager;
+        protected MessagingPlugInRepository ServiceProvider;
         protected IEnumerable<IMessage> Messages;
         protected Credentials MyCredentials;
 
@@ -42,9 +42,9 @@ namespace Unite.Specs.Using_Services
         public void Setup()
         {
             MyCredentials = new Credentials() { UserName = "username", Password = "password" };
-            ServiceProvider = new ServiceProvider(new PluginFinder());
+            ServiceProvider = new MessagingPlugInRepository(new MessagingPluginFinder());
             ServiceProvider.Add(new FauxMessageService("test 1"), new FauxMessageService("test2"));
-            ServiceManager = new ServicesManager(ServiceProvider);
+            ServiceManager = new UnifiedMessenger(ServiceProvider, new GenericPlugInDetection());
 
             Context();
             Because();
@@ -53,6 +53,14 @@ namespace Unite.Specs.Using_Services
         protected abstract void Because();
 
         protected abstract void Context();
+    }
+
+    public class GenericPlugInDetection : IPlugInDetection
+    {
+        public ServiceInformation GetService(string address)
+        {
+            return new ServiceInformation() {ServiceID = Guid.NewGuid(), ServiceName = "YADA"};
+        }
     }
 
     public class FauxMessageService : IMessagingService

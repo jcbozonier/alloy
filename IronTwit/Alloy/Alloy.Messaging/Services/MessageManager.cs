@@ -5,19 +5,19 @@ using Unite.Messaging.Extras;
 
 namespace Unite.Messaging.Services
 {
-    public class MessageManager
+    public class UnifiedMessagingController
     {
-        private readonly IMessagingServiceManager _MessagingService;
+        private readonly IUnifiedMessagingService _MessagingService;
         private readonly MessageRepository _MessageRepository;
         private readonly IMessageFormatter _MessageFormatter;
-        private readonly IJobRunner _JobRunner;
+        private readonly IFiber _JobRunner;
         private bool _MessagingServiceIsStarted;
 
-        public MessageManager(
-            IMessagingServiceManager messagingService, 
+        public UnifiedMessagingController(
+            IUnifiedMessagingService messagingService, 
             MessageRepository messageRepository, 
             IMessageFormatter messageFormatter,
-            IJobRunner jobRunner)
+            IFiber jobRunner)
         {
             _MessagingService = messagingService;
             _MessageRepository = messageRepository;

@@ -17,18 +17,18 @@ namespace Unite.UI
             // Initialize the static ObjectFactory container
             ObjectFactory.Initialize(x =>
             {
-                var asyncJobRunner = new AsyncJobRunner(Dispatcher.CurrentDispatcher);
+                var fiber = new AsyncFiber(Dispatcher.CurrentDispatcher);
 
-                x.ForRequestedType<Views.MainView>().TheDefaultIsConcreteType<Views.MainView>();
-                x.ForRequestedType<IMessagingServiceManager>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<ServicesManager>();
-                x.ForRequestedType<IContactService>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<ServicesManager>();
-                x.ForRequestedType<IServiceProvider>().TheDefaultIsConcreteType<ServiceProvider>();
-                x.ForRequestedType<IPluginFinder>().TheDefaultIsConcreteType<PluginFinder>();
-                x.ForRequestedType<ICodePaste>().TheDefaultIsConcreteType<CodePaste>();
-                x.ForRequestedType<ICredentialCache>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<CredentialCache>();
-                x.ForRequestedType<IInteractionContext>().TheDefaultIsConcreteType<GuiInteractionContext>();
-                x.ForRequestedType<IMessageFormatter>().TheDefaultIsConcreteType<MessageFormatter>();
-                x.ForRequestedType<IJobRunner>().TheDefault.IsThis(asyncJobRunner);
+                x.ForRequestedType<Views.MessagingWindow>().TheDefaultIsConcreteType<Views.MessagingWindow>();
+                x.ForRequestedType<IUnifiedMessagingService>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<UnifiedMessenger>();
+                x.ForRequestedType<IContactService>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<UnifiedMessenger>();
+                x.ForRequestedType<IServiceProvider>().TheDefaultIsConcreteType<MessagingPlugInRepository>();
+                x.ForRequestedType<IPluginFinder>().TheDefaultIsConcreteType<MessagingPluginFinder>();
+                x.ForRequestedType<ICodePaste>().TheDefaultIsConcreteType<CodePasteToUrlService>();
+                x.ForRequestedType<ICredentialCache>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<MessagingAccountCredentialRepository>();
+                x.ForRequestedType<IInteractionContext>().TheDefaultIsConcreteType<SecurityDialogService>();
+                x.ForRequestedType<IMessageFormatter>().TheDefaultIsConcreteType<AutoFormatCodePastesAsUrls>();
+                x.ForRequestedType<IFiber>().TheDefault.IsThis(fiber);
             });
         }
     }

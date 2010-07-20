@@ -99,7 +99,7 @@ namespace Unite.Specs.sending_message_specs
         }
 
         protected ScenarioRepository FakeRepo;
-        protected MainView ViewModel;
+        protected MessagingViewModel ViewModel;
         protected IMessagingService FakeMessagingService;
         protected string MessageSent;
         protected string IntendedRecipient;

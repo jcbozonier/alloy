@@ -8,14 +8,14 @@ using StructureMap;
 
 namespace Unite.Messaging.Messages
 {
-    public class CredentialCache : ICredentialCache
+    public class MessagingAccountCredentialRepository : ICredentialCache
     {
         private readonly string _cacheFile;
         private readonly Services.IServiceProvider _serviceProvider;
 
         private Dictionary<Guid, CachedCredential> _cache;
 
-        public CredentialCache(Services.IServiceProvider serviceProvider)
+        public MessagingAccountCredentialRepository(Services.IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             var userAppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);

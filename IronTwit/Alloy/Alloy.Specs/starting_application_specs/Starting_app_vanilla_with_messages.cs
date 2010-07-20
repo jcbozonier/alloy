@@ -35,7 +35,7 @@ namespace Unite.Specs.New_Starting_Application_Specs
 
     public abstract class no_cached_credentials_no_settings
     {
-        protected MainView ViewModel;
+        protected MessagingViewModel ViewModel;
         protected ScenarioRepository FakeRepo;
 
         [TestFixtureSetUp]

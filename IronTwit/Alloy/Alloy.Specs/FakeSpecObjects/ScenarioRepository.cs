@@ -58,16 +58,16 @@ namespace Unite.Specs.FakeSpecObjects
             ContainerBootstrapper.BootstrapStructureMap(FakeUIContext, FakePluginFinder, FakeSettings, FakeMessagePlugin, FakeCodeFormatter);
         }
 
-        public MainView GetMainView()
+        public MessagingViewModel GetMainView()
         {
             InitializeIoC();
             ObjectFactory.Inject(FakeMessagePlugin);
-            return ObjectFactory.GetInstance<MainView>();
+            return ObjectFactory.GetInstance<MessagingViewModel>();
         }
 
-        public MainView GetMainViewDontIoC()
+        public MessagingViewModel GetMainViewDontIoC()
         {
-            return ObjectFactory.GetInstance<MainView>();
+            return ObjectFactory.GetInstance<MessagingViewModel>();
         }
 
         public List<IMessage> GetMessages()
@@ -178,18 +178,18 @@ namespace Unite.Specs.FakeSpecObjects
             // Initialize the static ObjectFactory container
             ObjectFactory.Initialize(x =>
             {
-                x.ForRequestedType<MainView>().TheDefaultIsConcreteType<MainView>();
+                x.ForRequestedType<MessagingViewModel>().TheDefaultIsConcreteType<MessagingViewModel>();
                 x.ForRequestedType<IInteractionContext>().TheDefault.IsThis(gui);
                 x.ForRequestedType<IMessagingService>().TheDefault.IsThis(plugin);
                 x.ForRequestedType<ISettingsProvider>().TheDefault.IsThis(settings);
-                x.ForRequestedType<IMessagingServiceManager>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<ServicesManager>();
-                x.ForRequestedType<IContactService>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<ServicesManager>();
-                x.ForRequestedType<ContactManager>().TheDefaultIsConcreteType<ContactManager>();
-                x.ForRequestedType<IServiceProvider>().TheDefaultIsConcreteType<ServiceProvider>();
+                x.ForRequestedType<IUnifiedMessagingService>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<UnifiedMessenger>();
+                x.ForRequestedType<IContactService>().CacheBy(InstanceScope.Singleton).TheDefaultIsConcreteType<UnifiedMessenger>();
+                x.ForRequestedType<ContactQuery>().TheDefaultIsConcreteType<ContactQuery>();
+                x.ForRequestedType<IServiceProvider>().TheDefaultIsConcreteType<MessagingPlugInRepository>();
                 x.ForRequestedType<IPluginFinder>().TheDefault.IsThis(pluginFinder);
                 x.ForRequestedType<ICodePaste>().TheDefault.IsThis(formatter);
-                x.ForRequestedType<IMessageFormatter>().TheDefaultIsConcreteType<MessageFormatter>();
-                x.ForRequestedType<IJobRunner>().TheDefaultIsConcreteType<SynchronousJobRunner>();
+                x.ForRequestedType<IMessageFormatter>().TheDefaultIsConcreteType<AutoFormatCodePastesAsUrls>();
+                x.ForRequestedType<IFiber>().TheDefaultIsConcreteType<SynchronousFiber>();
             });
         }
     }

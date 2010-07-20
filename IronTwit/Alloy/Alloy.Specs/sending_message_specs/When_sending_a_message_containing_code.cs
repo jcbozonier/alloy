@@ -52,7 +52,7 @@ namespace Unite.Specs.sending_message_specs
     public abstract class code_sample_context
     {
         protected ScenarioRepository FakeRepo;
-        protected MainView ViewModel;
+        protected MessagingViewModel ViewModel;
         protected string MinimalCodeSample;
         protected string MessageToSend;
         protected string MessageSent;

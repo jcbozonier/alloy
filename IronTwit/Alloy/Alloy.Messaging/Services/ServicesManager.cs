@@ -5,7 +5,7 @@ using Unite.Messaging.Messages;
 
 namespace Unite.Messaging.Services
 {
-    public class ServicesManager : IMessagingServiceManager, IContactService
+    public class UnifiedMessenger : IUnifiedMessagingService, IContactService
     {
         private readonly ServiceInformation _ServiceInfo = new ServiceInformation()
         {
@@ -14,7 +14,7 @@ namespace Unite.Messaging.Services
         };
 
         private readonly IServiceProvider _Provider;
-        private readonly IServiceResolver _Resolver;
+        private readonly IPlugInDetection _Resolver;
 
         private readonly IEnumerable<IMessagingService> _Services;
 
@@ -37,12 +37,12 @@ namespace Unite.Messaging.Services
 
         public event EventHandler<ContactEventArgs> OnContactsReceived;
 
-        public ServicesManager(IServiceProvider provider)
+        public UnifiedMessenger(IServiceProvider provider, IPlugInDetection resolver)
         {
             _Provider = provider;
             _Provider.CredentialsRequested += Provider_CredentialsRequested;
             _Provider.AuthorizationFailed += Provider_AuthorizationFailed;
-            _Resolver = new ServiceResolver(_Provider);
+            _Resolver = resolver;
 
             _Services = _Provider.GetServices();
 

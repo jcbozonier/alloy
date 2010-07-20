@@ -7,9 +7,9 @@ namespace Unite.UI.Views
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class MainView : DraggableWindow
+    public partial class MessagingWindow : DraggableWindow
     {
-        public MainView(ViewModels.MainView viewModel)
+        public MessagingWindow(ViewModels.MessagingViewModel viewModel)
         {
             InitializeComponent();
             DataContext = viewModel;
@@ -64,7 +64,7 @@ namespace Unite.UI.Views
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             base.OnClosing(e);
-            ((ViewModels.MainView)DataContext).Dispose();
+            ((ViewModels.MessagingViewModel)DataContext).Dispose();
         }
 
         void Window1_Loaded(object sender, RoutedEventArgs e)

@@ -48,10 +48,10 @@ namespace Unite.Specs.starting_application_specs
     public abstract class authenticating_two_services_context
     {
         protected ScenarioRepository ScenarioRepo;
-        protected MainView ViewModel;
+        protected MessagingViewModel ViewModel;
         protected FakeTwitterPlugin FakeTwitter;
         protected FakeGTalkPlugin FakeGTalk;
-        protected MainView View;
+        protected MessagingViewModel View;
 
         protected bool TwitterPluginAuthenticated;
         protected bool GTalkPluginAuthenticated;
