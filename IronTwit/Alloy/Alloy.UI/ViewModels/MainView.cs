@@ -18,8 +18,8 @@ namespace Unite.UI.ViewModels
         
         public MessagingViewModel(
             IInteractionContext interactionContext, 
-            ContactQuery contactManager, 
-            UnifiedMessagingController messageManager)
+            IContactQuery contactManager, 
+            IUnifiedMessagingController messageManager)
         {
             // TODO: CredentialManager doesn't belong here... it can be instantiated outside the ViewModel.
             // This means that testing credentials will no longer be a part of testing the main view. 
@@ -64,8 +64,8 @@ namespace Unite.UI.ViewModels
         /// this object. Instantiation is handled in IoC container.
         /// </summary>
         private readonly IInteractionContext _Interactions;
-        private readonly ContactQuery _ContactManager;
-        private readonly UnifiedMessagingController _MessageManager;
+        private readonly IContactQuery _ContactManager;
+        private readonly IUnifiedMessagingController _MessageManager;
 
         private Dictionary<ServiceInformation, bool> _RetryOnAuthFailure;
         

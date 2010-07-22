@@ -5,7 +5,15 @@ using Unite.Messaging.Extras;
 
 namespace Unite.Messaging.Services
 {
-    public class UnifiedMessagingController
+    public interface IUnifiedMessagingController
+    {
+        void MessageToSend(string recipient, string message);
+        void RequestMessageUpdate();
+        IEnumerable<IMessage> GetAllMessages();
+        event EventHandler NewMessagesReceived;
+    }
+
+    public class UnifiedMessagingController : IUnifiedMessagingController
     {
         private readonly IUnifiedMessagingService _MessagingService;
         private readonly MessageRepository _MessageRepository;

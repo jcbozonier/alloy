@@ -1,26 +1,28 @@
-﻿using NUnit.Framework;
-using Rhino.Mocks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using SpecUnit;
 using Unite.Messaging;
-using Unite.Messaging.Messages;
-using Unite.Specs.FakeSpecObjects;
+using Unite.Messaging.Entities;
+using Unite.Messaging.Services;
 using Unite.UI.ViewModels;
 
 namespace Unite.Specs.sending_message_specs
 {
     [TestFixture]
-    public class Sending_a_message_in_general : context
+    public class Sending_a_message_in_general
     {
-        [Test]
-        public void It_should_be_sent()
-        {
-            MessageSent.ShouldNotBeNull();
-        }
+        private MessagingViewModel ViewModel;
+        private string MessageToBeSent = "message to be sent";
+        private string IntendedRecipient = "intended recipient";
+        private TestMessagingController TestMessagingController;
 
         [Test]
         public void It_should_NOT_refresh_its_messages_just_because_we_sent_one()
         {
-            FakeRepo.FakeMessagePlugin.AssertWasNotCalled(x=>x.GetMessages());
+            Assert.That(TestMessagingController.GetAllMessagesCalledCount, Is.EqualTo(1), "It should only get the messages once, at start up.");
         }
 
         [Test]
@@ -32,13 +34,13 @@ namespace Unite.Specs.sending_message_specs
         [Test]
         public void The_message_sent_should_match_the_one_provided_by_the_user()
         {
-            MessageSent.ShouldEqual(MessageToBeSent);
+            TestMessagingController.SentMessage.ShouldEqual(MessageToBeSent);
         }
 
         [Test]
         public void It_should_be_sent_to_the_correct_recipient()
         {
-            ActualRecipient.UserName.ShouldEqual(IntendedRecipient);
+            TestMessagingController.MessageRecipient.ShouldEqual(IntendedRecipient);
         }
 
         [Test]
@@ -53,57 +55,73 @@ namespace Unite.Specs.sending_message_specs
             ViewModel.MessageToSend.ShouldEqual("");
         }
 
-        protected override void Context()
+        [TestFixtureSetUp]
+        public void Setup()
         {
-            FakeRepo.FakePluginFinder
-                .Assume_a_single_messaging_service_is_found();
+            Context();
+            BecauseOf();
+        }
 
-            FakeRepo.FakeMessagePlugin
-                .Assume_it_can_find_any_address()
-                .Assume_a_message_will_be_sent_and_deliver_the_arguments_to(SendingMessageCallBack);
+        protected void Context()
+        {
+            TestMessagingController = new TestMessagingController();
+
+            ViewModel = new MessagingViewModel(new TestInteractionContext(), new TestContactQuery(), TestMessagingController);
 
             ViewModel.MessageToSend = MessageToBeSent;
             ViewModel.Recipient = IntendedRecipient;
         }
 
-        protected override void BecauseOf()
+        protected void BecauseOf()
         {
             ViewModel.SendMessage.Execute(null);
         }
     }
 
-    public abstract class context
+    public class TestMessagingController : IUnifiedMessagingController
     {
-        [TestFixtureSetUp]
-        public void Setup()
+        public int GetAllMessagesCalledCount;
+        public string SentMessage;
+        public string MessageRecipient;
+
+        public void MessageToSend(string recipient, string message)
         {
-            IntendedRecipient = "@darkxanthos";
-            MessageToBeSent = "Test message";
-
-            FakeRepo = ScenarioRepository.CreateStubbedInstance();
-
-            ViewModel = FakeRepo.GetMainView();
-
-            Context();
-            BecauseOf();
+            SentMessage = message;
+            MessageRecipient = recipient;
         }
 
-        protected abstract void BecauseOf();
-
-        protected abstract void Context();
-
-        protected void SendingMessageCallBack(IIdentity recipient, string message)
+        public void RequestMessageUpdate()
         {
-            ActualRecipient = recipient;
-            MessageSent = message;
+            
         }
 
-        protected ScenarioRepository FakeRepo;
-        protected MessagingViewModel ViewModel;
-        protected IMessagingService FakeMessagingService;
-        protected string MessageSent;
-        protected string IntendedRecipient;
-        protected IIdentity ActualRecipient;
-        protected string MessageToBeSent;
+        public IEnumerable<IMessage> GetAllMessages()
+        {
+            GetAllMessagesCalledCount++;
+            return Enumerable.Empty<IMessage>();
+        }
+
+        public event EventHandler NewMessagesReceived;
+    }
+
+    public class TestContactQuery : IContactQuery
+    {
+        public IEnumerable<IIdentity> SearchFor(string name)
+        {
+            return Enumerable.Empty<IIdentity>();
+        }
+    }
+
+    public class TestInteractionContext : IInteractionContext
+    {
+        public Credentials GetCredentials(IServiceInformation serviceInformation)
+        {
+            return new Credentials();
+        }
+
+        public bool AuthenticationFailedRetryQuery()
+        {
+            return false;
+        }
     }
 }

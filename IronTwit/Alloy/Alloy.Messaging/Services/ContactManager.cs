@@ -2,7 +2,12 @@
 
 namespace Unite.Messaging.Services
 {
-    public class ContactQuery
+    public interface IContactQuery
+    {
+        IEnumerable<IIdentity> SearchFor(string name);
+    }
+
+    public class ContactQuery : IContactQuery
     {
         private readonly ContactRepository _ContactRepository;
         private readonly IUnifiedMessagingService _ServicesManager;
