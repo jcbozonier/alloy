@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using Rhino.Mocks;
 using SpecUnit;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
 using Unite.Specs.FakeSpecObjects;
+using Unite.Specs.TestObjects;
 using Unite.UI.Utilities;
 using Unite.UI.ViewModels;
 
@@ -20,13 +22,16 @@ namespace Unite.Specs.New_Starting_Application_Specs
         private MessagingViewModel View;
         private List<IMessage> PreexistingMessages;
         private FakeReceivingMessagePlugin FakeMessagePlugin;
+        private TestMessagingController TestMessenger;
+        private Message[] ReceivedMessages;
 
         [Test]
         public void It_should_increase_the_number_of_viewable_messages_by_one()
         {
-            View.Messages.Count().ShouldBeGreaterThan(PreexistingMessages.Count);
+            Assert.That(View.Messages, Is.EquivalentTo(ReceivedMessages), "It should receive the messages provided.");
         }
 
+        [Ignore("This test is not applicable on this object but the behavior needs verification.")]
         [Test]
         public void It_should_place_the_most_recent_message_at_the_top_of_the_list()
         {
@@ -38,12 +43,11 @@ namespace Unite.Specs.New_Starting_Application_Specs
         {
             FakeMessagePlugin = new FakeReceivingMessagePlugin();
 
-            var repo = new ScenarioRepository(FakeMessagePlugin);
+            TestMessenger = new TestMessagingController();
+            ReceivedMessages = new[] {new Message()};
+            TestMessenger.MessagesReceived = ReceivedMessages;
 
-            repo.FakePluginFinder
-                .Assume_a_single_messaging_service_is_found();
-
-            View = repo.GetMainView();
+            View = new MessagingViewModel(new TestInteractionContext(), new TestContactQuery(), TestMessenger);
             
             PreexistingMessages = new List<IMessage>(View.Messages);
 
@@ -54,9 +58,7 @@ namespace Unite.Specs.New_Starting_Application_Specs
 
         private void Because()
         {
-            FakeMessagePlugin.PretendThatYouJustReceivedAMessage(); 
-            //Give us time to receive it...
-            Thread.Sleep(100);
+            TestMessenger.NewMessagesReceived_Occurred();
         }
     }
 

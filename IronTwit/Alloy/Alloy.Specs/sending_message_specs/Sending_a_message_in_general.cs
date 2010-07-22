@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using SpecUnit;
-using Unite.Messaging;
-using Unite.Messaging.Entities;
-using Unite.Messaging.Services;
+using Unite.Specs.TestObjects;
 using Unite.UI.ViewModels;
 
 namespace Unite.Specs.sending_message_specs
@@ -75,53 +70,6 @@ namespace Unite.Specs.sending_message_specs
         protected void BecauseOf()
         {
             ViewModel.SendMessage.Execute(null);
-        }
-    }
-
-    public class TestMessagingController : IUnifiedMessagingController
-    {
-        public int GetAllMessagesCalledCount;
-        public string SentMessage;
-        public string MessageRecipient;
-
-        public void MessageToSend(string recipient, string message)
-        {
-            SentMessage = message;
-            MessageRecipient = recipient;
-        }
-
-        public void RequestMessageUpdate()
-        {
-            
-        }
-
-        public IEnumerable<IMessage> GetAllMessages()
-        {
-            GetAllMessagesCalledCount++;
-            return Enumerable.Empty<IMessage>();
-        }
-
-        public event EventHandler NewMessagesReceived;
-    }
-
-    public class TestContactQuery : IContactQuery
-    {
-        public IEnumerable<IIdentity> SearchFor(string name)
-        {
-            return Enumerable.Empty<IIdentity>();
-        }
-    }
-
-    public class TestInteractionContext : IInteractionContext
-    {
-        public Credentials GetCredentials(IServiceInformation serviceInformation)
-        {
-            return new Credentials();
-        }
-
-        public bool AuthenticationFailedRetryQuery()
-        {
-            return false;
         }
     }
 }

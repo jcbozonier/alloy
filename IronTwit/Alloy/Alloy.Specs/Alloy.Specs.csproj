@@ -112,9 +112,11 @@
     <Compile Include="sending_message_specs\When_sending_a_message_containing_code.cs" />
     <Compile Include="starting_application_specs\Receiving_messages.cs" />
     <Compile Include="FakeSpecObjects\ScenarioRepository.cs" />
-    <Compile Include="starting_application_specs\Starting_app_vanilla_with_messages.cs" />
     <Compile Include="starting_application_specs\When_application_starts_receiving_with_no_valid_credentials.cs" />
     <Compile Include="starting_application_specs\When_authenticating_across_two_services_without_credentials_for_one.cs" />
+    <Compile Include="TestObjects\TestContactQuery.cs" />
+    <Compile Include="TestObjects\TestMessagingController.cs" />
+    <Compile Include="TestObjects\TestInteractionContext.cs" />
     <Compile Include="TwitterServicesScope\When_receiving_messages.cs" />
     <Compile Include="TwitterServicesScope\When_sending_large_messages.cs" />
     <Compile Include="TwitterServicesScope\When_sending_normal_messages.cs" />
