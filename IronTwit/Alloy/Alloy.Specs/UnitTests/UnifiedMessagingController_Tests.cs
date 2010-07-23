@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Unite.Messaging;
-using Unite.Messaging.Entities;
 using Unite.Messaging.Extras;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
+using Unite.Specs.TestObjects;
 
 namespace Unite.Specs.UnitTests
 {
@@ -65,26 +64,5 @@ namespace Unite.Specs.UnitTests
         }
 
         public event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
-    }
-
-    public class TestFiber : IFiber
-    {
-        public void Run(Action job)
-        {
-            job();
-        }
-
-        public void RunOnMainThread(Action job)
-        {
-            job();
-        }
-    }
-
-    public class TestMessageChannel : IMessageChannel
-    {
-        public void ReceivedMessages(IEnumerable<IMessage> messages)
-        {
-            
-        }
     }
 }
