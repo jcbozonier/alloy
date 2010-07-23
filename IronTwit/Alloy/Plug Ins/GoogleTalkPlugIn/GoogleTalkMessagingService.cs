@@ -86,7 +86,7 @@ namespace GoogleTalkPlugIn
                     new MessagesReceivedEventArgs(new[] { messageReceived }));
         }
 
-        public bool CanAccept(Credentials credentials)
+        private static bool _CanAccept(Credentials credentials)
         {
             return credentials.ServiceInformation.ServiceID.Equals(_ServiceInformation.ServiceID);
         }
@@ -98,6 +98,8 @@ namespace GoogleTalkPlugIn
 
         public void SendMessage(IIdentity recipient, string message)
         {
+            if (!_CanFind(recipient.UserName)) return;
+
             _AuthenticateIfNeeded();
             
             if(_Credentials == null)
@@ -126,7 +128,7 @@ namespace GoogleTalkPlugIn
             _Credentials = credentials;
         }
 
-        public bool CanFind(string address)
+        private static bool _CanFind(string address)
         {
             // If the address contains an ampersand it can't start with it
             // or it just shouldn't have one at all.
@@ -169,5 +171,10 @@ namespace GoogleTalkPlugIn
         public event EventHandler<CredentialEventArgs> CredentialsRequested;
         public event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
         public event EventHandler<ContactEventArgs> ContactsReceived;
+        public void IfCanAcceptSet(Credentials credentials)
+        {
+            if(_CanAccept(credentials))
+                SetCredentials(credentials);
+        }
     }
 }

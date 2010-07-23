@@ -61,7 +61,7 @@ namespace Unite.Specs.sending_message_specs
         {
             TestMessagingController = new TestMessagingController();
 
-            ViewModel = new MessagingViewModel(new TestInteractionContext(), new TestContactQuery(), TestMessagingController);
+            ViewModel = new MessagingViewModel(TestMessagingController);
 
             ViewModel.MessageToSend = MessageToBeSent;
             ViewModel.Recipient = IntendedRecipient;

@@ -49,7 +49,6 @@ namespace GoogleTalkPlugin.Specs
 
     public abstract class sending_message_context
     {
-        protected ScenarioRepository FakeRepo;
         protected IGoogleTalkDataAccess GoogleDataAccessLayer;
         protected GoogleTalkMessagingService GooglePlugin;
 

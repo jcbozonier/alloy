@@ -1,5 +1,6 @@
 using System;
 using Unite.Messaging;
+using Unite.Messaging.Messages;
 
 namespace GoogleTalkPlugIn
 {

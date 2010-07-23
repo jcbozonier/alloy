@@ -102,19 +102,15 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Contacts\Typing_a_contacts_name.cs" />
     <Compile Include="FakeSpecObjects\FakeReceivingMessagePlugin.cs" />
     <Compile Include="FakeSpecObjects\FakeUser.cs" />
-    <Compile Include="FakeSpecObjects\ScenarioExtensions.cs" />
     <Compile Include="sending_message_specs\Sending_a_message_in_general.cs" />
     <Compile Include="sending_message_specs\Sending_message_across_two_services.cs" />
     <Compile Include="FakeSpecObjects\FakePlugin.cs" />
     <Compile Include="sending_message_specs\When_sending_a_message_containing_code.cs" />
     <Compile Include="starting_application_specs\Receiving_messages.cs" />
-    <Compile Include="FakeSpecObjects\ScenarioRepository.cs" />
-    <Compile Include="starting_application_specs\When_application_starts_receiving_with_no_valid_credentials.cs" />
-    <Compile Include="starting_application_specs\When_authenticating_across_two_services_without_credentials_for_one.cs" />
-    <Compile Include="TestObjects\TestContactQuery.cs" />
+    <Compile Include="TestObjects\TestAutoFormatCodePastesAsUrls.cs" />
+    <Compile Include="TestObjects\TestMessage.cs" />
     <Compile Include="TestObjects\TestMessagingController.cs" />
     <Compile Include="TestObjects\TestInteractionContext.cs" />
     <Compile Include="TwitterServicesScope\When_receiving_messages.cs" />
@@ -123,7 +119,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TwitterServicesScope\Formatting_messages_for_twitter.cs" />
     <Compile Include="UnitTests\InlineUrlsTests.cs" />
-    <Compile Include="UnitTests\ServiceResolverTests.cs" />
     <Compile Include="UnitTests\TrieTests.cs" />
     <Compile Include="Using_Services\When_getting_messages.cs" />
     <Compile Include="Utilities\SpecUnit.cs" />
@@ -162,6 +157,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Contacts\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

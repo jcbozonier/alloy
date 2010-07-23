@@ -18,12 +18,6 @@ namespace GoogleTalkPlugin.Specs
             MessageSent.ShouldEqual(MessageToSend);
         }
 
-        [Test]
-        public void The_plugin_should_say_it_can_send_message()
-        {
-            Plugin.CanFind(null).ShouldBeTrue();
-        }
-
         public void Because()
         {
             Plugin.SendMessage(Recipient, MessageToSend);

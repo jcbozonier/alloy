@@ -8,9 +8,8 @@ namespace Unite.Messaging.Services
     public interface IServiceProvider
     {
         void Add(params IMessagingService[] services);
-        IEnumerable<IMessagingService> GetServices();
+        IEnumerable<IMessagingService> GetAllServices();
         event EventHandler<CredentialEventArgs> CredentialsRequested;
         event EventHandler<CredentialEventArgs> AuthorizationFailed;
-        IEnumerable<IMessagingService> GetServices(string recipient);
     }
 }

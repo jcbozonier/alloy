@@ -73,7 +73,7 @@ namespace Unite.Specs.TwitterServicesScope
                                       Password = "password",
                                       ServiceInformation = e.ServiceInfo
                                   };
-            Utilities.SetCredentials(UserCredentials);
+            Utilities.IfCanAcceptSet(UserCredentials);
         }
 
         protected abstract void Because();

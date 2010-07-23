@@ -5,16 +5,9 @@ using Unite.Messaging.Messages;
 
 namespace Unite.Messaging.Services
 {
-    public class UnifiedMessenger : IUnifiedMessagingService, IContactService
+    public class UnifiedMessenger : IUnifiedMessagingService
     {
-        private readonly ServiceInformation _ServiceInfo = new ServiceInformation()
-        {
-            ServiceID = new Guid("{FC1DF655-BBA0-4036-B352-CA98E1B56001}"),
-            ServiceName = "Service Manager"
-        };
-
         private readonly IServiceProvider _Provider;
-        private readonly IPlugInDetection _Resolver;
 
         private readonly IEnumerable<IMessagingService> _Services;
 
@@ -37,14 +30,13 @@ namespace Unite.Messaging.Services
 
         public event EventHandler<ContactEventArgs> OnContactsReceived;
 
-        public UnifiedMessenger(IServiceProvider provider, IPlugInDetection resolver)
+        public UnifiedMessenger(IServiceProvider provider)
         {
             _Provider = provider;
             _Provider.CredentialsRequested += Provider_CredentialsRequested;
             _Provider.AuthorizationFailed += Provider_AuthorizationFailed;
-            _Resolver = resolver;
 
-            _Services = _Provider.GetServices();
+            _Services = _Provider.GetAllServices();
 
         }
 
@@ -58,16 +50,6 @@ namespace Unite.Messaging.Services
         {
             if (CredentialsRequested != null)
                 CredentialsRequested(sender, e); 
-        }
-
-        /// <summary>
-        /// TODO: This doesn't appear to alter any specs. Maybe not important?
-        /// </summary>
-        /// <param name="credentials"></param>
-        /// <returns></returns>
-        public bool CanAccept(Credentials credentials)
-        {
-            return true;
         }
 
         /// <summary>
@@ -97,7 +79,7 @@ namespace Unite.Messaging.Services
         /// <param name="message"></param>
         public void SendMessage(string recipient, string message)
         {
-            var servicesToUse = _Provider.GetServices(recipient);
+            var servicesToUse = _Provider.GetAllServices(); //_Provider.GetServicesFor(recipient);
             foreach (var service in servicesToUse)
                 // TODO: If I remove the service info NO specs are impacted. Is this really
                 // important then?
@@ -114,30 +96,8 @@ namespace Unite.Messaging.Services
 
             foreach (var service in services)
             {
-                if(service.CanAccept(credentials))
-                    service.SetCredentials(credentials);
+                service.IfCanAcceptSet(credentials);
             }
-        }
-
-        /// <summary>
-        /// Tells whether or not the given messaging recipient can be
-        /// found using any known service.
-        /// </summary>
-        /// <param name="address"></param>
-        /// <returns></returns>
-        public bool CanFind(string address)
-        {
-            var foundService = _Resolver.GetService(address);
-            return foundService != null;
-        }
-
-        /// <summary>
-        /// Gets this service's identifying information.
-        /// </summary>
-        /// <returns></returns>
-        public ServiceInformation GetInformation()
-        {
-            return _ServiceInfo;
         }
 
         /// <summary>
@@ -149,30 +109,8 @@ namespace Unite.Messaging.Services
 
             foreach (var service in services)
             {
-                service.ContactsReceived += service_ContactsReceived;
                 service.MessagesReceived += service_MessagesReceived;
                 service.StartReceiving();
-            }
-        }
-
-        private void service_ContactsReceived(object sender, ContactEventArgs e)
-        {
-            if (OnContactsReceived != null)
-                OnContactsReceived(this, e);
-        }
-
-        /// <summary>
-        /// Shuts down all of the plugins. Usually used in prep
-        /// for shutting down the application.
-        /// </summary>
-        public void StopReceiving()
-        {
-            var services = _Services;
-
-            foreach (var service in services)
-            {
-                service.MessagesReceived -= service_MessagesReceived;
-                service.StopReceiving();
             }
         }
 

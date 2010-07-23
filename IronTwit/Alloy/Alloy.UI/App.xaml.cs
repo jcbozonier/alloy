@@ -35,11 +35,7 @@ namespace Unite.UI
         {
             var messagingPluginFinder = new MessagingPluginFinder();
             var messagingPlugInRepository = new MessagingPlugInRepository(messagingPluginFinder);
-            var appropriatePlugInDetection = new DetectPlugInToUseBasedOnRecipientAddress(messagingPlugInRepository);
-            var unifiedMessenger = new UnifiedMessenger(messagingPlugInRepository, appropriatePlugInDetection);
-            
-            var contactRepository = new ContactRepository();
-            var contactQuery = new ContactQuery(unifiedMessenger, contactRepository);
+            var unifiedMessenger = new UnifiedMessenger(messagingPlugInRepository);
 
             var messagingFiber = new AsyncFiber(this.Dispatcher);
             var credentialRepository = new MessagingAccountCredentialRepository(messagingPlugInRepository);
@@ -53,7 +49,7 @@ namespace Unite.UI
             var messageRepository = new MessageRepository();
             var unifiedMessagingController = new UnifiedMessagingController(unifiedMessenger, messageRepository, automaticMessageFormatting, messagingFiber);
 
-            var messagingViewModel = new MessagingViewModel(securityDialogService, contactQuery, unifiedMessagingController);
+            var messagingViewModel = new MessagingViewModel(unifiedMessagingController);
             var messagingWindow = new MessagingWindow(messagingViewModel);
            
             messagingWindow.Show();

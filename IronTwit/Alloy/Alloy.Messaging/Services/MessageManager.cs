@@ -2,17 +2,10 @@
 using System.Collections.Generic;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Extras;
+using Unite.Messaging.Messages;
 
 namespace Unite.Messaging.Services
 {
-    public interface IUnifiedMessagingController
-    {
-        void MessageToSend(string recipient, string message);
-        void RequestMessageUpdate();
-        IEnumerable<IMessage> GetAllMessages();
-        event EventHandler NewMessagesReceived;
-    }
-
     public class UnifiedMessagingController : IUnifiedMessagingController
     {
         private readonly IUnifiedMessagingService _MessagingService;

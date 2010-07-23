@@ -70,6 +70,8 @@ namespace IronTwitterPlugIn
 
         public void SendMessage(IIdentity theRecipient, string message)
         {
+            if (!_CanFind(theRecipient.UserName)) return;
+
             _RequestCredentials();
 
             var recipient = theRecipient.UserName;
@@ -121,15 +123,10 @@ namespace IronTwitterPlugIn
             messagesToSend.ForEach((messageToSend) => _DataAccess.SendMessage(_UserCredentials, messageToSend));
         }
 
-        public void SetCredentials(Credentials credentials)
-        {
-            _UserCredentials = credentials;
-        }
-
         public event EventHandler<CredentialEventArgs> CredentialsRequested;
         public event EventHandler<CredentialEventArgs> AuthorizationFailed;
 
-        public bool CanFind(string address)
+        private static bool _CanFind(string address)
         {
             if (string.IsNullOrEmpty(address))
                 return true;
@@ -145,15 +142,14 @@ namespace IronTwitterPlugIn
             return _ServiceInformation;
         }
 
-        public bool CanAccept(Credentials credentials)
-        {
-            return credentials.ServiceInformation.ServiceID.Equals(GetInformation().ServiceID);
-        }
-
         private bool _StopReceiving;
 
         public event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
-        public event EventHandler<ContactEventArgs> ContactsReceived;
+        public void IfCanAcceptSet(Credentials credentials)
+        {
+            if (credentials.ServiceInformation.ServiceID.Equals(GetInformation().ServiceID))
+                _UserCredentials = credentials;
+        }
 
         public void StartReceiving()
         {
@@ -161,7 +157,6 @@ namespace IronTwitterPlugIn
 
             var receivingThread = new Thread(() =>
                                                  {
-                                                     GetContacts();
                                                      // 100 api calls over an hour.
                                                      var getIntervalMilliseconds = 60*60*1000/99;
                                                      DateTime lastGetTime = DateTime.MinValue;
@@ -178,33 +173,6 @@ namespace IronTwitterPlugIn
                                                      }
                                                  });
             receivingThread.Start();
-        }
-
-        private void GetContacts()
-        {
-           _RequestCredentials();
-
-            var resultString = _DataAccess.GetContacts(_UserCredentials);
-            var str = new StringReader(resultString);
-
-            var converter = new JsonSerializer()
-                                {
-                                    MissingMemberHandling = MissingMemberHandling.Ignore
-                                };
-            var twits = (List<TwitterUser>)converter.Deserialize(str, typeof(List<TwitterUser>));
-
-            foreach(var twit in twits)
-            {
-                twit.ServiceInfo = GetInformation();
-            }
-
-            if(ContactsReceived != null)
-                ContactsReceived(this, new ContactEventArgs(twits.Cast<IIdentity>()));
-        }
-
-        public void StopReceiving()
-        {
-            _StopReceiving = true;
         }
 
         public List<IMessage> GetMessages()

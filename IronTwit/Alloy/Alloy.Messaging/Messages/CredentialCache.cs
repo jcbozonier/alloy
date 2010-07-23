@@ -76,7 +76,7 @@ namespace Unite.Messaging.Messages
                 return null;
             var cachedCredential = _cache[serviceId];
             var service =
-                _serviceProvider.GetServices().Where(x => x.GetInformation().ServiceID.Equals(serviceId)).FirstOrDefault();
+                _serviceProvider.GetAllServices().Where(x => x.GetInformation().ServiceID.Equals(serviceId)).FirstOrDefault();
             return new Credentials()
                 {
                     ServiceInformation = service.GetInformation(),

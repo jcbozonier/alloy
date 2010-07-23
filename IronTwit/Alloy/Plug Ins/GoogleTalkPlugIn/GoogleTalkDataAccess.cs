@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using jabber.client;
 using jabber.protocol.client;
 using Unite.Messaging;
+using Unite.Messaging.Messages;
 
 namespace GoogleTalkPlugIn
 {

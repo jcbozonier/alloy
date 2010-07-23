@@ -16,23 +16,14 @@ namespace Unite.UI.ViewModels
     public class MessagingViewModel : INotifyPropertyChanged
     {
         
-        public MessagingViewModel(
-            IInteractionContext interactionContext, 
-            IContactQuery contactManager, 
-            IUnifiedMessagingController messageManager)
+        public MessagingViewModel(IUnifiedMessagingController messageManager)
         {
             // TODO: CredentialManager doesn't belong here... it can be instantiated outside the ViewModel.
             // This means that testing credentials will no longer be a part of testing the main view. 
-            // Also don't forget to clean up all of the event references for fear of memory leaks.
-            if (interactionContext == null)
-                throw new ArgumentNullException("interactionContext");
-            if(contactManager == null)
-                throw new ArgumentNullException("contactManager");
+            // Also don't forget to clean up all of the event references for fear of memory leaks
             if(messageManager == null)
                 throw new ArgumentNullException("messageManager");
 
-            _Interactions = interactionContext;
-            _ContactManager = contactManager;
             _MessageManager = messageManager;
 
             _MessageManager.NewMessagesReceived += _MessageManager_NewMessagesReceived; 
@@ -59,16 +50,8 @@ namespace Unite.UI.ViewModels
             _GetMessages();
         }
 
-        /// <summary>
-        /// Any user input the view model needs can be requested through
-        /// this object. Instantiation is handled in IoC container.
-        /// </summary>
-        private readonly IInteractionContext _Interactions;
-        private readonly IContactQuery _ContactManager;
         private readonly IUnifiedMessagingController _MessageManager;
 
-        private Dictionary<ServiceInformation, bool> _RetryOnAuthFailure;
-        
         /// <summary>
         /// A list of all of the tweets that should be displayed.
         /// </summary>
@@ -181,9 +164,6 @@ namespace Unite.UI.ViewModels
             {
                 case "SelectedMessage":
                     Recipient = SelectedMessage.Address.UserName;
-                    break;
-                case "Recipient":
-                    SuggestedRecipients = _ContactManager.SearchFor(Recipient);
                     break;
             }
         }

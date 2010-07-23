@@ -1,76 +1,111 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using Rhino.Mocks;
 using SpecUnit;
 using StructureMap;
 using Unite.Messaging;
+using Unite.Messaging.Entities;
+using Unite.Messaging.Messages;
+using Unite.Messaging.Services;
 using Unite.Specs.FakeSpecObjects;
+using Unite.Specs.TestObjects;
+using Unite.Specs.UnitTests;
 using Unite.UI.ViewModels;
+using IServiceProvider = Unite.Messaging.Services.IServiceProvider;
 
 namespace Unite.Specs.sending_message_specs
 {
     [TestFixture]
-    public class When_sending_message_that_is_valid_for_multiple_services : multiple_service_context
+    public class When_sending_message_that_is_valid_for_multiple_services
     {
         [Test]
         public void It_should_send_message_using_each_service()
         {
-            FakeTwitter.MessageSent.ShouldNotBeNull();
-            FakeGTalk.MessageSent.ShouldNotBeNull();
-        }
+            var messagingPlugIns = new[] {new TestMessagingPlugIn(), new TestMessagingPlugIn()};
+            var messagingPlugInProvider = new TestServiceProvider();
+            messagingPlugInProvider.Add(messagingPlugIns);
 
-        [Test]
-        public void It_should_send_the_message_that_we_wanted_sent()
-        {
-            FakeTwitter.MessageSent.ShouldEqual(MessageToSend);
-            FakeGTalk.MessageSent.ShouldEqual(MessageToSend);
-        }
+            var unifiedMessenger = new UnifiedMessenger(messagingPlugInProvider);
 
-        protected override void Context()
-        {
-            FakesRepo.FakeUIContext
-                .Assume_valid_credentials_are_provided_for_the_correct_service();
-            FakesRepo.FakePluginFinder
-                .Assume_that_two_different_plugins_are_found();
 
-            View = FakesRepo.GetMainViewDontIoC();
-            View.MessageToSend = MessageToSend;
-            View.Recipient = null;
-        }
+            unifiedMessenger.SendMessage("recipient", "message");
 
-        protected override void Because()
-        {
-            View.SendMessage.Execute(null);
+            Assert.That(messagingPlugIns.Select(x => x.SentMessages.SingleOrDefault().Text).ToArray(), Has.All.EqualTo("message"), "It should send the message via every plugin.");
+            Assert.That(messagingPlugIns.Select(x=>x.SentMessages.SingleOrDefault().Address.UserName).ToArray(), Has.All.EqualTo("recipient"), "It should send the message to the correct recipient.");
         }
     }
 
-    public abstract class multiple_service_context
+    public class TestMessagingPlugIn : IMessagingService
     {
-        protected MessagingViewModel View;
-        protected string MessageToSend;
-        protected FakeTwitterPlugin FakeTwitter;
-        protected FakeGTalkPlugin FakeGTalk;
-        protected IInteractionContext FakeUI;
-        protected ScenarioRepository FakesRepo;
+        public readonly List<IMessage> SentMessages = new List<IMessage>();
 
-        [TestFixtureSetUp]
-        public void Setup()
+        public bool CanAccept(Credentials credentials)
         {
-            FakesRepo = ScenarioRepository.CreateUnstubbedInstance();
-
-            FakesRepo.InitializeIoC();
-            FakeTwitter = new FakeTwitterPlugin();
-            FakeGTalk = new FakeGTalkPlugin();
-            ObjectFactory.Inject(FakeTwitter);
-            ObjectFactory.Inject(FakeGTalk);
-
-            MessageToSend = "Test message";
-
-            Context();
-            Because();
+            return true;
         }
 
-        protected abstract void Because();
+        public List<IMessage> GetMessages()
+        {
+            return Enumerable.Empty<IMessage>().ToList();
+        }
 
-        protected abstract void Context();
+        public void SendMessage(IIdentity recipient, string message)
+        {
+            SentMessages.Add(new Message(){Address = recipient, Text = message, TimeStamp = DateTime.MinValue});
+        }
+
+        public event EventHandler<CredentialEventArgs> CredentialsRequested;
+        public event EventHandler<CredentialEventArgs> AuthorizationFailed;
+        public bool CanFind(string address)
+        {
+            return true;
+        }
+
+        public ServiceInformation GetInformation()
+        {
+            return new ServiceInformation();
+        }
+
+        public void StartReceiving()
+        {
+        }
+
+        public void StopReceiving()
+        {
+        }
+
+        public event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
+        public event EventHandler<ContactEventArgs> ContactsReceived;
+        public void IfCanAcceptSet(Credentials credentials)
+        {
+            
+        }
+    }
+
+    public class TestServiceProvider : IServiceProvider
+    {
+        private IMessagingService[] _Services = Enumerable.Empty<IMessagingService>().ToArray();
+
+        public void Add(params IMessagingService[] services)
+        {
+            _Services = services;
+        }
+
+        public IEnumerable<IMessagingService> GetAllServices()
+        {
+            return _Services;
+        }
+
+        public IEnumerable<IMessagingService> GetServicesFor(string recipient)
+        {
+            return _Services;
+        }
+
+        public event EventHandler<CredentialEventArgs> CredentialsRequested;
+
+        public event EventHandler<CredentialEventArgs> AuthorizationFailed;
     }
 }

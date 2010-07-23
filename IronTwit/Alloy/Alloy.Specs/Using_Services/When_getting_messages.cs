@@ -44,7 +44,7 @@ namespace Unite.Specs.Using_Services
             MyCredentials = new Credentials() { UserName = "username", Password = "password" };
             ServiceProvider = new MessagingPlugInRepository(new MessagingPluginFinder());
             ServiceProvider.Add(new FauxMessageService("test 1"), new FauxMessageService("test2"));
-            ServiceManager = new UnifiedMessenger(ServiceProvider, new GenericPlugInDetection());
+            ServiceManager = new UnifiedMessenger(ServiceProvider);
 
             Context();
             Because();
@@ -53,14 +53,6 @@ namespace Unite.Specs.Using_Services
         protected abstract void Because();
 
         protected abstract void Context();
-    }
-
-    public class GenericPlugInDetection : IPlugInDetection
-    {
-        public ServiceInformation GetService(string address)
-        {
-            return new ServiceInformation() {ServiceID = Guid.NewGuid(), ServiceName = "YADA"};
-        }
     }
 
     public class FauxMessageService : IMessagingService
@@ -125,6 +117,10 @@ namespace Unite.Specs.Using_Services
 
         public event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
         public event EventHandler<ContactEventArgs> ContactsReceived;
+        public void IfCanAcceptSet(Credentials credentials)
+        {
+            
+        }
     }
 
     public class Recipient : IIdentity
