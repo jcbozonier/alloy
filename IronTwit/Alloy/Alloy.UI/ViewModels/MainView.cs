@@ -136,7 +136,7 @@ namespace Unite.UI.ViewModels
 
         public void ReceivedMessages(IEnumerable<IMessage> messages)
         {
-            //Messages = messages;
+            Messages = messages;
         }
 
         /// <summary>

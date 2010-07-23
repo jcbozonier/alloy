@@ -69,8 +69,6 @@ namespace Unite.Messaging.Services
                 _MessagingServiceIsStarted = true;
                 _JobRunner.Run(_MessagingService.StartReceiving);
             }
-
-            return _MessageRepository.GetAll();
         }
 
         public event EventHandler NewMessagesReceived;
