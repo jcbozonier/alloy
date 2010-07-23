@@ -2,20 +2,16 @@
 using System.Linq;
 using Bound.Net;
 using Unite.Messaging.Entities;
-using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
-using unite.ui.utilities;
 using Unite.UI.Utilities;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using Unite.Messaging;
 
 namespace Unite.UI.ViewModels
 {
     public class MessagingViewModel : INotifyPropertyChanged
     {
-        
         public MessagingViewModel(IUnifiedMessagingController messageManager)
         {
             // TODO: CredentialManager doesn't belong here... it can be instantiated outside the ViewModel.
@@ -119,21 +115,7 @@ namespace Unite.UI.ViewModels
         }
 
 
-        private IEnumerable<IIdentity> _suggestedRecipients;
         private IEnumerable<IMessage> _Messages;
-
-        public IEnumerable<IIdentity> SuggestedRecipients
-        {
-            get
-            {
-                return _suggestedRecipients;
-            }
-            set
-            {
-                _suggestedRecipients = value;
-                PropertyChanged.Notify(() => SuggestedRecipients);
-            }
-        }
 
         /// <summary>
         /// Command object invoked by the InteractionContext (GUI) to send
@@ -150,6 +132,11 @@ namespace Unite.UI.ViewModels
         private void _GetMessages()
         {
             Messages = _MessageManager.GetAllMessages().ToArray();
+        }
+
+        public void ReceivedMessages(IEnumerable<IMessage> messages)
+        {
+            //Messages = messages;
         }
 
         /// <summary>
