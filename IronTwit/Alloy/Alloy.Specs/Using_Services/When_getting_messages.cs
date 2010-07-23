@@ -22,7 +22,7 @@ namespace Unite.Specs.Using_Services
 
         protected override void Because()
         {
-            ServiceManager.GetMessages();
+            ServiceManager.RequestMessages();
         }
 
         protected override void Context()

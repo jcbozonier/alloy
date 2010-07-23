@@ -15,12 +15,6 @@ namespace Unite.Specs.sending_message_specs
         private TestMessagingController TestMessagingController;
 
         [Test]
-        public void It_should_NOT_refresh_its_messages_just_because_we_sent_one()
-        {
-            Assert.That(TestMessagingController.GetAllMessagesCalledCount, Is.EqualTo(1), "It should only get the messages once, at start up.");
-        }
-
-        [Test]
         public void It_should_be_able_to_send_the_message()
         {
             ViewModel.SendMessage.CanExecute(null).ShouldBeTrue();

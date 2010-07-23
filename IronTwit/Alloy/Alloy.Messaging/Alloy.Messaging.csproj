@@ -91,16 +91,16 @@
     <Compile Include="Entities\Credentials.cs" />
     <Compile Include="Entities\IServiceInformation.cs" />
     <Compile Include="Messages\ICredentialCache.cs" />
+    <Compile Include="Messages\IMessageChannel.cs" />
     <Compile Include="Messages\IUnifiedMessagingService.cs" />
     <Compile Include="Prompts\IInteractionContext.cs" />
     <Compile Include="Entities\IMessage.cs" />
     <Compile Include="Messages\ContactEventArgs.cs" />
-    <Compile Include="Messages\IMessagingServiceRegistry.cs" />
     <Compile Include="Services\CodePaste.cs" />
     <Compile Include="Services\ICodePaste.cs" />
+    <Compile Include="Services\IFiber.cs" />
     <Compile Include="Services\IPluginFinder.cs" />
     <Compile Include="Services\IServiceProvider.cs" />
-    <Compile Include="Messages\MessagingAccount.cs" />
     <Compile Include="Messages\IMessagingService.cs" />
     <Compile Include="Entities\Identity.cs" />
     <Compile Include="Services\IUnifiedMessagingController.cs" />
@@ -113,7 +113,6 @@
     <Compile Include="Entities\ServiceInformation.cs" />
     <Compile Include="Services\MessagingPlugInRepository.cs" />
     <Compile Include="Services\ServicesManager.cs" />
-    <Compile Include="Services\ISettingsProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

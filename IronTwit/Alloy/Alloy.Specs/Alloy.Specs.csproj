@@ -121,6 +121,7 @@
     <Compile Include="UnitTests\InlineUrlsTests.cs" />
     <Compile Include="UnitTests\MainView_Tests.cs" />
     <Compile Include="UnitTests\TrieTests.cs" />
+    <Compile Include="UnitTests\UnifiedMessagingController_Tests.cs" />
     <Compile Include="Using_Services\When_getting_messages.cs" />
     <Compile Include="Utilities\SpecUnit.cs" />
   </ItemGroup>

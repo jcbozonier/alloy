@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Unite.Messaging.Entities;
 
 namespace Unite.Messaging.Services
 {
@@ -8,7 +6,7 @@ namespace Unite.Messaging.Services
     {
         void MessageToSend(string recipient, string message);
         void RequestMessageUpdate();
-        IEnumerable<IMessage> GetAllMessages();
+        void GetAllMessages();
         event EventHandler NewMessagesReceived;
     }
 }

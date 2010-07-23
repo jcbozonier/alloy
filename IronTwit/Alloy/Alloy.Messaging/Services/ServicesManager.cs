@@ -56,7 +56,7 @@ namespace Unite.Messaging.Services
         /// Gets an aggregated list of messages received from all plugins.
         /// </summary>
         /// <returns></returns>
-        public void GetMessages()
+        public void RequestMessages()
         {
             var messages = new List<IMessage>();
             var services = _Services;
@@ -79,7 +79,7 @@ namespace Unite.Messaging.Services
         /// <param name="message"></param>
         public void SendMessage(string recipient, string message)
         {
-            var servicesToUse = _Provider.GetAllServices(); //_Provider.GetServicesFor(recipient);
+            var servicesToUse = _Provider.GetAllServices(); 
             foreach (var service in servicesToUse)
                 // TODO: If I remove the service info NO specs are impacted. Is this really
                 // important then?

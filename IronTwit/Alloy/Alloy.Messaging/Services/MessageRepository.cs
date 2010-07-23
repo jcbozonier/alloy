@@ -12,19 +12,15 @@ namespace Unite.Messaging.Services
             _Messages = new List<IMessage>();
         }
 
-        public bool Contains(IMessage message)
-        {
-            return _Messages.Exists(x => x.Address.ServiceInfo == message.Address.ServiceInfo &&
-                                         message.Text == x.Text &&
-                                         message.TimeStamp == x.TimeStamp);
-        }
-
-        public void Add(IMessage message)
+        public void UniqueAdd(IMessage message)
         {
             lock(_Messages)
             {
-                _Messages.Add(message);
-                _Messages.Sort((x,y)=>y.TimeStamp.CompareTo(x.TimeStamp));
+                if (!_Contains(message))
+                {
+                    _Messages.Add(message);
+                    _Messages.Sort((x, y) => y.TimeStamp.CompareTo(x.TimeStamp));
+                }
             }
         }
 
@@ -33,6 +29,13 @@ namespace Unite.Messaging.Services
             var returnableMessages = new IMessage[_Messages.Count];
             _Messages.CopyTo(returnableMessages);
             return returnableMessages;
+        }
+
+        private bool _Contains(IMessage message)
+        {
+            return _Messages.Exists(x => x.Address.ServiceInfo == message.Address.ServiceInfo &&
+                                         message.Text == x.Text &&
+                                         message.TimeStamp == x.TimeStamp);
         }
     }
 }

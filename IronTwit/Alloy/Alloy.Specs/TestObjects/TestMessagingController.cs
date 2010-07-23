@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Unite.Messaging.Entities;
+using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
 
 namespace Unite.Specs.TestObjects
@@ -24,13 +25,16 @@ namespace Unite.Specs.TestObjects
 
         }
 
-        public IEnumerable<IMessage> GetAllMessages()
+        public void GetAllMessages()
         {
             GetAllMessagesCalledCount++;
-            return MessagesReceived;
         }
 
         public event EventHandler NewMessagesReceived;
+        public void SetMessageChannel(IMessageChannel messageChannel)
+        {
+            
+        }
 
         public void NewMessagesReceived_Occurred()
         {

@@ -4,12 +4,6 @@ using System.Windows.Threading;
 
 namespace Unite.Messaging.Services
 {
-    public interface IFiber 
-    {
-        void Run(Action job);
-        void RunOnMainThread(Action job);
-    }
-
     public class AsyncFiber : IFiber
     {
         private readonly Dispatcher _MainDispatcher;
@@ -30,19 +24,6 @@ namespace Unite.Messaging.Services
         public void Run(Action job)
         {
             new Thread(()=>job()).Start();
-        }
-    }
-
-    public class SynchronousFiber : IFiber
-    {
-        public void Run(Action job)
-        {
-            job(); 
-        }
-
-        public void RunOnMainThread(Action job)
-        {
-            job();
         }
     }
 }

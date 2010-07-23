@@ -50,8 +50,10 @@ namespace Unite.UI
             var unifiedMessagingController = new UnifiedMessagingController(unifiedMessenger, messageRepository, automaticMessageFormatting, messagingFiber);
 
             var messagingViewModel = new MessagingViewModel(unifiedMessagingController);
+            unifiedMessagingController.SetMessageChannel(messagingViewModel);
             var messagingWindow = new MessagingWindow(messagingViewModel);
            
+            messagingViewModel.ReceiveMessage.Execute(null);
             messagingWindow.Show();
         }
     }

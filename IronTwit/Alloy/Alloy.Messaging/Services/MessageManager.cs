@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Unite.Messaging.Entities;
 using Unite.Messaging.Extras;
 using Unite.Messaging.Messages;
 
@@ -12,6 +10,7 @@ namespace Unite.Messaging.Services
         private readonly MessageRepository _MessageRepository;
         private readonly IMessageFormatter _MessageFormatter;
         private readonly IFiber _JobRunner;
+        private IMessageChannel _MessageChannel;
         private bool _MessagingServiceIsStarted;
 
         public UnifiedMessagingController(
@@ -26,26 +25,24 @@ namespace Unite.Messaging.Services
             _JobRunner = jobRunner;
             _MessagingService.MessagesReceived += _MessagingService_MessagesReceived;
         }
+        public void SetMessageChannel(IMessageChannel messageChannel)
+        {
+            _MessageChannel = messageChannel;
+            if (_MessagingServiceIsStarted) return;
+
+            _MessagingServiceIsStarted = true;
+            _JobRunner.Run(_MessagingService.StartReceiving);
+        }
 
         void _MessagingService_MessagesReceived(object sender, MessagesReceivedEventArgs e)
         {
             var messages = e.Messages;
             foreach(var message in messages)
             {
-                if(!_MessageRepository.Contains(message))
-                {
-                    _MessageRepository.Add(message);
-                }
+                _MessageRepository.UniqueAdd(message);   
             }
 
-            _JobRunner.RunOnMainThread(_NotifyMessagesReceived);
-        }
-
-        private void _NotifyMessagesReceived()
-        {
-            var messagesReceivedHandler = NewMessagesReceived;
-            if (messagesReceivedHandler != null)
-                messagesReceivedHandler(this, EventArgs.Empty);
+            _JobRunner.RunOnMainThread(()=>_MessageChannel.ReceivedMessages(_MessageRepository.GetAll()));
         }
 
         public void MessageToSend(string recipient, string message)
@@ -59,16 +56,12 @@ namespace Unite.Messaging.Services
 
         public void RequestMessageUpdate()
         {
-            _JobRunner.Run(()=>_MessagingService.GetMessages());
+            _JobRunner.Run(()=>_MessagingService.RequestMessages());
         }
 
-        public IEnumerable<IMessage> GetAllMessages()
+        public void GetAllMessages()
         {
-            if(!_MessagingServiceIsStarted)
-            {
-                _MessagingServiceIsStarted = true;
-                _JobRunner.Run(_MessagingService.StartReceiving);
-            }
+            
         }
 
         public event EventHandler NewMessagesReceived;

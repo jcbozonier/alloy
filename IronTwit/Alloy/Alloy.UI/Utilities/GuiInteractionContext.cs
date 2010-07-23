@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Windows;
-using System.Windows.Threading;
+﻿using System.Windows;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
@@ -64,6 +61,7 @@ namespace Unite.UI.Utilities
                            ServiceInformation = serviceInformation,
                            IsPasswordCachingAllowed = savePassword
                        };
+
             credentialCache.Add(credentials);
             return credentials;
         }

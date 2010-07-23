@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Bound.Net;
 using Unite.Messaging.Entities;
+using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
 using Unite.UI.Utilities;
 using System;
@@ -10,7 +10,7 @@ using System.ComponentModel;
 
 namespace Unite.UI.ViewModels
 {
-    public class MessagingViewModel : INotifyPropertyChanged
+    public class MessagingViewModel : INotifyPropertyChanged, IMessageChannel
     {
         public MessagingViewModel(IUnifiedMessagingController messageManager)
         {
@@ -36,9 +36,6 @@ namespace Unite.UI.ViewModels
                 });
 
             ReceiveMessage = new ReceiveMessagesCommand(_MessageManager.RequestMessageUpdate);
-
-            _GetMessages();
-
         }
 
         void _MessageManager_NewMessagesReceived(object sender, EventArgs e)
@@ -131,7 +128,7 @@ namespace Unite.UI.ViewModels
 
         private void _GetMessages()
         {
-            Messages = _MessageManager.GetAllMessages().ToArray();
+            _MessageManager.GetAllMessages();
         }
 
         public void ReceivedMessages(IEnumerable<IMessage> messages)

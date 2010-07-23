@@ -13,7 +13,7 @@ namespace Unite.Messaging.Extras
 
     public class AutoFormatCodePastesAsUrls : IMessageFormatter
     {
-        private ICodePaste _CodePasteService;
+        private readonly ICodePaste _CodePasteService;
 
         public AutoFormatCodePastesAsUrls(ICodePaste codePasteService)
         {
