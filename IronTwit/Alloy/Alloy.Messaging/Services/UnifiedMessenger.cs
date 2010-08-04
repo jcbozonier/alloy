@@ -81,8 +81,6 @@ namespace Unite.Messaging.Services
         {
             var servicesToUse = _Provider.GetAllServices(); 
             foreach (var service in servicesToUse)
-                // TODO: If I remove the service info NO specs are impacted. Is this really
-                // important then?
                 service.SendMessage(new Identity(recipient, service.GetInformation()), message);
         }
 

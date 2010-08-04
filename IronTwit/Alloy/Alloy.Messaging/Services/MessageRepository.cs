@@ -23,7 +23,7 @@ namespace Unite.Messaging.Services
                                          message.TimeStamp == x.TimeStamp);
         }
 
-        public void UniqueAdd(IEnumerable<IMessage> messages)
+        public void AddUniqueMessages(IEnumerable<IMessage> messages)
         {
             lock (_Messages)
             {

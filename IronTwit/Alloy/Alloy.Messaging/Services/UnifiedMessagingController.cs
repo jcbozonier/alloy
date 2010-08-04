@@ -38,7 +38,7 @@ namespace Unite.Messaging.Services
 
         void _MessagingService_MessagesReceived(object sender, MessagesReceivedEventArgs e)
         {
-            _MessageRepository.UniqueAdd(e.Messages);   
+            _MessageRepository.AddUniqueMessages(e.Messages);   
         }
 
         public void MessageToSend(string recipient, string message)

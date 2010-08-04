@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Unite.Messaging.Services;
+﻿using Unite.Messaging.Services;
 
 namespace Unite.Messaging.Extras
 {
