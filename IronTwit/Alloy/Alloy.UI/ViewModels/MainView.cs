@@ -12,17 +12,12 @@ namespace Unite.UI.ViewModels
 {
     public class MessagingViewModel : INotifyPropertyChanged, IMessageChannel
     {
-        public MessagingViewModel(IUnifiedMessagingController messageManager)
+        public MessagingViewModel(IUnifiedMessagingController messagingController)
         {
-            // TODO: CredentialManager doesn't belong here... it can be instantiated outside the ViewModel.
-            // This means that testing credentials will no longer be a part of testing the main view. 
-            // Also don't forget to clean up all of the event references for fear of memory leaks
-            if(messageManager == null)
-                throw new ArgumentNullException("messageManager");
+            if(messagingController == null)
+                throw new ArgumentNullException("messagingController");
 
-            _MessageManager = messageManager;
-
-            _MessageManager.NewMessagesReceived += _MessageManager_NewMessagesReceived; 
+            _MessagingController = messagingController;
 
             PropertyChanged += MainView_PropertyChanged;
             
@@ -31,19 +26,14 @@ namespace Unite.UI.ViewModels
             SendMessage = new SendMessageCommand(
                 () =>
                 {
-                    _MessageManager.MessageToSend(Recipient, MessageToSend);
+                    _MessagingController.MessageToSend(Recipient, MessageToSend);
                     MessageToSend = "";
                 });
 
-            ReceiveMessage = new ReceiveMessagesCommand(_MessageManager.RequestMessageUpdate);
+            ReceiveMessage = new ReceiveMessagesCommand(_MessagingController.RequestMessageUpdate);
         }
 
-        void _MessageManager_NewMessagesReceived(object sender, EventArgs e)
-        {
-            _GetMessages();
-        }
-
-        private readonly IUnifiedMessagingController _MessageManager;
+        private readonly IUnifiedMessagingController _MessagingController;
 
         /// <summary>
         /// A list of all of the tweets that should be displayed.
@@ -126,11 +116,6 @@ namespace Unite.UI.ViewModels
         /// </summary>
         public ReceiveMessagesCommand ReceiveMessage { get; set; }
 
-        private void _GetMessages()
-        {
-            _MessageManager.GetAllMessages();
-        }
-
         public void ReceivedMessages(IEnumerable<IMessage> messages)
         {
             Messages = messages;
@@ -157,7 +142,6 @@ namespace Unite.UI.ViewModels
         public void Dispose()
         {
             PropertyChanged -= MainView_PropertyChanged;
-            _MessageManager.NewMessagesReceived -= _MessageManager_NewMessagesReceived;
         }
     }
 }

@@ -1,15 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using Unite.Messaging.Entities;
 using Unite.Messaging.Extras;
 using Unite.Messaging.Messages;
 
 namespace Unite.Messaging.Services
 {
-    public class UnifiedMessagingController : IUnifiedMessagingController
+    public class UnifiedMessagingController : IUnifiedMessagingController, IMessageChannel
     {
         private readonly IUnifiedMessagingService _MessagingService;
         private readonly MessageRepository _MessageRepository;
         private readonly IMessageFormatter _MessageFormatter;
-        private readonly IFiber _JobRunner;
+        private readonly IFiber _Fiber;
         private IMessageChannel _MessageChannel;
         private bool _MessagingServiceIsStarted;
 
@@ -17,37 +19,31 @@ namespace Unite.Messaging.Services
             IUnifiedMessagingService messagingService, 
             MessageRepository messageRepository, 
             IMessageFormatter messageFormatter,
-            IFiber jobRunner)
+            IFiber fiber)
         {
             _MessagingService = messagingService;
             _MessageRepository = messageRepository;
             _MessageFormatter = messageFormatter;
-            _JobRunner = jobRunner;
+            _Fiber = fiber;
             _MessagingService.MessagesReceived += _MessagingService_MessagesReceived;
         }
-        public void SetMessageChannel(IMessageChannel messageChannel)
+        public void SendReceivedMessagesTo(IMessageChannel messageChannel)
         {
             _MessageChannel = messageChannel;
             if (_MessagingServiceIsStarted) return;
 
             _MessagingServiceIsStarted = true;
-            _JobRunner.Run(_MessagingService.StartReceiving);
+            _Fiber.Run(_MessagingService.StartReceiving);
         }
 
         void _MessagingService_MessagesReceived(object sender, MessagesReceivedEventArgs e)
         {
-            var messages = e.Messages;
-            foreach(var message in messages)
-            {
-                _MessageRepository.UniqueAdd(message);   
-            }
-
-            _JobRunner.RunOnMainThread(()=>_MessageChannel.ReceivedMessages(_MessageRepository.GetAll()));
+            _MessageRepository.UniqueAdd(e.Messages);   
         }
 
         public void MessageToSend(string recipient, string message)
         {
-            _JobRunner.Run(() =>
+            _Fiber.Run(() =>
                            {
                                var messageToSend = _MessageFormatter.ApplyFormatting(message);
                                _MessagingService.SendMessage(recipient, messageToSend);
@@ -56,14 +52,12 @@ namespace Unite.Messaging.Services
 
         public void RequestMessageUpdate()
         {
-            _JobRunner.Run(()=>_MessagingService.RequestMessages());
+            _Fiber.Run(()=>_MessagingService.RequestMessages());
         }
 
-        public void GetAllMessages()
+        public void ReceivedMessages(IEnumerable<IMessage> messages)
         {
-            
+            _Fiber.RunOnMainThread(() => _MessageChannel.ReceivedMessages(messages));
         }
-
-        public event EventHandler NewMessagesReceived;
     }
 }

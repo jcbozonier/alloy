@@ -6,7 +6,5 @@ namespace Unite.Messaging.Services
     {
         void MessageToSend(string recipient, string message);
         void RequestMessageUpdate();
-        void GetAllMessages();
-        event EventHandler NewMessagesReceived;
     }
 }

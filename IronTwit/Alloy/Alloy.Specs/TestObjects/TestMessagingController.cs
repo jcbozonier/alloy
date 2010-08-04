@@ -24,21 +24,5 @@ namespace Unite.Specs.TestObjects
         {
 
         }
-
-        public void GetAllMessages()
-        {
-            GetAllMessagesCalledCount++;
-        }
-
-        public event EventHandler NewMessagesReceived;
-        public void SetMessageChannel(IMessageChannel messageChannel)
-        {
-            
-        }
-
-        public void NewMessagesReceived_Occurred()
-        {
-            NewMessagesReceived(null, EventArgs.Empty);
-        }
     }
 }

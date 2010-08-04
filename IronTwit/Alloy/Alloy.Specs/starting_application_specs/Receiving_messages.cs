@@ -27,14 +27,12 @@ namespace Unite.Specs.New_Starting_Application_Specs
 
             View = new MessagingViewModel(TestMessenger);
 
-            // Sleep for a minute so that the time spans don't match.
-            View.ReceivedMessages(ReceivedMessages);
             Because();
         }
 
         private void Because()
         {
-            TestMessenger.NewMessagesReceived_Occurred();
+            View.ReceivedMessages(ReceivedMessages);
         }
     }
 }

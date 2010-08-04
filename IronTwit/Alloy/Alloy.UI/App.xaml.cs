@@ -41,16 +41,18 @@ namespace Unite.UI
             var credentialRepository = new MessagingAccountCredentialRepository(messagingPlugInRepository);
             var securityDialogService = new SecurityDialogService(credentialRepository, messagingFiber);
 
-            var credentialManager = new CredentialAuthorizationController(unifiedMessenger, securityDialogService);
+            new CredentialAuthorizationController(unifiedMessenger, securityDialogService);
 
             var codePasteToUrlService = new CodePasteToUrlService();
             var automaticMessageFormatting = new AutoFormatCodePastesAsUrls(codePasteToUrlService);
 
             var messageRepository = new MessageRepository();
             var unifiedMessagingController = new UnifiedMessagingController(unifiedMessenger, messageRepository, automaticMessageFormatting, messagingFiber);
+            messageRepository.SendAddedMessagesTo(unifiedMessagingController);
 
             var messagingViewModel = new MessagingViewModel(unifiedMessagingController);
-            unifiedMessagingController.SetMessageChannel(messagingViewModel);
+            unifiedMessagingController.SendReceivedMessagesTo(messagingViewModel);
+
             var messagingWindow = new MessagingWindow(messagingViewModel);
            
             messagingViewModel.ReceiveMessage.Execute(null);
