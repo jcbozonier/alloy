@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Unite.Messaging;
+﻿using System.Collections.Generic;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
+using Unite.Messaging.Prompts;
 
 namespace unite.ui.utilities
 {
@@ -19,9 +18,6 @@ namespace unite.ui.utilities
             _MessagingService.CredentialsRequested += _MessagingService_CredentialsRequested;
             _MessagingService.AuthorizationFailed += _MessagingService_AuthorizationFailed;
         }
-
-        public event EventHandler<CredentialEventArgs> CredentialsRequested;
-        public event EventHandler<CredentialEventArgs> AuthorizationFailed;
 
         public void SetCredentials(Credentials credentials)
         {

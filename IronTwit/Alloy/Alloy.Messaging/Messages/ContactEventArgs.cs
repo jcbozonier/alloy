@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unite.Messaging.Entities;
 
 namespace Unite.Messaging.Messages
 {

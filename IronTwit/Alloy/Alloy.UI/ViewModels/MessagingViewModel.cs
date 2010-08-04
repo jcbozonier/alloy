@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Input;
 using Bound.Net;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
@@ -23,14 +24,12 @@ namespace Unite.UI.ViewModels
             
             Messages = new ObservableCollection<IMessage>();
 
-            SendMessage = new SendMessageCommand(
-                () =>
-                {
-                    _MessagingController.MessageToSend(Recipient, MessageToSend);
-                    MessageToSend = "";
-                });
-
-            ReceiveMessage = new ReceiveMessagesCommand(_MessagingController.RequestMessageUpdate);
+            SendMessage = new Do(() =>
+                                     {
+                                         _MessagingController.MessageToSend(Recipient, MessageToSend);
+                                         MessageToSend = "";
+                                     });
+            ReceiveMessage = new Do(_MessagingController.RequestMessageUpdate);
         }
 
         private readonly IUnifiedMessagingController _MessagingController;
@@ -108,13 +107,13 @@ namespace Unite.UI.ViewModels
         /// Command object invoked by the InteractionContext (GUI) to send
         /// a message.
         /// </summary>
-        public SendMessageCommand SendMessage { get; set; }
+        public ICommand SendMessage { get; set; }
 
         /// <summary>
         /// Command object invoked by the InteractionContext (GUI) to
         /// receive a message.
         /// </summary>
-        public ReceiveMessagesCommand ReceiveMessage { get; set; }
+        public ICommand ReceiveMessage { get; set; }
 
         public void ReceivedMessages(IEnumerable<IMessage> messages)
         {

@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SpecUnit;
 using Unite.Messaging;
+using Unite.Messaging.Entities;
 
 namespace TwitterPlugIn.Specs
 {

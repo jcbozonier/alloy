@@ -1,5 +1,4 @@
 ﻿using System;
-using Unite.Messaging;
 using Unite.Messaging.Entities;
 
 namespace Unite.Specs.TestObjects

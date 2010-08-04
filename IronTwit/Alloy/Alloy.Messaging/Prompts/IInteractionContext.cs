@@ -1,6 +1,6 @@
 ﻿using Unite.Messaging.Entities;
 
-namespace Unite.Messaging
+namespace Unite.Messaging.Prompts
 {
     public interface IInteractionContext
     {

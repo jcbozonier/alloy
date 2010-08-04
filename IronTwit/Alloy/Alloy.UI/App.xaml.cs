@@ -1,22 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using unite.ui.utilities;
 using Unite.UI.ViewModels;
-using StructureMap;
-using System.Threading;
-using System.Windows.Threading;
-using StructureMap.Attributes;
 using Unite.Messaging.Extras;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
 using Unite.UI.Utilities;
-using StructureMap;
-using Unite.Messaging;
 using Unite.UI.Views;
 
 namespace Unite.UI

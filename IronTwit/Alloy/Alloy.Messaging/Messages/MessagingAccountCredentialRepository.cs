@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using StructureMap;
+using Unite.Messaging.Entities;
 
 namespace Unite.Messaging.Messages
 {

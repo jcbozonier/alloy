@@ -59,14 +59,6 @@
       <HintPath>..\..\ThirdParty\WpfBindingHelpers\Bound.Net.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework.Classic" />
-    <Reference Include="StructureMap, Version=2.5.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ThirdParty\IoC\StructureMap.dll</HintPath>
-    </Reference>
-    <Reference Include="StructureMap.AutoMocking, Version=2.5.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ThirdParty\IoC\StructureMap.AutoMocking.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -135,6 +127,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Utilities\InlineUri.cs" />
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -162,13 +155,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Utilities\ContactProvider.cs" />
-    <Compile Include="Utilities\CredentialManager.cs" />
-    <Compile Include="Utilities\Extensions.cs" />
-    <Compile Include="Utilities\InlineUrls.cs" />
-    <Compile Include="Utilities\GuiInteractionContext.cs" />
-    <Compile Include="Utilities\DelegateCommand.cs" />
-    <Compile Include="ViewModels\MainView.cs" />
+    <Compile Include="Utilities\CredentialAuthorizationController.cs" />
+    <Compile Include="Utilities\InlineUris.cs" />
+    <Compile Include="Utilities\SecurityDialogService.cs" />
+    <Compile Include="Utilities\Do.cs" />
+    <Compile Include="ViewModels\MessagingViewModel.cs" />
     <Compile Include="Utilities\ReceiveMessagesCommand.cs" />
     <Compile Include="Utilities\SendMessageCommand.cs" />
     <Compile Include="ViewModels\UserCredentialsViewModel.cs" />

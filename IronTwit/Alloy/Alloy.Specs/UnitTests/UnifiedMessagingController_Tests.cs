@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
-using Unite.Messaging;
+using Unite.Messaging.Entities;
 using Unite.Messaging.Extras;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Services;

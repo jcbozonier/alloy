@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Unite.Messaging;
+﻿using System.Collections.Generic;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
-using Unite.UI.Utilities;
 using IronTwitterPlugIn;
 using NUnit.Framework;
 using SpecUnit;

@@ -1,10 +1,10 @@
 ﻿using System.Windows;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
+using Unite.Messaging.Prompts;
 using Unite.Messaging.Services;
 using Unite.UI.ViewModels;
 using Unite.UI.Views;
-using Unite.Messaging;
 
 namespace Unite.UI.Utilities
 {

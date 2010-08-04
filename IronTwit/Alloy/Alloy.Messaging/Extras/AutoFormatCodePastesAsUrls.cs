@@ -2,11 +2,6 @@
 
 namespace Unite.Messaging.Extras
 {
-    public interface IMessageFormatter
-    {
-        string ApplyFormatting(string message);
-    }
-
     public class AutoFormatCodePastesAsUrls : IMessageFormatter
     {
         private readonly ICodePaste _CodePasteService;

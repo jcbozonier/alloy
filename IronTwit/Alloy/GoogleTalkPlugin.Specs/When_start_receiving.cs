@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Unite.Messaging;
+using Unite.Messaging.Entities;
 
 namespace GoogleTalkPlugin.Specs
 {

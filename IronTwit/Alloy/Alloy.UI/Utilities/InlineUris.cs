@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Unite.UI.Utilities
@@ -43,18 +40,6 @@ namespace Unite.UI.Utilities
             };
 
             return uris;
-        }
-    }
-
-    public class InlineUri : Uri
-    {
-        public int StartIndex { get; private set; }
-        public int Length { get; private set; }
-
-        public InlineUri(string uriString, int startIndex, int length) : base(uriString)
-        {
-            StartIndex = startIndex;
-            Length = length;
         }
     }
 }

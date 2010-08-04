@@ -1,14 +1,6 @@
 ﻿
-using Unite.Messaging.Entities;
-
-namespace Unite.Messaging
+namespace Unite.Messaging.Entities
 {
-    public interface IIdentity
-    {
-        string UserName { get; set; }
-        ServiceInformation ServiceInfo { get; set; }
-    }
-
     public class Identity : IIdentity
     {
        public Identity(string userName, ServiceInformation serviceInformation)

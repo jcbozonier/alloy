@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using SpecUnit;
 using Unite.Specs.TestObjects;
 using Unite.UI.ViewModels;

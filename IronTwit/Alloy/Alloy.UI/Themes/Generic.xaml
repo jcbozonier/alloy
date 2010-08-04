@@ -1,7 +1,7 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Controls="clr-namespace:Unite.UI.Controls">
+    xmlns:Controls="clr-namespace:Unite.UI.Controls" x:Class="Unite.UI.Themes.c__code_alloy_alloy_irontwit_alloy_alloy_ui_themes_generic_xaml">
 
     <Style TargetType="{x:Type Controls:MessageTextView}">
         <Setter Property="Template">

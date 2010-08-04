@@ -1,4 +1,5 @@
 ﻿using System;
+using Unite.Messaging.Entities;
 
 namespace Unite.Messaging.Messages
 {

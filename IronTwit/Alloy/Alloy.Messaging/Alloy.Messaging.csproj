@@ -84,8 +84,10 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Extras\MessageFormatter.cs" />
-    <Compile Include="Messages\CredentialCache.cs" />
+    <Compile Include="Entities\IIdentity.cs" />
+    <Compile Include="Extras\IMessageFormatter.cs" />
+    <Compile Include="Extras\AutoFormatCodePastesAsUrls.cs" />
+    <Compile Include="Messages\MessagingAccountCredentialRepository.cs" />
     <Compile Include="Messages\CredentialEventArgs.cs" />
     <Compile Include="Entities\Contact.cs" />
     <Compile Include="Entities\Credentials.cs" />
@@ -96,7 +98,7 @@
     <Compile Include="Prompts\IInteractionContext.cs" />
     <Compile Include="Entities\IMessage.cs" />
     <Compile Include="Messages\ContactEventArgs.cs" />
-    <Compile Include="Services\CodePaste.cs" />
+    <Compile Include="Services\CodePasteToUrlService.cs" />
     <Compile Include="Services\ICodePaste.cs" />
     <Compile Include="Services\IFiber.cs" />
     <Compile Include="Services\IPluginFinder.cs" />
@@ -104,11 +106,11 @@
     <Compile Include="Messages\IMessagingService.cs" />
     <Compile Include="Entities\Identity.cs" />
     <Compile Include="Services\IUnifiedMessagingController.cs" />
-    <Compile Include="Services\JobRunner.cs" />
+    <Compile Include="Services\AsyncFiber.cs" />
     <Compile Include="Services\UnifiedMessagingController.cs" />
-    <Compile Include="Services\MessageReceivedEventArgs.cs" />
+    <Compile Include="Services\MessagesReceivedEventArgs.cs" />
     <Compile Include="Services\MessageRepository.cs" />
-    <Compile Include="Services\PluginFinder.cs" />
+    <Compile Include="Services\MessagingPluginFinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\ServiceInformation.cs" />
     <Compile Include="Services\MessagingPlugInRepository.cs" />

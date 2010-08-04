@@ -2,6 +2,7 @@
 using jabber.client;
 using jabber.protocol.client;
 using Unite.Messaging;
+using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
 
 namespace GoogleTalkPlugIn

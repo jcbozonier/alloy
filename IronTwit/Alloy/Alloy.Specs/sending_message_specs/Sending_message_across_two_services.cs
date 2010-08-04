@@ -3,17 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
-using Rhino.Mocks;
-using SpecUnit;
-using StructureMap;
-using Unite.Messaging;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
-using Unite.Specs.FakeSpecObjects;
 using Unite.Specs.TestObjects;
-using Unite.Specs.UnitTests;
-using Unite.UI.ViewModels;
 using IServiceProvider = Unite.Messaging.Services.IServiceProvider;
 
 namespace Unite.Specs.sending_message_specs

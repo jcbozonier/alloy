@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Windows.Input;
-using Unite.UI.Utilities;
-using StructureMap;
 
 namespace Unite.UI.Utilities
 {

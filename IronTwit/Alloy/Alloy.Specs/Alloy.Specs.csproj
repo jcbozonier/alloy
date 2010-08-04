@@ -102,17 +102,14 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="FakeSpecObjects\FakeReceivingMessagePlugin.cs" />
     <Compile Include="FakeSpecObjects\FakeUser.cs" />
     <Compile Include="sending_message_specs\Sending_a_message_in_general.cs" />
     <Compile Include="sending_message_specs\Sending_message_across_two_services.cs" />
-    <Compile Include="FakeSpecObjects\FakePlugin.cs" />
     <Compile Include="sending_message_specs\When_sending_a_message_containing_code.cs" />
     <Compile Include="starting_application_specs\Receiving_messages.cs" />
     <Compile Include="TestObjects\TestAutoFormatCodePastesAsUrls.cs" />
     <Compile Include="TestObjects\TestMessage.cs" />
     <Compile Include="TestObjects\TestMessagingController.cs" />
-    <Compile Include="TestObjects\TestInteractionContext.cs" />
     <Compile Include="TwitterServicesScope\When_receiving_messages.cs" />
     <Compile Include="TwitterServicesScope\When_sending_large_messages.cs" />
     <Compile Include="TwitterServicesScope\When_sending_normal_messages.cs" />
@@ -122,7 +119,6 @@
     <Compile Include="UnitTests\MainView_Tests.cs" />
     <Compile Include="TestObjects\TestFiber.cs" />
     <Compile Include="TestObjects\TestMessageChannel.cs" />
-    <Compile Include="UnitTests\TrieTests.cs" />
     <Compile Include="UnitTests\UnifiedMessagingController_Tests.cs" />
     <Compile Include="Using_Services\When_getting_messages.cs" />
     <Compile Include="Utilities\SpecUnit.cs" />

@@ -23,7 +23,6 @@ namespace Unite.Specs.New_Starting_Application_Specs
         {
             TestMessenger = new TestMessagingController();
             ReceivedMessages = new[] {new Message()};
-            TestMessenger.MessagesReceived = ReceivedMessages;
 
             View = new MessagingViewModel(TestMessenger);
 

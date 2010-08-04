@@ -1,13 +1,7 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
-using SpecUnit;
 using Unite.Messaging.Extras;
-using Unite.Messaging.Services;
-using Unite.Specs.FakeSpecObjects;
 using Unite.Specs.TestObjects;
-using Unite.UI.ViewModels;
-using IServiceProvider = System.IServiceProvider;
 
 namespace Unite.Specs.sending_message_specs
 {

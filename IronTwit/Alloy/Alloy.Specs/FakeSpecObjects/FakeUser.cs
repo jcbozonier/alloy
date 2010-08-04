@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Unite.Messaging;
-using Unite.Messaging.Entities;
+﻿using Unite.Messaging.Entities;
 
 namespace Unite.Specs.FakeSpecObjects
 {

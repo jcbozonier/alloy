@@ -1,8 +1,8 @@
-﻿using Unite.Messaging;
-using IronTwitterPlugIn;
+﻿using IronTwitterPlugIn;
 using NUnit.Framework;
 using SpecUnit;
 using System.Collections.Generic;
+using Unite.Messaging.Entities;
 using Unite.Specs.FakeSpecObjects;
 
 namespace Unite.Specs.Application_running.sending_messages

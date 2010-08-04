@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using SpecUnit;
-using Unite.Messaging;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Services;

@@ -1,4 +1,5 @@
 ﻿using Unite.Messaging;
+using Unite.Messaging.Entities;
 using Yedda;
 
 namespace IronTwitterPlugIn
