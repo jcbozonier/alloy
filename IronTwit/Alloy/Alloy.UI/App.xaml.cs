@@ -21,28 +21,30 @@ namespace Unite.UI
 
         void App_Startup(object sender, StartupEventArgs e)
         {
-            var messagingPluginFinder = new MessagingPluginFinder();
-            var messagingPlugInRepository = new MessagingPlugInRepository(messagingPluginFinder);
+            var messagingPlugInRepository = new MessagingPlugInRepository();
+            var messagingPluginFinder = new MessagingPluginFinder(messagingPlugInRepository);
             var unifiedMessenger = new UnifiedMessenger(messagingPlugInRepository);
 
-            var messagingFiber = new AsyncFiber(this.Dispatcher);
+            var messagingFiber = new AsyncFiber(Dispatcher);
             var credentialRepository = new MessagingAccountCredentialRepository(messagingPlugInRepository);
             var securityDialogService = new SecurityDialogService(credentialRepository, messagingFiber);
 
-            new CredentialAuthorizationController(unifiedMessenger, securityDialogService);
+            var credentialAuthorizationController = new CredentialAuthorizationController(unifiedMessenger, securityDialogService);
+            securityDialogService.OnNewCredentials(credentialAuthorizationController);
 
             var codePasteToUrlService = new CodePasteToUrlService();
             var automaticMessageFormatting = new AutoFormatCodePastesAsUrls(codePasteToUrlService);
 
             var messageRepository = new MessageRepository();
             var unifiedMessagingController = new UnifiedMessagingController(unifiedMessenger, messageRepository, automaticMessageFormatting, messagingFiber);
-            messageRepository.SendAddedMessagesTo(unifiedMessagingController);
 
             var messagingViewModel = new MessagingViewModel(unifiedMessagingController);
-            unifiedMessagingController.SendReceivedMessagesTo(messagingViewModel);
-
             var messagingWindow = new MessagingWindow(messagingViewModel);
-           
+
+            messageRepository.SendAddedMessagesTo(unifiedMessagingController);
+            unifiedMessagingController.SendReceivedMessagesTo(messagingViewModel);
+            messagingPluginFinder.GetAllPlugins();
+
             messagingViewModel.ReceiveMessage.Execute(null);
             messagingWindow.Show();
         }

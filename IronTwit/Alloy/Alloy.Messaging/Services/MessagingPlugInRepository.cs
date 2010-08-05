@@ -5,37 +5,35 @@ using Unite.Messaging.Messages;
 
 namespace Unite.Messaging.Services
 {
-    public class MessagingPlugInRepository : IServiceProvider
+    public class MessagingPlugInRepository : IServiceProvider, IMessagingPlugInRepository
     {
         private readonly List<IMessagingService> Services;
 
-        public MessagingPlugInRepository(IPluginFinder finder)
+        public MessagingPlugInRepository()
         {
             Services = new List<IMessagingService>();
-
-            var plugins = finder.GetAllPlugins();
-
-            foreach(var plugin in plugins)
-            {
-                _AddServiceProvider(plugin);
-            }
         }
 
         private void _AddServiceProvider(Type serviceType)
         {
             var service = (IMessagingService)ObjectFactory.GetInstance(serviceType);
-            Add(service);
+            _Add(service);
         }
 
         public void Add(params IMessagingService[] services)
         {
             foreach(var service in services)
             {
-                Add(service);
+                _Add(service);
             }
         }
 
-        private void Add(IMessagingService service)
+        public void Add(Type messagingServiceType)
+        {
+            _AddServiceProvider(messagingServiceType);
+        }
+
+        private void _Add(IMessagingService service)
         {
             service.CredentialsRequested += _GetCredentials;
             service.AuthorizationFailed += service_AuthorizationFailed;
@@ -57,6 +55,14 @@ namespace Unite.Messaging.Services
         public IEnumerable<IMessagingService> GetAllServices()
         {
             return Services;
+        }
+
+        public void ForEachPlugIn(Action<IMessagingService> takeAction)
+        {
+            foreach(var plugin in Services)
+            {
+                takeAction(plugin);
+            }
         }
 
         public event EventHandler<CredentialEventArgs> CredentialsRequested;

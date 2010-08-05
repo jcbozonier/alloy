@@ -2,9 +2,9 @@
 
 namespace Unite.Messaging.Prompts
 {
-    public interface IInteractionContext
+    public interface IUser
     {
-        Credentials GetCredentials(IServiceInformation serviceInformation);
+        void PromptForCredentials(IServiceInformation serviceInformation);
         bool AuthenticationFailedRetryQuery();
     }
 }

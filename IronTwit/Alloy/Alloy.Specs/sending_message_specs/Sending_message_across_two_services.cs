@@ -92,13 +92,13 @@ namespace Unite.Specs.sending_message_specs
             return _Services;
         }
 
-        public IEnumerable<IMessagingService> GetServicesFor(string recipient)
-        {
-            return _Services;
-        }
-
         public event EventHandler<CredentialEventArgs> CredentialsRequested;
 
         public event EventHandler<CredentialEventArgs> AuthorizationFailed;
+        public void ForEachPlugIn(Action<IMessagingService> takeAction)
+        {
+            foreach (var service in _Services)
+                takeAction(service);
+        }
     }
 }

@@ -95,12 +95,13 @@
     <Compile Include="Messages\ICredentialCache.cs" />
     <Compile Include="Messages\IMessageChannel.cs" />
     <Compile Include="Messages\IUnifiedMessagingService.cs" />
-    <Compile Include="Prompts\IInteractionContext.cs" />
+    <Compile Include="Prompts\IUser.cs" />
     <Compile Include="Entities\IMessage.cs" />
     <Compile Include="Messages\ContactEventArgs.cs" />
     <Compile Include="Services\CodePasteToUrlService.cs" />
     <Compile Include="Services\ICodePaste.cs" />
     <Compile Include="Services\IFiber.cs" />
+    <Compile Include="Services\IMessagingPlugInRepository.cs" />
     <Compile Include="Services\IPluginFinder.cs" />
     <Compile Include="Services\IServiceProvider.cs" />
     <Compile Include="Messages\IMessagingService.cs" />

@@ -40,7 +40,7 @@ namespace Unite.Specs.Using_Services
         public void Setup()
         {
             MyCredentials = new Credentials() { UserName = "username", Password = "password" };
-            ServiceProvider = new MessagingPlugInRepository(new MessagingPluginFinder());
+            ServiceProvider = new MessagingPlugInRepository();
             ServiceProvider.Add(new FauxMessageService("test 1"), new FauxMessageService("test2"));
             ServiceManager = new UnifiedMessenger(ServiceProvider);
 
@@ -51,6 +51,14 @@ namespace Unite.Specs.Using_Services
         protected abstract void Because();
 
         protected abstract void Context();
+    }
+
+    public class TestMessagingPlugInRepository : IMessagingPlugInRepository
+    {
+        public void Add(Type messagingServiceType)
+        {
+            
+        }
     }
 
     public class FauxMessageService : IMessagingService

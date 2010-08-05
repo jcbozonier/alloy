@@ -5,15 +5,15 @@ using Unite.Messaging.Prompts;
 
 namespace unite.ui.utilities
 {
-    public class CredentialAuthorizationController
+    public class CredentialAuthorizationController : ICredentialsObserver
     {
         private readonly IUnifiedMessagingService _MessagingService;
         private Dictionary<ServiceInformation, bool> _RetryOnAuthFailure;
-        private readonly IInteractionContext _Interactions;
+        private readonly IUser _User;
 
-        public CredentialAuthorizationController(IUnifiedMessagingService messagingService, IInteractionContext uiContext)
+        public CredentialAuthorizationController(IUnifiedMessagingService messagingService, IUser user)
         {
-            _Interactions = uiContext;
+            _User = user;
             _MessagingService = messagingService;
             _MessagingService.CredentialsRequested += _MessagingService_CredentialsRequested;
             _MessagingService.AuthorizationFailed += _MessagingService_AuthorizationFailed;
@@ -26,8 +26,7 @@ namespace unite.ui.utilities
 
         void _MessagingService_CredentialsRequested(object sender, CredentialEventArgs e)
         {
-            var credentials = _Interactions.GetCredentials(e.ServiceInfo);
-            SetCredentials(credentials);
+            _User.PromptForCredentials(e.ServiceInfo);
         }
 
         void _MessagingService_AuthorizationFailed(object sender, CredentialEventArgs e)
@@ -37,7 +36,7 @@ namespace unite.ui.utilities
             _RetryOnAuthFailure = _RetryOnAuthFailure ?? new Dictionary<ServiceInformation, bool>();
 
             if (!_RetryOnAuthFailure.ContainsKey(e.ServiceInfo))
-                _RetryOnAuthFailure[e.ServiceInfo] = _Interactions.AuthenticationFailedRetryQuery();
+                _RetryOnAuthFailure[e.ServiceInfo] = _User.AuthenticationFailedRetryQuery();
 
             if (!_RetryOnAuthFailure[e.ServiceInfo]) return;
 

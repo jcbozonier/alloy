@@ -5,6 +5,6 @@ namespace Unite.Messaging.Services
 {
     public interface IPluginFinder
     {
-        IEnumerable<Type> GetAllPlugins();
+        void GetAllPlugins();
     }
 }

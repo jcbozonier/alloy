@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Unite.Messaging.Messages;
@@ -8,16 +7,21 @@ namespace Unite.Messaging.Services
 {
     public class MessagingPluginFinder : IPluginFinder
     {
-        public IEnumerable<Type> GetAllPlugins()
+        private readonly IMessagingPlugInRepository _PlugInRepository;
+
+        public MessagingPluginFinder(IMessagingPlugInRepository plugInRepository)
+        {
+            _PlugInRepository = plugInRepository;
+        }
+
+        public void GetAllPlugins()
         {
             var mainExeDir = Environment.CurrentDirectory;
             var pluginDir = new DirectoryInfo(mainExeDir);
             var thisAssembly = Assembly.GetExecutingAssembly();
             var entryAssembly = Assembly.GetEntryAssembly();
 
-            var result = new List<Type>();
-
-            if (entryAssembly == null) return new List<Type>();
+            if (entryAssembly == null) return;
 
             foreach (var fileInfo in pluginDir.GetFiles("*.dll", SearchOption.TopDirectoryOnly))
             {
@@ -35,7 +39,7 @@ namespace Unite.Messaging.Services
                         {
                             if (interfaceType == typeof(IMessagingService))
                             {
-                                result.Add(type);
+                                _PlugInRepository.Add(type);
                                 found = true;
                                 break;
                             }
@@ -47,8 +51,6 @@ namespace Unite.Messaging.Services
                 catch (Exception)
                 { }
             }
-
-            return result;
         }
     }
 }

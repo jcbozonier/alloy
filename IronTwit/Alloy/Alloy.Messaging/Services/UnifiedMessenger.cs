@@ -9,8 +9,6 @@ namespace Unite.Messaging.Services
     {
         private readonly IServiceProvider _Provider;
 
-        private readonly IEnumerable<IMessagingService> _Services;
-
         /// <summary>
         /// Invoked when the users credentials were received and used to 
         /// authenticate but were signaled to be invalid by the service.
@@ -28,16 +26,11 @@ namespace Unite.Messaging.Services
         /// </summary>
         public event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
 
-        public event EventHandler<ContactEventArgs> OnContactsReceived;
-
         public UnifiedMessenger(IServiceProvider provider)
         {
             _Provider = provider;
             _Provider.CredentialsRequested += Provider_CredentialsRequested;
             _Provider.AuthorizationFailed += Provider_AuthorizationFailed;
-
-            _Services = _Provider.GetAllServices();
-
         }
 
         void Provider_AuthorizationFailed(object sender, CredentialEventArgs e)
@@ -59,12 +52,8 @@ namespace Unite.Messaging.Services
         public void RequestMessages()
         {
             var messages = new List<IMessage>();
-            var services = _Services;
 
-            foreach (var service in services)
-            {
-                messages.AddRange(service.GetMessages());
-            }
+            _Provider.ForEachPlugIn(plugIn => messages.AddRange(plugIn.GetMessages()));
 
             if(MessagesReceived != null)
                 MessagesReceived(this, new MessagesReceivedEventArgs(messages));
@@ -79,9 +68,7 @@ namespace Unite.Messaging.Services
         /// <param name="message"></param>
         public void SendMessage(string recipient, string message)
         {
-            var servicesToUse = _Provider.GetAllServices(); 
-            foreach (var service in servicesToUse)
-                service.SendMessage(new Identity(recipient, service.GetInformation()), message);
+            _Provider.ForEachPlugIn(x => x.SendMessage(new Identity(recipient, x.GetInformation()), message));
         }
 
         /// <summary>
@@ -90,12 +77,7 @@ namespace Unite.Messaging.Services
         /// <param name="credentials"></param>
         public void SetCredentials(Credentials credentials)
         {
-            var services = _Services;
-
-            foreach (var service in services)
-            {
-                service.IfCanAcceptSet(credentials);
-            }
+            _Provider.ForEachPlugIn(plugIn=>plugIn.IfCanAcceptSet(credentials));
         }
 
         /// <summary>
@@ -103,13 +85,12 @@ namespace Unite.Messaging.Services
         /// </summary>
         public void StartReceiving()
         {
-            var services = _Services;
 
-            foreach (var service in services)
-            {
-                service.MessagesReceived += service_MessagesReceived;
-                service.StartReceiving();
-            }
+            _Provider.ForEachPlugIn(plugIn=>
+                                        {
+                                            plugIn.MessagesReceived += service_MessagesReceived;
+                                            plugIn.StartReceiving();
+                                        });
         }
 
         private void service_MessagesReceived(object sender, MessagesReceivedEventArgs e)

@@ -3,15 +3,17 @@ using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Prompts;
 using Unite.Messaging.Services;
+using unite.ui.utilities;
 using Unite.UI.ViewModels;
 using Unite.UI.Views;
 
 namespace Unite.UI.Utilities
 {
-    public class SecurityDialogService : IInteractionContext
+    public class SecurityDialogService : IUser
     {
         private readonly ICredentialCache _CredentialCache;
         private readonly IFiber _JobRunner;
+        private ICredentialsObserver _CredentialsObserver;
 
         public SecurityDialogService(ICredentialCache credentialCache, IFiber jobRunner)
         {
@@ -19,7 +21,12 @@ namespace Unite.UI.Utilities
             _JobRunner = jobRunner;
         }
 
-        public Credentials GetCredentials(IServiceInformation serviceInformation)
+        public void OnNewCredentials(ICredentialsObserver credentialsObserver)
+        {
+            _CredentialsObserver = credentialsObserver;
+        }
+
+        public void PromptForCredentials(IServiceInformation serviceInformation)
         {
             var credentialCache = _CredentialCache;
             Credentials cachedCredential = null;
@@ -27,7 +34,10 @@ namespace Unite.UI.Utilities
             {
                 cachedCredential = credentialCache.Get(serviceInformation.ServiceID);
                 if (cachedCredential.IsPasswordCachingAllowed) //else we will prompt for password
-                    return cachedCredential;
+                {
+                    _CredentialsObserver.SetCredentials(cachedCredential);
+                    return;
+                }
             }
 
             var username = "";
@@ -36,22 +46,22 @@ namespace Unite.UI.Utilities
 
             _JobRunner.RunOnMainThread(() =>
                                             {
-                                                var model = new UserCredentialsViewModel()
+                                                var userCredentialsViewModel = new UserCredentialsViewModel()
                                                                 {
                                                                     Caption = serviceInformation.ServiceName + " Login",
                                                                     UserName = (cachedCredential != null) ? cachedCredential.UserName : string.Empty
                                                                 };
                                                 var dialog = new UserCredentialsWindow
                                                                  {
-                                                                     DataContext = model
+                                                                     DataContext = userCredentialsViewModel
                                                                  };
                                                 var mainWindow = Application.Current.MainWindow;
                                                 dialog.Owner = mainWindow;
                                                 dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                                                 dialog.ShowDialog();
-                                                username = model.UserName;
-                                                password = model.Password;
-                                                savePassword = model.SavePassword;
+                                                username = userCredentialsViewModel.UserName;
+                                                password = userCredentialsViewModel.Password;
+                                                savePassword = userCredentialsViewModel.SavePassword;
                                             });
 
             var credentials = new Credentials()
@@ -63,7 +73,8 @@ namespace Unite.UI.Utilities
                        };
 
             credentialCache.Add(credentials);
-            return credentials;
+
+            _CredentialsObserver.SetCredentials(credentials);
         }
 
         public bool AuthenticationFailedRetryQuery()
