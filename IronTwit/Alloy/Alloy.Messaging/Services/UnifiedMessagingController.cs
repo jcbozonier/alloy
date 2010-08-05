@@ -27,7 +27,7 @@ namespace Unite.Messaging.Services
             _Fiber = fiber;
             _MessagingService.MessagesReceived += _MessagingService_MessagesReceived;
         }
-        public void SendReceivedMessagesTo(IMessageChannel messageChannel)
+        public void OnReceivedMessagesNotify(IMessageChannel messageChannel)
         {
             _MessageChannel = messageChannel;
             if (_MessagingServiceIsStarted) return;

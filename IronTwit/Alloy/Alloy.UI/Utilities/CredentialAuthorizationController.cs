@@ -1,22 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Prompts;
+using Unite.Messaging.Services;
 
 namespace unite.ui.utilities
 {
-    public class CredentialAuthorizationController : ICredentialsObserver
+    public class CredentialAuthorizationController : ICredentialsObserver, ICredentialUpdates, ICredentialsProvidedObserver
     {
         private readonly IUnifiedMessagingService _MessagingService;
-        private Dictionary<ServiceInformation, bool> _RetryOnAuthFailure;
-        private readonly IUser _User;
+        private ICredentialsRequestedObserver _CredentialsRequestedObserver;
 
-        public CredentialAuthorizationController(IUnifiedMessagingService messagingService, IUser user)
+        public CredentialAuthorizationController(IUnifiedMessagingService messagingService)
         {
-            _User = user;
             _MessagingService = messagingService;
-            _MessagingService.CredentialsRequested += _MessagingService_CredentialsRequested;
-            _MessagingService.AuthorizationFailed += _MessagingService_AuthorizationFailed;
         }
 
         public void SetCredentials(Credentials credentials)
@@ -24,23 +22,24 @@ namespace unite.ui.utilities
              _MessagingService.SetCredentials(credentials);
         }
 
-        void _MessagingService_CredentialsRequested(object sender, CredentialEventArgs e)
+        public void CredentialsRequested(CredentialEventArgs e)
         {
-            _User.PromptForCredentials(e.ServiceInfo);
+            _CredentialsRequestedObserver.CredentialsNeeded(e.ServiceInfo);
         }
 
-        void _MessagingService_AuthorizationFailed(object sender, CredentialEventArgs e)
+        public void AuthorizationFailed(CredentialEventArgs e)
         {
-            // This needs to be refactored out of the view model for sure and placed
-            // into the credential manager.
-            _RetryOnAuthFailure = _RetryOnAuthFailure ?? new Dictionary<ServiceInformation, bool>();
+            
+        }
 
-            if (!_RetryOnAuthFailure.ContainsKey(e.ServiceInfo))
-                _RetryOnAuthFailure[e.ServiceInfo] = _User.AuthenticationFailedRetryQuery();
+        public void CredentialsProvided(Credentials credentials)
+        {
+            _MessagingService.SetCredentials(credentials);
+        }
 
-            if (!_RetryOnAuthFailure[e.ServiceInfo]) return;
-
-            _MessagingService_CredentialsRequested(this, e);
+        public void OnCredentialsRequestedNotify(ICredentialsRequestedObserver credentialsRequestedObserver)
+        {
+            _CredentialsRequestedObserver = credentialsRequestedObserver;
         }
     }
 }

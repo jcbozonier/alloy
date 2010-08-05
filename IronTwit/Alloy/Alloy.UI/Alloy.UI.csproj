@@ -129,6 +129,8 @@
     </Compile>
     <Compile Include="Utilities\ICredentialsObserver.cs" />
     <Compile Include="Utilities\InlineUri.cs" />
+    <Compile Include="Utilities\ISecurityDialogService.cs" />
+    <Compile Include="Utilities\UserSecurityPrompt.cs" />
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -158,7 +160,6 @@
     </Compile>
     <Compile Include="Utilities\CredentialAuthorizationController.cs" />
     <Compile Include="Utilities\InlineUris.cs" />
-    <Compile Include="Utilities\SecurityDialogService.cs" />
     <Compile Include="Utilities\Do.cs" />
     <Compile Include="ViewModels\MessagingViewModel.cs" />
     <Compile Include="Utilities\ReceiveMessagesCommand.cs" />

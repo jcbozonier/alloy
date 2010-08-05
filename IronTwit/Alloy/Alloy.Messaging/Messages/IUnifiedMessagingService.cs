@@ -9,8 +9,6 @@ namespace Unite.Messaging.Messages
         void SendMessage(string recipient, string message);
         void RequestMessages();
         void SetCredentials(Credentials credentials);
-        event EventHandler<CredentialEventArgs> CredentialsRequested;
-        event EventHandler<CredentialEventArgs> AuthorizationFailed;
         void StartReceiving();
         event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
     }

@@ -53,6 +53,20 @@ namespace Unite.Specs.Using_Services
         protected abstract void Context();
     }
 
+
+    public class TestCredentialUpdater : ICredentialUpdates
+    {
+        public void CredentialsRequested(CredentialEventArgs e)
+        {
+            
+        }
+
+        public void AuthorizationFailed(CredentialEventArgs e)
+        {
+            
+        }
+    }
+
     public class TestMessagingPlugInRepository : IMessagingPlugInRepository
     {
         public void Add(Type messagingServiceType)

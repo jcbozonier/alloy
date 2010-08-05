@@ -26,11 +26,15 @@ namespace Unite.UI
             var unifiedMessenger = new UnifiedMessenger(messagingPlugInRepository);
 
             var messagingFiber = new AsyncFiber(Dispatcher);
-            var credentialRepository = new MessagingAccountCredentialRepository(messagingPlugInRepository);
-            var securityDialogService = new SecurityDialogService(credentialRepository, messagingFiber);
+            var cachedCredentialRepository = new MessagingAccountCredentialsRepository(messagingPlugInRepository);
+            var userSecurityPrompt = new UserSecurityPrompt(messagingFiber);
+            var credentialAuthorizationController = new CredentialAuthorizationController(unifiedMessenger);
 
-            var credentialAuthorizationController = new CredentialAuthorizationController(unifiedMessenger, securityDialogService);
-            securityDialogService.OnNewCredentials(credentialAuthorizationController);
+            messagingPlugInRepository.OnCredentialUpdatesNotify(credentialAuthorizationController);
+            credentialAuthorizationController.OnCredentialsRequestedNotify(cachedCredentialRepository);
+            cachedCredentialRepository.OnCredentialsRequestedNotify(userSecurityPrompt);
+            userSecurityPrompt.OnCredentialsProvidedNotify(cachedCredentialRepository);
+            cachedCredentialRepository.OnCredentialsProvidedNotify(credentialAuthorizationController);
 
             var codePasteToUrlService = new CodePasteToUrlService();
             var automaticMessageFormatting = new AutoFormatCodePastesAsUrls(codePasteToUrlService);
@@ -41,8 +45,9 @@ namespace Unite.UI
             var messagingViewModel = new MessagingViewModel(unifiedMessagingController);
             var messagingWindow = new MessagingWindow(messagingViewModel);
 
-            messageRepository.SendAddedMessagesTo(unifiedMessagingController);
-            unifiedMessagingController.SendReceivedMessagesTo(messagingViewModel);
+            messageRepository.OnAddedMessagesNotify(unifiedMessagingController);
+            unifiedMessagingController.OnReceivedMessagesNotify(messagingViewModel);
+
             messagingPluginFinder.GetAllPlugins();
 
             messagingViewModel.ReceiveMessage.Execute(null);

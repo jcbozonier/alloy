@@ -2,22 +2,24 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml.Serialization;
-using StructureMap;
 using Unite.Messaging.Entities;
+using Unite.Messaging.Services;
 
 namespace Unite.Messaging.Messages
 {
-    public class MessagingAccountCredentialRepository : ICredentialCache
+    public class MessagingAccountCredentialsRepository : ICredentialCache, ICredentialsRequestedObserver, ICredentialsProvidedObserver
     {
         private readonly string _cacheFile;
         private readonly Services.IServiceProvider _serviceProvider;
+        private ICredentialsRequestedObserver _credentialsRequestedObserver;
 
         private Dictionary<Guid, CachedCredential> _cache;
+        private ICredentialsProvidedObserver _CredentialsProvidedObserver;
 
-        public MessagingAccountCredentialRepository(Services.IServiceProvider serviceProvider)
+        public MessagingAccountCredentialsRepository(Services.IServiceProvider serviceProvider)
         {
+            //_CredentialsObserver
             _serviceProvider = serviceProvider;
             var userAppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             _cacheFile = Path.Combine(userAppData, "CredentialCache.xml");
@@ -71,6 +73,7 @@ namespace Unite.Messaging.Messages
             SaveCache();
         }
 
+
         public Credentials Get(Guid serviceId)
         {
             if (!_cache.ContainsKey(serviceId))
@@ -118,6 +121,34 @@ namespace Unite.Messaging.Messages
             public string UserName { get; set; }
             public string Password { get; set; }
             public bool IsPasswordCached { get; set; }
+        }
+
+        public void OnCredentialsRequestedNotify(ICredentialsRequestedObserver credentialsRequestedObserver)
+        {
+            _credentialsRequestedObserver = credentialsRequestedObserver;
+        }
+
+        public void OnCredentialsProvidedNotify(ICredentialsProvidedObserver credentialsProvidedObserver)
+        {
+            _CredentialsProvidedObserver = credentialsProvidedObserver;
+        }
+
+        public void CredentialsProvided(Credentials credentials)
+        {
+            Add(credentials);
+        }
+
+        public void CredentialsNeeded(IServiceInformation serviceInformation)
+        {
+            if (this.Contains(serviceInformation.ServiceID))
+            {
+                var cachedCredential = this.Get(serviceInformation.ServiceID);
+                _CredentialsProvidedObserver.CredentialsProvided(cachedCredential);
+            }
+            else
+            {
+                _credentialsRequestedObserver.CredentialsNeeded(serviceInformation);
+            }
         }
     }
 }

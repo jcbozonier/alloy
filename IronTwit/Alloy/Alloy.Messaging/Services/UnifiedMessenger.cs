@@ -10,17 +10,6 @@ namespace Unite.Messaging.Services
         private readonly IServiceProvider _Provider;
 
         /// <summary>
-        /// Invoked when the users credentials were received and used to 
-        /// authenticate but were signaled to be invalid by the service.
-        /// </summary>
-        public event EventHandler<CredentialEventArgs> AuthorizationFailed;
-
-        /// <summary>
-        /// Invoked when new credentials are required to log into a service.
-        /// </summary>
-        public event EventHandler<CredentialEventArgs> CredentialsRequested;
-
-        /// <summary>
         /// Invoked whenever new messages are received from any one of the
         /// loaded services.
         /// </summary>
@@ -29,20 +18,6 @@ namespace Unite.Messaging.Services
         public UnifiedMessenger(IServiceProvider provider)
         {
             _Provider = provider;
-            _Provider.CredentialsRequested += Provider_CredentialsRequested;
-            _Provider.AuthorizationFailed += Provider_AuthorizationFailed;
-        }
-
-        void Provider_AuthorizationFailed(object sender, CredentialEventArgs e)
-        {
-            if (AuthorizationFailed != null)
-                AuthorizationFailed(sender, e);
-        }
-
-        void Provider_CredentialsRequested(object sender, CredentialEventArgs e)
-        {
-            if (CredentialsRequested != null)
-                CredentialsRequested(sender, e); 
         }
 
         /// <summary>
@@ -68,7 +43,12 @@ namespace Unite.Messaging.Services
         /// <param name="message"></param>
         public void SendMessage(string recipient, string message)
         {
-            _Provider.ForEachPlugIn(x => x.SendMessage(new Identity(recipient, x.GetInformation()), message));
+            _Provider.ForEachPlugIn(messagingService =>
+                                        {
+                                            messagingService.SendMessage(
+                                                new Identity(recipient, messagingService.GetInformation()),
+                                                message);
+                                        });
         }
 
         /// <summary>

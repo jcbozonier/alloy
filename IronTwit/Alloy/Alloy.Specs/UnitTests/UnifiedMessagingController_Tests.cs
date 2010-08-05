@@ -21,7 +21,7 @@ namespace Unite.Specs.UnitTests
                                            new TestMessageFormatter(), 
                                            new TestFiber());
 
-            messagingController.SendReceivedMessagesTo(new TestMessageChannel());
+            messagingController.OnReceivedMessagesNotify(new TestMessageChannel());
 
             Assert.That(messagingService.StartReceiving_WasCalled, "It should start receiving from the messaging plugins.");
         }

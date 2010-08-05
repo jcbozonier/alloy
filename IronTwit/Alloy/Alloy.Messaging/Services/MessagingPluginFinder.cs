@@ -5,7 +5,7 @@ using Unite.Messaging.Messages;
 
 namespace Unite.Messaging.Services
 {
-    public class MessagingPluginFinder : IPluginFinder
+    public class MessagingPluginFinder
     {
         private readonly IMessagingPlugInRepository _PlugInRepository;
 

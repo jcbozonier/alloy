@@ -40,7 +40,7 @@ namespace Unite.Messaging.Services
             }
         }
 
-        public void SendAddedMessagesTo(IMessageChannel messageChannel)
+        public void OnAddedMessagesNotify(IMessageChannel messageChannel)
         {
             _MessageChannel = messageChannel;
         }
