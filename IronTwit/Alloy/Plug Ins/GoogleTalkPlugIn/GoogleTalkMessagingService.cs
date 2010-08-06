@@ -23,7 +23,7 @@ namespace GoogleTalkPlugIn
 
         [DefaultConstructor]
         public GoogleTalkMessagingService()
-            : this(new GoogleTalkAuthenticationBufferDataAccess(new GoogleTalkDataAccess()))
+            : this(new AuthenticatedGoogleTalkDataAccess(new GoogleTalkDataAccess()))
         {
         }
 

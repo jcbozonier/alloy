@@ -85,7 +85,8 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="GoogleTalkAuthenticationBufferDataAccess.cs" />
+    <Compile Include="EventExtensions.cs" />
+    <Compile Include="AuthenticatedGoogleTalkDataAccess.cs" />
     <Compile Include="GoogleTalkDataAccess.cs" />
     <Compile Include="GoogleTalkMessagingService.cs" />
     <Compile Include="GTalkMessage.cs" />

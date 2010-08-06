@@ -3,7 +3,7 @@ using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
 
-namespace Unite.Specs.UnitTests
+namespace Unite.Specs.TestObjects
 {
     public class TestUnifiedMessagingService : IUnifiedMessagingService
     {

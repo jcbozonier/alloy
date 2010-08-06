@@ -77,10 +77,12 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AuthenticatedGoogleTalkDataAccess_Tests.cs" />
     <Compile Include="Receiving_messages.cs" />
     <Compile Include="Sending_a_message.cs" />
     <Compile Include="Sending_message_recipientless.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestObjects\TestGoogleTalkDataAccess.cs" />
     <Compile Include="When_start_receiving.cs" />
   </ItemGroup>
   <ItemGroup>

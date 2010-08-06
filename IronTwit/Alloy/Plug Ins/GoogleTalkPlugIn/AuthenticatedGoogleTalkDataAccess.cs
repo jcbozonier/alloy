@@ -4,24 +4,13 @@ using Unite.Messaging.Messages;
 
 namespace GoogleTalkPlugIn
 {
-    public static class EventExtensions
-    {
-        public static void SafelyInvoke<T>(this EventHandler<T> eventHandler, object sender, T eventArgs)
-            where T : EventArgs
-        {
-            var tempEvent = eventHandler;
-            if (tempEvent != null)
-                tempEvent(sender, eventArgs);
-        }
-    }
-
-    public class GoogleTalkAuthenticationBufferDataAccess : IGoogleTalkDataAccess
+    public class AuthenticatedGoogleTalkDataAccess : IGoogleTalkDataAccess
     {
         private readonly Queue<Action> _ActionQueue;
         private bool _WasAuthenticated;
         private readonly IGoogleTalkDataAccess _GoogleTalkDataAccess;
 
-        public GoogleTalkAuthenticationBufferDataAccess(IGoogleTalkDataAccess googleTalkDataAccess)
+        public AuthenticatedGoogleTalkDataAccess(IGoogleTalkDataAccess googleTalkDataAccess)
         {
             _ActionQueue = new Queue<Action>();
             _GoogleTalkDataAccess = googleTalkDataAccess;
@@ -41,7 +30,7 @@ namespace GoogleTalkPlugIn
             DoAsSoonAsAuthenticated(() => _GoogleTalkDataAccess.Message(name, message));
         }
 
-        public void DoAsSoonAsAuthenticated(Action action)
+        private void DoAsSoonAsAuthenticated(Action action)
         {
             if (_WasAuthenticated)
                 action();

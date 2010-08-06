@@ -35,23 +35,20 @@ namespace GoogleTalkPlugIn
 
             client.OnError += (s, e) =>
             {
-                throw new Exception(e.Message);
+                throw e;
             };
-            client.OnAuthError += (s, e) => OnAuthError(s, null);
-            client.OnMessage += (s, e) => OnMessage(s, new GTalkMessageEventArgs(e.From.User, e.Body, DateTime.Now));
+            client.OnAuthError += (s, e) => OnAuthError.SafelyInvoke(s, null);
+            client.OnMessage += (s, e) => OnMessage.SafelyInvoke(s, new GTalkMessageEventArgs(e.From.User, e.Body, DateTime.Now));
 
 
-            client.OnPresence += (sndr, e) =>
-                                     {
-                                         if (OnContactsReceived != null)
-                                             OnContactsReceived(this, new ContactEventArgs()
-                                                                          {
-                                                                              ReceivedContacts =
-                                                                                  new IIdentity[]
-                                                                                      {new Identity(e.From.User, null)}
-                                                                          });
- 
-                                     }; 
+            client.OnPresence += (sndr, e) => OnContactsReceived.SafelyInvoke(this, new ContactEventArgs()
+                                                                                        {
+                                                                                            ReceivedContacts =
+                                                                                                new IIdentity[]
+                                                                                                    {
+                                                                                                        new Identity(e.From.User, null)
+                                                                                                    }
+                                                                                        }); 
             _Client = client;
         }
 
@@ -59,9 +56,7 @@ namespace GoogleTalkPlugIn
         {
             _Client.GetRoster();
 
-            var onAuthenticated = OnAuthenticated;
-            if(onAuthenticated!=null)
-                OnAuthenticated(this, EventArgs.Empty);
+            OnAuthenticated.SafelyInvoke(this, EventArgs.Empty);
         }
 
         public event EventHandler<EventArgs> OnAuthError;
@@ -71,7 +66,7 @@ namespace GoogleTalkPlugIn
         {
             if(!_Client.IsAuthenticated && OnAuthError != null)
             {
-                OnAuthError(this, EventArgs.Empty);
+                OnAuthError.SafelyInvoke(this, EventArgs.Empty);
             }
             else
                 _Client.Message(name, message);
