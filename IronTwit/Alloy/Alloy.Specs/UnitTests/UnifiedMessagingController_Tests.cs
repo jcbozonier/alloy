@@ -1,8 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using Unite.Messaging.Entities;
 using Unite.Messaging.Extras;
-using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
 using Unite.Specs.TestObjects;
 
@@ -21,7 +19,7 @@ namespace Unite.Specs.UnitTests
                                            new TestMessageFormatter(), 
                                            new TestFiber());
 
-            messagingController.OnReceivedMessagesNotify(new TestMessageChannel());
+            messagingController.StartReceiving();
 
             Assert.That(messagingService.StartReceiving_WasCalled, "It should start receiving from the messaging plugins.");
         }
@@ -33,34 +31,5 @@ namespace Unite.Specs.UnitTests
         {
             throw new NotImplementedException();
         }
-    }
-
-    public class TestUnifiedMessagingService : IUnifiedMessagingService
-    {
-        public bool StartReceiving_WasCalled;
-
-        public void SendMessage(string recipient, string message)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RequestMessages()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetCredentials(Credentials credentials)
-        {
-            throw new NotImplementedException();
-        }
-
-        public event EventHandler<CredentialEventArgs> CredentialsRequested;
-        public event EventHandler<CredentialEventArgs> AuthorizationFailed;
-        public void StartReceiving()
-        {
-            StartReceiving_WasCalled = true;
-        }
-
-        public event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
     }
 }

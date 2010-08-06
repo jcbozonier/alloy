@@ -119,6 +119,7 @@
     <Compile Include="UnitTests\MainView_Tests.cs" />
     <Compile Include="TestObjects\TestFiber.cs" />
     <Compile Include="TestObjects\TestMessageChannel.cs" />
+    <Compile Include="TestObjects\TestUnifiedMessagingService.cs" />
     <Compile Include="UnitTests\UnifiedMessagingController_Tests.cs" />
     <Compile Include="Using_Services\When_getting_messages.cs" />
     <Compile Include="Utilities\SpecUnit.cs" />

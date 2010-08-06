@@ -23,16 +23,13 @@ namespace GoogleTalkPlugIn
 
         [DefaultConstructor]
         public GoogleTalkMessagingService()
-            : this(new GoogleTalkDataAccess())
+            : this(new GoogleTalkAuthenticationBufferDataAccess(new GoogleTalkDataAccess()))
         {
         }
 
         public GoogleTalkMessagingService(IGoogleTalkDataAccess dataAccess)
         {
             _DataAccess = dataAccess;
-            _DataAccess.OnMessage += _DataAccess_OnMessage;
-            _DataAccess.OnAuthError += _DataAccess_OnAuthError;
-            _DataAccess.OnContactsReceived += _DataAccess_OnContactsReceived;
 
             _CredEventArgs = new CredentialEventArgs()
             {
@@ -100,11 +97,6 @@ namespace GoogleTalkPlugIn
         {
             if (!_CanFind(recipient.UserName)) return;
 
-            _AuthenticateIfNeeded();
-            
-            if(_Credentials == null)
-                throw new Exception("Your credentials can not still be null. This should NEVER happen.");
-
             if (recipient == null || String.IsNullOrEmpty(recipient.UserName))
                 _DataAccess.SetAvailableMessage(message);
             else
@@ -147,6 +139,10 @@ namespace GoogleTalkPlugIn
 
         public void StartReceiving()
         {
+            _DataAccess.OnMessage += _DataAccess_OnMessage;
+            _DataAccess.OnAuthError += _DataAccess_OnAuthError;
+            _DataAccess.OnContactsReceived += _DataAccess_OnContactsReceived;
+
             _AuthenticateIfNeeded();
         }
 

@@ -50,6 +50,7 @@ namespace Unite.UI
 
             messagingPluginFinder.GetAllPlugins();
 
+            unifiedMessagingController.StartReceiving();
             messagingViewModel.ReceiveMessage.Execute(null);
             messagingWindow.Show();
         }

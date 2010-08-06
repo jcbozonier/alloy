@@ -52,7 +52,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="jabber-net, Version=2.1.0.710, Culture=neutral, PublicKeyToken=924c5b18328d6f09, processorArchitecture=MSIL">
+    <Reference Include="jabber-net, Version=2.1.0.702, Culture=neutral, PublicKeyToken=924c5b18328d6f09, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\ThirdParty\JabberLibrary\jabber-net.dll</HintPath>
     </Reference>
@@ -85,6 +85,7 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="GoogleTalkAuthenticationBufferDataAccess.cs" />
     <Compile Include="GoogleTalkDataAccess.cs" />
     <Compile Include="GoogleTalkMessagingService.cs" />
     <Compile Include="GTalkMessage.cs" />

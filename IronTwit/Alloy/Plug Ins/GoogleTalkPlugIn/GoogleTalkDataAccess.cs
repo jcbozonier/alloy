@@ -1,7 +1,6 @@
 ﻿using System;
 using jabber.client;
 using jabber.protocol.client;
-using Unite.Messaging;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
 
@@ -11,6 +10,7 @@ namespace GoogleTalkPlugIn
     {
         private readonly JabberClient _Client;
         public bool IsConnected{ get; set;}
+        public event EventHandler<EventArgs> OnAuthenticated;
         public event EventHandler<ContactEventArgs> OnContactsReceived;
 
         public GoogleTalkDataAccess()
@@ -38,10 +38,7 @@ namespace GoogleTalkPlugIn
                 throw new Exception(e.Message);
             };
             client.OnAuthError += (s, e) => OnAuthError(s, null);
-            client.OnMessage += (s, e) =>
-                                    {
-                                        OnMessage(s, new GTalkMessageEventArgs(e.From.User, e.Body, DateTime.Now));
-                                    };
+            client.OnMessage += (s, e) => OnMessage(s, new GTalkMessageEventArgs(e.From.User, e.Body, DateTime.Now));
 
 
             client.OnPresence += (sndr, e) =>
@@ -56,16 +53,18 @@ namespace GoogleTalkPlugIn
  
                                      }; 
             _Client = client;
-
-
         }
 
         void client_OnAuthenticate(object sender)
         {
             _Client.GetRoster();
+
+            var onAuthenticated = OnAuthenticated;
+            if(onAuthenticated!=null)
+                OnAuthenticated(this, EventArgs.Empty);
         }
 
-        public event EventHandler OnAuthError;
+        public event EventHandler<EventArgs> OnAuthError;
         public event EventHandler<GTalkMessageEventArgs> OnMessage;
 
         public void Message(string name, string message)

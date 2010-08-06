@@ -30,10 +30,6 @@ namespace Unite.Messaging.Services
         public void OnReceivedMessagesNotify(IMessageChannel messageChannel)
         {
             _MessageChannel = messageChannel;
-            if (_MessagingServiceIsStarted) return;
-
-            _MessagingServiceIsStarted = true;
-            _Fiber.Run(_MessagingService.StartReceiving);
         }
 
         void _MessagingService_MessagesReceived(object sender, MessagesReceivedEventArgs e)
@@ -58,6 +54,12 @@ namespace Unite.Messaging.Services
         public void ReceivedMessages(IEnumerable<IMessage> messages)
         {
             _Fiber.RunOnMainThread(() => _MessageChannel.ReceivedMessages(messages));
+        }
+
+        public void StartReceiving()
+        {
+            _MessagingServiceIsStarted = true;
+            _Fiber.Run(_MessagingService.StartReceiving);
         }
     }
 }
