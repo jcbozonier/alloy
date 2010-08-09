@@ -9,7 +9,7 @@ namespace Unite.Messaging.Services
 
     public interface ICredentialsRequestedObserver
     {
-        void CredentialsNeeded(IServiceInformation serviceInformation);
+        void CredentialsRequested(IServiceInformation serviceInformation);
     }
 
     public interface ICredentialRetryObserver

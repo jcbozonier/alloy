@@ -8,7 +8,7 @@ namespace Unite.Messaging.Services
     public class MessagingPlugInRepository : IServiceProvider, IMessagingPlugInRepository
 
     {
-        private ICredentialUpdates _CredentialUpdates;
+        private ICredentialsRequestedObserver _CredentialUpdates;
         private readonly List<IMessagingService> _Services;
 
         public MessagingPlugInRepository()
@@ -32,7 +32,7 @@ namespace Unite.Messaging.Services
             _Services.Add(service);
         }
 
-        public void OnCredentialUpdatesNotify(ICredentialUpdates credentialUpdates)
+        public void OnCredentialsRequestedNotify(ICredentialsRequestedObserver credentialUpdates)
         {
             _CredentialUpdates = credentialUpdates;
         }
@@ -45,14 +45,12 @@ namespace Unite.Messaging.Services
 
         private void service_AuthorizationFailed(object sender, CredentialEventArgs e)
         {
-            if (_CredentialUpdates != null)
-                _CredentialUpdates.AuthorizationFailed(e);
         }
 
         private void _GetCredentials(object sender, CredentialEventArgs e)
         {
             if (_CredentialUpdates != null)
-                _CredentialUpdates.CredentialsRequested(e);
+                _CredentialUpdates.CredentialsRequested(e.ServiceInfo);
         }
 
         public IEnumerable<IMessagingService> GetAllServices()

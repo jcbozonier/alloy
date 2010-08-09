@@ -1,6 +1,8 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using Unite.Messaging.Extras;
+using Unite.Messaging.Services;
 using Unite.Specs.TestObjects;
 
 namespace Unite.Specs.sending_message_specs
@@ -13,6 +15,8 @@ namespace Unite.Specs.sending_message_specs
         {
             var testCodePasteService = new TestCodePasteService();
             var urlFormatter = new AutoFormatCodePastesAsUrls(testCodePasteService);
+            var messagingController = new TestUnifiedMessagingController();
+            urlFormatter.OnMessageToSendNotify(messagingController);
             var codeSample = @"
 public class Foo
 {
@@ -21,10 +25,10 @@ public class Foo
 
     }
 }";
-            var formattedMessage = urlFormatter.ApplyFormatting(codeSample);
+            urlFormatter.MessageToSend("recipient", codeSample);
 
 
-            Assert.That(formattedMessage, Is.EqualTo(testCodePasteService.CodePasteText), "It should replace the message with the value from th code paste service.");
+            Assert.That(messagingController.SentMessage, Is.EqualTo(testCodePasteService.CodePasteText), "It should replace the message with the value from th code paste service.");
         }
 
         [Test]
@@ -34,5 +38,19 @@ public class Foo
         }
 
         
+    }
+
+    public class TestUnifiedMessagingController : IUnifiedMessagingController
+    {
+        public string SentMessage;
+
+        public void MessageToSend(string recipient, string message)
+        {
+            SentMessage = message;
+        }
+
+        public void RequestMessageUpdate()
+        {
+        }
     }
 }

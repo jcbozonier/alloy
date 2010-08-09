@@ -5,7 +5,7 @@ using Unite.Messaging.Messages;
 
 namespace Unite.Messaging.Services
 {
-    public class UnifiedMessenger : IUnifiedMessagingService
+    public class UnifiedMessenger : IUnifiedMessagingService, ICredentialsProvidedObserver
     {
         private readonly IServiceProvider _MessagingServicesProvider;
 
@@ -55,7 +55,7 @@ namespace Unite.Messaging.Services
         /// TODO: Need specs that cover the use of this method.
         /// </summary>
         /// <param name="credentials"></param>
-        public void SetCredentials(Credentials credentials)
+        public void CredentialsProvided(Credentials credentials)
         {
             _MessagingServicesProvider.ForEachPlugIn(plugIn=>plugIn.IfCanAcceptSet(credentials));
         }

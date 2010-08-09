@@ -87,7 +87,7 @@
     <Compile Include="Entities\IIdentity.cs" />
     <Compile Include="Extras\IMessageFormatter.cs" />
     <Compile Include="Extras\AutoFormatCodePastesAsUrls.cs" />
-    <Compile Include="Messages\MessagingAccountCredentialRepository.cs" />
+    <Compile Include="Messages\MessagingCredentialCache.cs" />
     <Compile Include="Messages\CredentialEventArgs.cs" />
     <Compile Include="Entities\Contact.cs" />
     <Compile Include="Entities\Credentials.cs" />
@@ -101,10 +101,8 @@
     <Compile Include="Services\CodePasteToUrlService.cs" />
     <Compile Include="Services\ICodePaste.cs" />
     <Compile Include="Services\ICredentialsObserver.cs" />
-    <Compile Include="Services\ICredentialUpdates.cs" />
     <Compile Include="Services\IFiber.cs" />
     <Compile Include="Services\IMessagingPlugInRepository.cs" />
-    <Compile Include="Services\IPluginFinder.cs" />
     <Compile Include="Services\IServiceProvider.cs" />
     <Compile Include="Messages\IMessagingService.cs" />
     <Compile Include="Entities\Identity.cs" />

@@ -8,7 +8,7 @@ using Unite.Messaging.Services;
 
 namespace Unite.Messaging.Messages
 {
-    public class MessagingAccountCredentialsRepository : ICredentialsRequestedObserver, ICredentialsProvidedObserver
+    public class MessagingCredentialCache : ICredentialsRequestedObserver, ICredentialsProvidedObserver
     {
         private readonly string _cacheFile;
         private readonly Services.IServiceProvider _serviceProvider;
@@ -17,7 +17,7 @@ namespace Unite.Messaging.Messages
         private Dictionary<Guid, CachedCredential> _cache;
         private ICredentialsProvidedObserver _CredentialsProvidedObserver;
 
-        public MessagingAccountCredentialsRepository(Services.IServiceProvider serviceProvider)
+        public MessagingCredentialCache(Services.IServiceProvider serviceProvider)
         {
             //_CredentialsObserver
             _serviceProvider = serviceProvider;
@@ -57,23 +57,21 @@ namespace Unite.Messaging.Messages
         }
 
 
-        private Credentials _Get(Guid serviceId)
+        private Credentials _Get(IServiceInformation serviceInformation)
         {
-            if (!_cache.ContainsKey(serviceId))
+            if (!_cache.ContainsKey(serviceInformation.ServiceID))
                 return null;
-            var cachedCredential = _cache[serviceId];
-            var service =
-                _serviceProvider.GetAllServices().Where(x => x.GetInformation().ServiceID.Equals(serviceId)).FirstOrDefault();
+            var cachedCredential = _cache[serviceInformation.ServiceID];
             return new Credentials()
                 {
-                    ServiceInformation = service.GetInformation(),
+                    ServiceInformation = serviceInformation,
                     UserName = cachedCredential.UserName,
                     Password = cachedCredential.Password,
                     IsPasswordCachingAllowed = cachedCredential.IsPasswordCached
                 };
         }
 
-        public bool Contains(Guid serviceId)
+        public bool _Contains(Guid serviceId)
         {
             return _cache.ContainsKey(serviceId);
         }
@@ -84,7 +82,10 @@ namespace Unite.Messaging.Messages
             return normalizedUserName;
         }
 
-        private class CachedCredential
+        /// <summary>
+        /// Needs to remain public so LoadCache can instantiate these during deserialization and serialization.
+        /// </summary>
+        public class CachedCredential
         {
             public Guid ServiceId { get; set; }
             public string UserName { get; set; }
@@ -119,16 +120,16 @@ namespace Unite.Messaging.Messages
             SaveCache();
         }
 
-        public void CredentialsNeeded(IServiceInformation serviceInformation)
+        public void CredentialsRequested(IServiceInformation serviceInformation)
         {
-            if (Contains(serviceInformation.ServiceID))
+            if (_Contains(serviceInformation.ServiceID))
             {
-                var cachedCredential = _Get(serviceInformation.ServiceID);
+                var cachedCredential = _Get(serviceInformation);
                 _CredentialsProvidedObserver.CredentialsProvided(cachedCredential);
             }
             else
             {
-                _credentialsRequestedObserver.CredentialsNeeded(serviceInformation);
+                _credentialsRequestedObserver.CredentialsRequested(serviceInformation);
             }
         }
     }

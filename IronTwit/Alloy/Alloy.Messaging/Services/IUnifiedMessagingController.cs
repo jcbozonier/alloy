@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Unite.Messaging.Services
+﻿namespace Unite.Messaging.Services
 {
     public interface IUnifiedMessagingController
     {

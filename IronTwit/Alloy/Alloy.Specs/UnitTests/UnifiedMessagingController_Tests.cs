@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Unite.Messaging.Extras;
 using Unite.Messaging.Services;
 using Unite.Specs.TestObjects;
@@ -27,9 +26,9 @@ namespace Unite.Specs.UnitTests
 
     public class TestMessageFormatter : IMessageFormatter
     {
-        public string ApplyFormatting(string message)
+        public void MessageToSend(string recipient, string message)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

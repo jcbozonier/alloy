@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using StructureMap;
-using Unite.Messaging;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
@@ -118,6 +117,9 @@ namespace GoogleTalkPlugIn
         public void SetCredentials(Credentials credentials)
         {
             _Credentials = credentials;
+
+            if(!String.IsNullOrEmpty(_Credentials.UserName) || _Credentials.Password != null)
+                _DataAccess.Login(_Credentials.UserName, _Credentials.Password);
         }
 
         private static bool _CanFind(string address)
@@ -143,19 +145,8 @@ namespace GoogleTalkPlugIn
             _DataAccess.OnAuthError += _DataAccess_OnAuthError;
             _DataAccess.OnContactsReceived += _DataAccess_OnContactsReceived;
 
-            _AuthenticateIfNeeded();
-        }
-
-        private void _AuthenticateIfNeeded()
-        {
-            if(!_DataAccess.IsConnected)
-            {
-                if (CredentialsRequested != null)
-                    CredentialsRequested(this, _CredEventArgs);
-
-                if(!String.IsNullOrEmpty(_Credentials.UserName) || _Credentials.Password != null)
-                    _DataAccess.Login(_Credentials.UserName, _Credentials.Password);
-            }   
+            if(!_DataAccess.IsConnected && CredentialsRequested != null)
+                CredentialsRequested(this, _CredEventArgs);
         }
 
         public void StopReceiving()

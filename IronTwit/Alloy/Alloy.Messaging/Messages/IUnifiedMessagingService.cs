@@ -1,5 +1,4 @@
 ﻿using System;
-using Unite.Messaging.Entities;
 using Unite.Messaging.Services;
 
 namespace Unite.Messaging.Messages
@@ -8,7 +7,6 @@ namespace Unite.Messaging.Messages
     {
         void SendMessage(string recipient, string message);
         void RequestMessages();
-        void SetCredentials(Credentials credentials);
         void StartReceiving();
         event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
     }

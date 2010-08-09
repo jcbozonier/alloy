@@ -54,14 +54,17 @@ namespace Unite.UI.Utilities
                                                          });
         }
 
-        public void AuthenticationFailedRetryQuery(ServiceInformation serviceInfo)
+        public void AuthenticationFailed(ServiceInformation serviceInfo)
         {
             var result = MessageBox.Show("Username and/or password are not correct. Retry?",
                             "Alloy by Justin Bozonier",
                             MessageBoxButton.YesNo);
 
-            if (result == MessageBoxResult.No)
+            if (result == MessageBoxResult.Yes)
+                CredentialsRequested(serviceInfo);
+            else
                 _CredentialsRetryObserver.StopRetrying(serviceInfo);
+            
         }
 
         public void OnCredentialsRetryNotify(ICredentialRetryObserver credentialRetryObserver)
@@ -69,7 +72,7 @@ namespace Unite.UI.Utilities
             _CredentialsRetryObserver = credentialRetryObserver;
         }
 
-        public void CredentialsNeeded(IServiceInformation serviceInformation)
+        public void CredentialsRequested(IServiceInformation serviceInformation)
         {
             RequestCredentialsFor(serviceInformation.ServiceName, "", serviceInformation);
         }

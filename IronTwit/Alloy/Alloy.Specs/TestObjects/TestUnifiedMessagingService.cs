@@ -19,7 +19,7 @@ namespace Unite.Specs.TestObjects
             
         }
 
-        public void SetCredentials(Credentials credentials)
+        public void CredentialsProvided(Credentials credentials)
         {
             
         }

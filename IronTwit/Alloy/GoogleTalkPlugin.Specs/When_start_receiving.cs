@@ -14,12 +14,12 @@ namespace GoogleTalkPlugin.Specs
             var fakeDataAccess = new TestGoogleTalkDataAccess();
             
             var plugin = new GoogleTalkMessagingService(fakeDataAccess);
-            plugin.SetCredentials(new Credentials(){UserName = null, Password = null});
             
             plugin.StartReceiving();
 
             Assert.That(fakeDataAccess.LoginWasRequested, Is.False);
         }
+
 
     }
 }

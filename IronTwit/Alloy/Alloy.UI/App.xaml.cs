@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using unite.ui.utilities;
 using Unite.UI.ViewModels;
 using Unite.Messaging.Extras;
 using Unite.Messaging.Messages;
@@ -26,21 +25,22 @@ namespace Unite.UI
             var unifiedMessenger = new UnifiedMessenger(messagingPlugInRepository);
 
             var messagingFiber = new AsyncFiber(Dispatcher);
-            var cachedCredentialRepository = new MessagingAccountCredentialsRepository(messagingPlugInRepository);
+            var cachedCredentialRepository = new MessagingCredentialCache(messagingPlugInRepository);
             var userSecurityPrompt = new UserSecurityPrompt(messagingFiber);
-            var credentialAuthorizationController = new CredentialAuthorizationController(unifiedMessenger);
 
-            messagingPlugInRepository.OnCredentialUpdatesNotify(credentialAuthorizationController);
-            credentialAuthorizationController.OnCredentialsRequestedNotify(cachedCredentialRepository);
+            messagingPlugInRepository.OnCredentialsRequestedNotify(cachedCredentialRepository);
             cachedCredentialRepository.OnCredentialsRequestedNotify(userSecurityPrompt);
+            cachedCredentialRepository.OnCredentialsProvidedNotify(unifiedMessenger);
+
             userSecurityPrompt.OnCredentialsProvidedNotify(cachedCredentialRepository);
-            cachedCredentialRepository.OnCredentialsProvidedNotify(credentialAuthorizationController);
 
             var codePasteToUrlService = new CodePasteToUrlService();
             var automaticMessageFormatting = new AutoFormatCodePastesAsUrls(codePasteToUrlService);
+            
 
             var messageRepository = new MessageRepository();
             var unifiedMessagingController = new UnifiedMessagingController(unifiedMessenger, messageRepository, automaticMessageFormatting, messagingFiber);
+            automaticMessageFormatting.OnMessageToSendNotify(unifiedMessagingController);
 
             var messagingViewModel = new MessagingViewModel(unifiedMessagingController);
             var messagingWindow = new MessagingWindow(messagingViewModel);

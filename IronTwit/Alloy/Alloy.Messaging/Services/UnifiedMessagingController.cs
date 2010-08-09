@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Unite.Messaging.Entities;
 using Unite.Messaging.Extras;
 using Unite.Messaging.Messages;
@@ -10,19 +9,19 @@ namespace Unite.Messaging.Services
     {
         private readonly IUnifiedMessagingService _MessagingService;
         private readonly MessageRepository _MessageRepository;
-        private readonly IMessageFormatter _MessageFormatter;
+        private readonly IMessageFormatter _FormattingMessenger;
         private readonly IFiber _Fiber;
         private IMessageChannel _MessageChannel;
 
         public UnifiedMessagingController(
             IUnifiedMessagingService messagingService, 
             MessageRepository messageRepository, 
-            IMessageFormatter messageFormatter,
+            IMessageFormatter formattingMessenger,
             IFiber fiber)
         {
             _MessagingService = messagingService;
             _MessageRepository = messageRepository;
-            _MessageFormatter = messageFormatter;
+            _FormattingMessenger = formattingMessenger;
             _Fiber = fiber;
             _MessagingService.MessagesReceived += _MessagingService_MessagesReceived;
         }
@@ -38,11 +37,7 @@ namespace Unite.Messaging.Services
 
         public void MessageToSend(string recipient, string message)
         {
-            _Fiber.Run(() =>
-                           {
-                               var messageToSend = _MessageFormatter.ApplyFormatting(message);
-                               _MessagingService.SendMessage(recipient, messageToSend);
-                           });
+            _Fiber.Run(() => _FormattingMessenger.MessageToSend(recipient, message));
         }
 
         public void RequestMessageUpdate()
