@@ -7,7 +7,7 @@ namespace Unite.Messaging.Services
 {
     public class UnifiedMessenger : IUnifiedMessagingService
     {
-        private readonly IServiceProvider _Provider;
+        private readonly IServiceProvider _MessagingServicesProvider;
 
         /// <summary>
         /// Invoked whenever new messages are received from any one of the
@@ -15,9 +15,9 @@ namespace Unite.Messaging.Services
         /// </summary>
         public event EventHandler<MessagesReceivedEventArgs> MessagesReceived;
 
-        public UnifiedMessenger(IServiceProvider provider)
+        public UnifiedMessenger(IServiceProvider messagingServicesProvider)
         {
-            _Provider = provider;
+            _MessagingServicesProvider = messagingServicesProvider;
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Unite.Messaging.Services
         {
             var messages = new List<IMessage>();
 
-            _Provider.ForEachPlugIn(plugIn => messages.AddRange(plugIn.GetMessages()));
+            _MessagingServicesProvider.ForEachPlugIn(plugIn => messages.AddRange(plugIn.GetMessages()));
 
             if(MessagesReceived != null)
                 MessagesReceived(this, new MessagesReceivedEventArgs(messages));
@@ -43,7 +43,7 @@ namespace Unite.Messaging.Services
         /// <param name="message"></param>
         public void SendMessage(string recipient, string message)
         {
-            _Provider.ForEachPlugIn(messagingService =>
+            _MessagingServicesProvider.ForEachPlugIn(messagingService =>
                                         {
                                             messagingService.SendMessage(
                                                 new Identity(recipient, messagingService.GetInformation()),
@@ -57,7 +57,7 @@ namespace Unite.Messaging.Services
         /// <param name="credentials"></param>
         public void SetCredentials(Credentials credentials)
         {
-            _Provider.ForEachPlugIn(plugIn=>plugIn.IfCanAcceptSet(credentials));
+            _MessagingServicesProvider.ForEachPlugIn(plugIn=>plugIn.IfCanAcceptSet(credentials));
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Unite.Messaging.Services
         public void StartReceiving()
         {
 
-            _Provider.ForEachPlugIn(plugIn=>
+            _MessagingServicesProvider.ForEachPlugIn(plugIn=>
                                         {
                                             plugIn.MessagesReceived += service_MessagesReceived;
                                             plugIn.StartReceiving();

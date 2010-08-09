@@ -9,17 +9,11 @@ namespace Unite.Messaging.Services
 
     {
         private ICredentialUpdates _CredentialUpdates;
-        private readonly List<IMessagingService> Services;
+        private readonly List<IMessagingService> _Services;
 
         public MessagingPlugInRepository()
         {
-            Services = new List<IMessagingService>();
-        }
-
-        private void _AddServiceProvider(Type serviceType)
-        {
-            var service = (IMessagingService)ObjectFactory.GetInstance(serviceType);
-            _Add(service);
+            _Services = new List<IMessagingService>();
         }
 
         public void Add(params IMessagingService[] services)
@@ -35,7 +29,7 @@ namespace Unite.Messaging.Services
             service.CredentialsRequested += _GetCredentials;
             service.AuthorizationFailed += service_AuthorizationFailed;
 
-            Services.Add(service);
+            _Services.Add(service);
         }
 
         public void OnCredentialUpdatesNotify(ICredentialUpdates credentialUpdates)
@@ -45,7 +39,8 @@ namespace Unite.Messaging.Services
 
         public void Add(Type messagingServiceType)
         {
-            _AddServiceProvider(messagingServiceType);
+            var service = (IMessagingService)ObjectFactory.GetInstance(messagingServiceType);
+            _Add(service);
         }
 
         private void service_AuthorizationFailed(object sender, CredentialEventArgs e)
@@ -62,18 +57,15 @@ namespace Unite.Messaging.Services
 
         public IEnumerable<IMessagingService> GetAllServices()
         {
-            return Services;
+            return _Services;
         }
 
         public void ForEachPlugIn(Action<IMessagingService> takeAction)
         {
-            foreach(var plugin in Services)
+            foreach(var plugin in _Services)
             {
                 takeAction(plugin);
             }
         }
-
-        public event EventHandler<CredentialEventArgs> CredentialsRequested;
-        public event EventHandler<CredentialEventArgs> AuthorizationFailed;
     }
 }

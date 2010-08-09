@@ -8,7 +8,7 @@ using Unite.Messaging.Services;
 
 namespace Unite.Messaging.Messages
 {
-    public class MessagingAccountCredentialsRepository : ICredentialCache, ICredentialsRequestedObserver, ICredentialsProvidedObserver
+    public class MessagingAccountCredentialsRepository : ICredentialsRequestedObserver, ICredentialsProvidedObserver
     {
         private readonly string _cacheFile;
         private readonly Services.IServiceProvider _serviceProvider;
@@ -56,25 +56,8 @@ namespace Unite.Messaging.Messages
                 serializer.Serialize(fs, cachedCredentials);
         }
 
-        public void Add(Credentials credentials)
-        {
-            var serviceId = credentials.ServiceInformation.ServiceID;
-            var userName = credentials.UserName;
-            var normalizedUserName = GetNormalizedUserName(userName);
-            var password = credentials.Password;
-            if (!_cache.ContainsKey(serviceId))
-                _cache[serviceId] = new CachedCredential
-                                        {
-                                            ServiceId = serviceId,
-                                            UserName = normalizedUserName,
-                                            Password = password,
-                                            IsPasswordCached = credentials.IsPasswordCachingAllowed
-                                        };
-            SaveCache();
-        }
 
-
-        public Credentials Get(Guid serviceId)
+        private Credentials _Get(Guid serviceId)
         {
             if (!_cache.ContainsKey(serviceId))
                 return null;
@@ -90,23 +73,9 @@ namespace Unite.Messaging.Messages
                 };
         }
 
-        public void Remove(Guid serviceId)
-        {
-            if (!_cache.ContainsKey(serviceId))
-                return;
-            _cache.Remove(serviceId);
-            SaveCache();
-        }
-
         public bool Contains(Guid serviceId)
         {
             return _cache.ContainsKey(serviceId);
-        }
-
-        public void Clear()
-        {
-            _cache.Clear();
-            SaveCache();
         }
 
         private static string GetNormalizedUserName(string rawUserName)
@@ -115,7 +84,7 @@ namespace Unite.Messaging.Messages
             return normalizedUserName;
         }
 
-        public class CachedCredential
+        private class CachedCredential
         {
             public Guid ServiceId { get; set; }
             public string UserName { get; set; }
@@ -135,14 +104,26 @@ namespace Unite.Messaging.Messages
 
         public void CredentialsProvided(Credentials credentials)
         {
-            Add(credentials);
+            var serviceId = credentials.ServiceInformation.ServiceID;
+            var userName = credentials.UserName;
+            var normalizedUserName = GetNormalizedUserName(userName);
+            var password = credentials.Password;
+            if (!_cache.ContainsKey(serviceId))
+                _cache[serviceId] = new CachedCredential
+                                        {
+                                            ServiceId = serviceId,
+                                            UserName = normalizedUserName,
+                                            Password = password,
+                                            IsPasswordCached = credentials.IsPasswordCachingAllowed
+                                        };
+            SaveCache();
         }
 
         public void CredentialsNeeded(IServiceInformation serviceInformation)
         {
-            if (this.Contains(serviceInformation.ServiceID))
+            if (Contains(serviceInformation.ServiceID))
             {
-                var cachedCredential = this.Get(serviceInformation.ServiceID);
+                var cachedCredential = _Get(serviceInformation.ServiceID);
                 _CredentialsProvidedObserver.CredentialsProvided(cachedCredential);
             }
             else

@@ -92,7 +92,6 @@
     <Compile Include="Entities\Contact.cs" />
     <Compile Include="Entities\Credentials.cs" />
     <Compile Include="Entities\IServiceInformation.cs" />
-    <Compile Include="Messages\ICredentialCache.cs" />
     <Compile Include="Messages\IMessageChannel.cs" />
     <Compile Include="Messages\IUnifiedMessagingService.cs" />
     <Compile Include="Prompts\IUser.cs" />

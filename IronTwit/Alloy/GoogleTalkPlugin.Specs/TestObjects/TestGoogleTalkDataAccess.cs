@@ -8,6 +8,8 @@ namespace GoogleTalkPlugin.Specs
     public class TestGoogleTalkDataAccess : IGoogleTalkDataAccess
     {
         public List<KeyValuePair<string, string>> SentMessages = new List<KeyValuePair<string, string>>();
+        public bool AvailableMessageWasSent;
+        public bool LoginWasRequested;
         public event EventHandler<EventArgs> OnAuthenticated;
         public event EventHandler<ContactEventArgs> OnContactsReceived;
         public event EventHandler<EventArgs> OnAuthError;
@@ -20,7 +22,7 @@ namespace GoogleTalkPlugin.Specs
 
         public void Login(string name, string password)
         {
-            OnAuthenticated.SafelyInvoke(this, EventArgs.Empty);
+            LoginWasRequested = true;
         }
 
         public void Logoff()
@@ -30,9 +32,14 @@ namespace GoogleTalkPlugin.Specs
 
         public void SetAvailableMessage(string message)
         {
-            
+            AvailableMessageWasSent = true;
         }
 
         public bool IsConnected { get; set; }
+
+        public void AssumeSuccessfulAuthenticationMessageIsReceivedFromGTalk()
+        {
+            OnAuthenticated.SafelyInvoke(this, EventArgs.Empty);
+        }
     }
 }

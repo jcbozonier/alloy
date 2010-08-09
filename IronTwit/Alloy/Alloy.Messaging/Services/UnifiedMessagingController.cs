@@ -13,7 +13,6 @@ namespace Unite.Messaging.Services
         private readonly IMessageFormatter _MessageFormatter;
         private readonly IFiber _Fiber;
         private IMessageChannel _MessageChannel;
-        private bool _MessagingServiceIsStarted;
 
         public UnifiedMessagingController(
             IUnifiedMessagingService messagingService, 
@@ -58,7 +57,6 @@ namespace Unite.Messaging.Services
 
         public void StartReceiving()
         {
-            _MessagingServiceIsStarted = true;
             _Fiber.Run(_MessagingService.StartReceiving);
         }
     }

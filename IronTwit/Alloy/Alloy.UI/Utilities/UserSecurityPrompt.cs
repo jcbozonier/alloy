@@ -1,14 +1,12 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using Unite.Messaging.Entities;
-using Unite.Messaging.Messages;
 using Unite.Messaging.Services;
 using Unite.UI.ViewModels;
 using Unite.UI.Views;
 
 namespace Unite.UI.Utilities
 {
-    public class UserSecurityPrompt : ISecurityDialogService, ICredentialsRequestedObserver, ICredentialsProvidedObserver
+    public class UserSecurityPrompt : ICredentialsRequestedObserver, ICredentialsProvidedObserver
     {
         private readonly IFiber _Fiber;
         private ICredentialsProvidedObserver _CredentialsProvidedObserver;
